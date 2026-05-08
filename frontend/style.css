@@ -171,3 +171,470 @@ body {
 
   color: #999;
 }
+
+
+
+
+/* Sign In / Register Form Page */
+
+.form-banner {
+  height: 90px;
+  background: linear-gradient(90deg, #ff2d2d, #3ad7df);
+}
+
+.register-card {
+  width: 70%;
+  max-width: 850px;
+  margin: -70px auto 0;
+  background: white;
+  padding: 45px 55px;
+  min-height: 520px;
+}
+
+.register-card h1 {
+  font-size: 32px;
+  margin-bottom: 35px;
+}
+
+.register-card label {
+  display: block;
+  font-size: 18px;
+  margin: 16px 0 8px;
+}
+
+.register-card input {
+  width: 100%;
+  height: 45px;
+  border: 1px solid #333;
+  border-radius: 10px;
+  padding: 0 12px;
+  font-size: 16px;
+}
+
+.form-links {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 16px;
+  font-size: 13px;
+}
+
+.form-links a,
+.bottom-links a {
+  color: #40dce5;
+  text-decoration: none;
+}
+
+.red-main-btn {
+  display: block;
+  width: 310px;
+  height: 58px;
+  margin: 40px auto 70px;
+  border: none;
+  border-radius: 12px;
+  background: #ff1f1f;
+  color: white;
+  font-size: 17px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.bottom-links {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+}
+
+.register-card {
+  border-radius: 4px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* Overlay form pages */
+
+.overlay-page {
+  position: relative;
+  overflow: hidden;
+}
+
+.form-modal {
+  position: absolute;
+  top: 100px;
+  left: 8%;
+  right: 8%;
+  background: white;
+  padding: 45px 55px 25px;
+  min-height: 520px;
+  box-shadow: 0 3px 4px rgba(0, 0, 0, 0.2);
+}
+
+.form-modal h1 {
+  font-size: 32px;
+  margin-bottom: 35px;
+}
+
+.form-modal label {
+  display: block;
+  font-size: 18px;
+  margin: 16px 0 8px;
+}
+
+.form-modal input {
+  width: 100%;
+  height: 52px;
+  border: 1px solid #333;
+  border-radius: 10px;
+  padding: 0 12px;
+  font-size: 16px;
+}
+
+.form-links {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 16px;
+  font-size: 13px;
+}
+
+.form-links a,
+.bottom-links a {
+  color: #40dce5;
+  text-decoration: none;
+}
+
+.red-main-btn {
+  display: block;
+  width: 310px;
+  height: 58px;
+  margin: 28px auto 70px;
+  border: none;
+  border-radius: 12px;
+  background: #ff1f1f;
+  color: white;
+  font-size: 17px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.bottom-links {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+}
+
+/* Employer Profile   */
+
+.emp-page {
+  min-height: 650px;
+  background: white;
+}
+
+.emp-topbar {
+  height: 50px;
+  background: linear-gradient(90deg, #ff2d2d, #3ad7df);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 18px;
+}
+
+.emp-logo-box {
+  width: 34px;
+  height: 34px;
+  background: #d9d9d9;
+}
+
+.emp-nav-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.emp-profile-content {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 30px;
+  padding: 45px 70px;
+}
+
+.emp-left {
+  padding-right: 20px;
+}
+
+.emp-info-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 25px;
+  margin-bottom: 25px;
+}
+
+.emp-avatar {
+  width: 110px;
+  height: 125px;
+  background: #d9d9d9;
+}
+
+.emp-text h1 {
+  font-size: 34px;
+  margin-bottom: 6px;
+}
+
+.emp-text p {
+  font-size: 15px;
+  margin-bottom: 6px;
+  font-weight: bold;
+}
+
+.emp-publish {
+  width: 360px;
+}
+
+.emp-publish h3 {
+  font-size: 17px;
+  margin-bottom: 10px;
+}
+
+.emp-input-box {
+  width: 100%;
+  height: 48px;
+  border: 1px solid #999999;
+  margin-bottom: 12px;
+  background: white;
+}
+
+.emp-add-btn {
+  display: block;
+  width: 100%;
+  height: 42px;
+  background: #d9d9d9;
+  color: black;
+  text-align: center;
+  line-height: 42px;
+  font-size: 34px;
+  text-decoration: none;
+}
+
+.emp-right {
+  position: relative;
+  border-left: 1px solid #cccccc;
+  padding-left: 30px;
+  min-height: 380px;
+}
+
+.emp-summary-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.emp-summary-head h3 {
+  font-size: 17px;
+}
+
+.emp-vip-btn {
+  width: 90px;
+  height: 30px;
+  border: none;
+  background: #d9d9d9;
+  font-weight: bold;
+}
+
+.emp-bottom-cards {
+  display: flex;
+  gap: 30px;
+  margin-top: 250px;
+}
+
+.emp-small-card {
+  width: 78px;
+  height: 88px;
+  background: #d9d9d9;
+}
+
+
+/* Post Job Modal */
+
+.job-modal {
+  position: absolute;
+  top: 125px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 520px;
+  min-height: 330px;
+  background: white;
+  border: 2px solid #999999;
+  padding: 35px;
+  z-index: 5;
+}
+
+.job-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 14px;
+  gap: 10px;
+}
+
+.job-row strong {
+  width: 130px;
+  font-size: 15px;
+}
+
+.job-line {
+  flex: 1;
+  height: 14px;
+  background: #d9d9d9;
+}
+
+.job-description strong {
+  display: block;
+  font-size: 15px;
+  margin-bottom: 10px;
+}
+
+.job-desc-box {
+  width: 100%;
+  height: 70px;
+  background: #d9d9d9;
+  margin-bottom: 18px;
+}
+
+.job-tags {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 12px;
+}
+
+.job-tags strong {
+  font-size: 15px;
+}
+
+.job-tags span {
+  background: #d9d9d9;
+  padding: 7px 16px;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.tag-placeholders {
+  display: flex;
+  gap: 16px;
+  margin-left: 50px;
+  margin-bottom: 14px;
+}
+
+.tag-placeholders div {
+  width: 78px;
+  height: 22px;
+  background: #d9d9d9;
+}
+
+.tag-add {
+  width: 100px;
+  height: 28px;
+  background: #d9d9d9;
+  text-align: center;
+  line-height: 28px;
+  font-size: 28px;
+  margin-left: 50px;
+}
+
+/* Candidate Profile Page */
+
+.candidate-page {
+  min-height: 650px;
+  background: white;
+}
+
+.candidate-profile-content {
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  gap: 35px;
+  padding: 55px 70px;
+}
+
+.candidate-left {
+  border-right: 1px solid #cccccc;
+  padding-right: 35px;
+}
+
+.candidate-info-row {
+  display: flex;
+  gap: 22px;
+  align-items: flex-start;
+  margin-bottom: 35px;
+}
+
+.candidate-avatar {
+  width: 110px;
+  height: 125px;
+  background: #d9d9d9;
+}
+
+.candidate-text h1 {
+  font-size: 34px;
+  margin-bottom: 6px;
+}
+
+.candidate-text p {
+  font-size: 15px;
+  margin-bottom: 6px;
+  font-weight: bold;
+}
+
+.candidate-skills h3 {
+  font-size: 17px;
+  margin-bottom: 12px;
+}
+
+.skill-row {
+  display: flex;
+  gap: 18px;
+  margin-bottom: 12px;
+}
+
+.skill-row span {
+  width: 80px;
+  height: 18px;
+  background: #d9d9d9;
+  display: block;
+}
+
+.skill-add {
+  width: 80px;
+  height: 22px;
+  background: #d9d9d9;
+  text-align: center;
+  line-height: 22px;
+  font-size: 24px;
+}
+
+.candidate-right {
+  position: relative;
+}
+
+.candidate-summary-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.candidate-summary-head h3 {
+  font-size: 17px;
+}
+
+.summary-box {
+  height: 145px;
+  border: 1px solid #999999;
+  margin-top: 10px;
+  margin-bottom: 18px;
+}
+
+.work-title {
+  font-size: 17px;
+  margin-bottom: 10px;
+}
+
+.experience-box {
+  height: 52px;
+  border: 1px solid #999999;
+  margin-bottom: 12px;
+}

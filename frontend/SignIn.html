@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Candidate Sign In</title>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <div class="page overlay-page">
+
+    <!-- Top Navigation Bar -->
+    <header class="navbar">
+      <div class="logo">Job <b>Radar</b></div>
+
+      <div class="nav-right">
+        <div class="user-icon"></div>
+        <a href="SignIn.html" class="signin-btn">Sign in</a>
+      </div>
+    </header>
+
+    <!-- Search Area from home page -->
+    <section class="search-area">
+      <input
+        class="search-input"
+        type="text"
+        placeholder="Enter company name or Job Position"
+      >
+
+      <button class="search-btn">Search</button>
+    </section>
+
+    <!-- Main Content from home page -->
+    <main class="main-content">
+
+      <section class="recommended-section">
+        <h1>Recommended</h1>
+
+        <p>
+          Please <a href="SignIn.html">sign in</a> and complete your
+          <span>profile</span> to view recommendations
+        </p>
+      </section>
+
+      <aside class="side-panel">
+
+        <section class="saved-section">
+          <h3>Saved Searches</h3>
+
+          <div class="empty-box">
+            You can view your previous search history here.
+          </div>
+        </section>
+
+        <section class="saved-section">
+          <h3>Saved Jobs</h3>
+
+          <div class="empty-box">
+            You can view your saved jobs here.
+          </div>
+        </section>
+
+      </aside>
+
+    </main>
+
+    <!-- Sign in modal -->
+    <main class="form-modal">
+
+      <h1>Sign in</h1>
+
+      <label>Email address:</label>
+      <input type="email">
+
+      <label>Password:</label>
+      <input type="password">
+
+      <div class="form-links">
+        <span>No account? <a href="candidate-register.html">Register</a></span>
+        <a href="#">Forgot your password?</a>
+      </div>
+
+      <button class="red-main-btn">Sign in</button>
+
+      <div class="bottom-links">
+        <span>Already have an account? <a href="SignIn.html">Log in</a></span>
+        <span>If you are an employer, please <a href="employer-register.html">click here.</a></span>
+      </div>
+
+    </main>
+
+  </div>
+
+</body>
+</html>
