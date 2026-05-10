@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Employer Home Page</title>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <div class="page">
+
+    <!-- Top Navigation -->
+    <header class="navbar">
+
+      <div class="logo">
+        Job <br>
+        Radar
+      </div>
+
+      <div class="nav-right">
+
+        <a href="profile.html">
+          <div class="user-icon"></div>
+        </a>
+
+        <button class="signin-btn">
+          Name
+        </button>
+
+      </div>
+
+    </header>
+
+    <!-- Search Area -->
+    <section class="search-area">
+
+      <input
+        class="search-input"
+        type="text"
+        placeholder="Enter company name or Job Position"
+      >
+
+      <button class="search-btn">
+        Search
+      </button>
+
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+      <!-- Left Side -->
+      <section class="recommended-section">
+
+        <div class="section-header">
+
+          <h1>Recommended</h1>
+
+          <p class="member-note">
+            Free users can view up to 10 recommendations.
+            Members can view unlimited recommendations.
+          </p>
+
+        </div>
+
+        <!-- Dynamic Recommendation Container -->
+        <div
+          class="recommend-scroll"
+          id="recommendList"
+        >
+
+          <!--
+            Job cards from database/backend
+            will be inserted here later
+          -->
+
+        </div>
+
+      </section>
+
+      <!-- Right Side -->
+      <aside class="side-panel">
+
+        <section class="saved-section">
+
+          <h3>Search History</h3>
+
+          <!-- Dynamic History Container -->
+          <div
+            class="history-box"
+            id="historyList"
+          >
+
+            <!--
+              Search history from database/backend
+              will be inserted here later
+            -->
+
+          </div>
+
+        </section>
+
+      </aside>
+
+    </main>
+
+  </div>
+
+  <script src="script.js"></script>
+
+</body>
+
+</html>
