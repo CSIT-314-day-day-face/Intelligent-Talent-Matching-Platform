@@ -1,15 +1,16 @@
-# Intelligent Talent Matching Platform
-**CSIT314 Group Project - day day face(2026)**
+1. Environment Setup:
+python3 -m venv .venv
+source .venv/bin/activate  # macOS/Linux
+# .venv\\Scripts\\activate   # Windows
 
-## Project Overview
-This is a functional web application designed to streamline the recruitment process through a two-way intelligent matching mechanism. The platform assists candidates in finding relevant jobs and helps employers identify suitable talent.
+2. Install Dependencies:
+pip install -r requirements.txt
 
-## Tech Stack (Recommended)
-- **Frontend:** HTML, CSS
-- **Backend:** Python (Flask/Django)
-- **Database:** SQLite / MySQL
-- **Version Control:** GitHub
+3. Initialize Database:
+python3 setup_db.py
 
-## Core Features
-- **Candidate Workflow:** Profile creation, keyword search, and Top-10 job recommendations.
-- **Employer Workflow:** Job posting, candidate filtering, and Top-10 talent recommendations.
+4. Running the Backend:
+python3 -m backend.app
+
+5. System Verification:
+python3 test/test_backend_flow.py
