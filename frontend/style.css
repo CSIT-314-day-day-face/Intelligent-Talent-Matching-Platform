@@ -35,13 +35,18 @@ body {
 .navbar {
   width: 100%;
   height: 120px;
+
   padding: 0 60px;
 
   display: flex;
   justify-content: space-between;
   align-items: center;
 
-  background: white;
+  background: linear-gradient(
+    90deg,
+    #ff3131,
+    #2fd7e7
+  );
 }
 
 .logo {
@@ -209,4 +214,781 @@ body {
   background: white;
   outline: none;
   cursor: pointer;
+}
+.user-name-box {
+
+  min-width: 120px;
+
+  height: 45px;
+
+  padding: 0 20px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  background: #f3f3f3;
+
+  color: black;
+
+  border-radius: 12px;
+
+  font-weight: 600;
+
+  font-size: 16px;
+
+}
+/* Candidate Profile Page */
+
+.profile-page {
+  width: 100%;
+  min-height: 100vh;
+
+  padding: 20px 30px;
+
+  background: #f3f3f3;
+}
+
+.profile-topbar {
+  width: 100%;
+  height: 90px;
+
+  padding: 0 18px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  background: linear-gradient(
+    90deg,
+    #ff3131,
+    #2fd7e7
+  );
+
+  border: 1px solid #444;
+}
+
+.profile-logo-link {
+  text-decoration: none;
+  color: black;
+}
+
+.profile-nav-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.profile-container {
+  width: 100%;
+  min-height: 780px;
+
+  margin-top: 28px;
+  padding: 40px 70px;
+
+  display: flex;
+
+  background: white;
+}
+
+.profile-left {
+  width: 48%;
+}
+
+.profile-basic {
+  display: flex;
+  align-items: flex-start;
+  gap: 40px;
+}
+
+.candidate-avatar-large {
+  width: 190px;
+  height: 190px;
+
+  background: #d9d9d9;
+}
+
+.candidate-info {
+  flex: 1;
+}
+
+.profile-name-input {
+  width: 100%;
+  height: 65px;
+
+  border: none;
+  outline: none;
+
+  font-size: 58px;
+  font-weight: 800;
+
+  background: transparent;
+}
+
+.profile-text-input {
+  width: 100%;
+  height: 52px;
+
+  border: none;
+  outline: none;
+
+  font-size: 24px;
+  font-weight: 700;
+
+  background: transparent;
+}
+
+.tag-section {
+  margin-top: 55px;
+}
+
+.tag-section h3 {
+  font-size: 30px;
+  margin-bottom: 25px;
+}
+
+.tag-grid {
+  width: 330px;
+
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+
+  gap: 30px;
+}
+
+.tag-input {
+  height: 40px;
+
+  border: none;
+  outline: none;
+
+  background: #d9d9d9;
+
+  padding: 0 12px;
+
+  font-size: 16px;
+}
+
+.tag-add-btn {
+  width: 130px;
+  height: 40px;
+
+  margin-top: 40px;
+
+  border: none;
+
+  background: #d9d9d9;
+
+  font-size: 40px;
+  line-height: 10px;
+
+  cursor: pointer;
+}
+
+.save-profile-btn {
+  display: block;
+
+  width: 180px;
+  height: 46px;
+
+  margin-top: 35px;
+
+  border: none;
+  border-radius: 12px;
+
+  background: #ff3131;
+  color: white;
+
+  font-size: 16px;
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+.profile-divider {
+  width: 1px;
+
+  margin: 0 40px;
+
+  background: #aaa;
+}
+
+.profile-right {
+  flex: 1;
+}
+
+.summary-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.summary-head h3,
+.work-title {
+  font-size: 28px;
+  margin-bottom: 12px;
+}
+
+.vip-btn {
+  width: 210px;
+  height: 55px;
+
+  border: none;
+
+  background: #d9d9d9;
+
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.summary-area {
+  width: 100%;
+  height: 260px;
+
+  resize: none;
+
+  border: 1px solid #555;
+
+  padding: 18px;
+
+  font-size: 18px;
+}
+
+.experience-area {
+  width: 100%;
+  height: 100px;
+
+  margin-bottom: 22px;
+
+  resize: none;
+
+  border: 1px solid #555;
+
+  padding: 15px;
+
+  font-size: 16px;
+}
+.candidate-profile-layout {
+  width: 100%;
+  padding: 40px 60px;
+
+  display: grid;
+  grid-template-columns: 1fr 1fr 1.1fr;
+  gap: 40px;
+}
+
+.profile-left-panel,
+.profile-middle-panel,
+.profile-right-panel {
+  background: white;
+  border-radius: 24px;
+  padding: 30px;
+}
+
+.profile-logo-link {
+  text-decoration: none;
+  color: black;
+}
+
+.profile-field {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 22px;
+}
+
+.profile-field label {
+  margin-bottom: 8px;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.profile-field input {
+  height: 50px;
+  padding: 0 16px;
+
+  border: 1px solid #ccc;
+  border-radius: 12px;
+
+  font-size: 16px;
+}
+
+.save-profile-btn {
+  width: 100%;
+  height: 52px;
+
+  border: none;
+  border-radius: 14px;
+
+  background: #ff3131;
+  color: white;
+
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.tag-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.selected-tag {
+  padding: 10px 16px;
+
+  border-radius: 999px;
+
+  background: #eeeeee;
+
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.selected-tag span {
+  margin-left: 10px;
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.tag-add-btn {
+  width: 180px;
+  height: 55px;
+
+  border: none;
+  border-radius: 12px;
+
+  background: #f3f3f3;
+
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.18);
+
+  font-size: 32px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.summary-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  margin-bottom: 20px;
+}
+
+.vip-btn {
+  width: 120px;
+  height: 45px;
+
+  border: none;
+  border-radius: 12px;
+
+  background: #d9d9d9;
+
+  font-weight: 700;
+}
+
+.summary-box {
+  width: 100%;
+  height: 240px;
+
+  padding: 16px;
+
+  border: 1px solid #ccc;
+  border-radius: 14px;
+
+  resize: none;
+  margin-bottom: 30px;
+}
+
+.experience-box {
+  width: 100%;
+  height: 200px;
+
+  padding: 16px;
+
+  border: 1px solid #ccc;
+  border-radius: 14px;
+
+  resize: none;
+}
+
+.tag-modal-bg {
+  position: fixed;
+  inset: 0;
+
+  display: none;
+  justify-content: center;
+  align-items: center;
+
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 100;
+}
+
+.tag-modal {
+  width: 560px;
+  max-height: 80vh;
+  overflow-y: auto;
+
+  background: white;
+
+  border-radius: 20px;
+
+  padding: 30px;
+}
+
+.tag-modal h3 {
+  margin-top: 24px;
+  margin-bottom: 12px;
+}
+
+.tag-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+
+  gap: 15px;
+}
+
+.tag-options button {
+  height: 45px;
+
+  border: none;
+  border-radius: 10px;
+
+  background: #f3f3f3;
+
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.close-modal-btn {
+  width: 100%;
+  height: 50px;
+
+  margin-top: 30px;
+
+  border: none;
+  border-radius: 12px;
+
+  background: #ff3131;
+  color: white;
+
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+@media (max-width: 1100px) {
+  .candidate-profile-layout {
+    grid-template-columns: 1fr;
+    padding: 30px;
+  }
+}
+.candidate-profile-layout {
+  width: 100%;
+  padding: 40px 60px;
+
+  display: grid;
+  grid-template-columns: 1fr 1fr 1.1fr;
+  gap: 40px;
+}
+
+.profile-left-panel,
+.profile-middle-panel,
+.profile-right-panel {
+  background: white;
+  border-radius: 24px;
+  padding: 30px;
+}
+
+.profile-logo-link {
+  text-decoration: none;
+  color: black;
+}
+
+.profile-field {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 22px;
+}
+
+.profile-field label {
+  margin-bottom: 8px;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.profile-field input {
+  height: 50px;
+  padding: 0 16px;
+
+  border: 1px solid #ccc;
+  border-radius: 12px;
+
+  font-size: 16px;
+}
+
+.save-profile-btn {
+  width: 100%;
+  height: 52px;
+
+  border: none;
+  border-radius: 14px;
+
+  background: #ff3131;
+  color: white;
+
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.tag-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.selected-tag {
+  padding: 10px 16px;
+
+  border-radius: 999px;
+
+  background: #eeeeee;
+
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.selected-tag span {
+  margin-left: 10px;
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.experience-tag {
+  background: #ffb3b3;
+}
+
+.tag-add-btn {
+  width: 180px;
+  height: 55px;
+
+  border: none;
+  border-radius: 12px;
+
+  background: #f3f3f3;
+
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.18);
+
+  font-size: 32px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.summary-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  margin-bottom: 20px;
+}
+
+.vip-btn {
+  width: 120px;
+  height: 45px;
+
+  border: none;
+  border-radius: 12px;
+
+  background: #d9d9d9;
+
+  font-weight: 700;
+}
+
+.summary-box {
+  width: 100%;
+  height: 240px;
+
+  padding: 16px;
+
+  border: 1px solid #ccc;
+  border-radius: 14px;
+
+  resize: none;
+  margin-bottom: 30px;
+}
+
+.experience-box {
+  width: 100%;
+  height: 200px;
+
+  padding: 16px;
+
+  border: 1px solid #ccc;
+  border-radius: 14px;
+
+  resize: none;
+}
+
+.tag-modal-bg {
+  position: fixed;
+  inset: 0;
+
+  display: none;
+  justify-content: center;
+  align-items: center;
+
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 100;
+}
+
+.tag-modal {
+  width: 560px;
+  max-height: 80vh;
+  overflow-y: auto;
+
+  background: white;
+  border-radius: 20px;
+  padding: 30px;
+}
+
+.tag-modal h3 {
+  margin-top: 24px;
+  margin-bottom: 12px;
+}
+
+.tag-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.tag-options button {
+  height: 45px;
+
+  border: none;
+  border-radius: 10px;
+
+  background: #f3f3f3;
+
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.active-tag {
+  background: #ff3131 !important;
+  color: white !important;
+}
+
+.close-modal-btn {
+  width: 100%;
+  height: 50px;
+
+  margin-top: 30px;
+
+  border: none;
+  border-radius: 12px;
+
+  background: #ff3131;
+  color: white;
+
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+@media (max-width: 1100px) {
+  .candidate-profile-layout {
+    grid-template-columns: 1fr;
+    padding: 30px;
+  }
+}
+.vip-btn {
+  width: 140px;
+  height: 50px;
+
+  border: none;
+  border-radius: 14px;
+
+  background: gold;
+
+  font-size: 18px;
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+.vip-active {
+  background: #ff3131 !important;
+  color: white;
+}
+
+.vip-modal-bg {
+  position: fixed;
+  inset: 0;
+
+  display: none;
+  justify-content: center;
+  align-items: center;
+
+  background: rgba(0, 0, 0, 0.45);
+
+  z-index: 200;
+}
+
+.vip-modal {
+  width: 420px;
+
+  background: white;
+
+  border-radius: 24px;
+
+  padding: 35px;
+
+  text-align: center;
+}
+
+.vip-modal h2 {
+  margin-bottom: 16px;
+}
+
+.vip-modal p {
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 30px;
+}
+
+.vip-modal-buttons {
+  display: flex;
+  gap: 20px;
+}
+
+.vip-confirm-btn,
+.vip-cancel-btn {
+  flex: 1;
+  height: 48px;
+
+  border: none;
+  border-radius: 12px;
+
+  font-size: 16px;
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+.vip-confirm-btn {
+  background: #ff3131;
+  color: white;
+}
+
+.vip-cancel-btn {
+  background: #eeeeee;
 }
