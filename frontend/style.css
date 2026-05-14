@@ -1,640 +1,212 @@
+/* style.css */
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  min-height: 100%;
+  margin: 0;
+  padding: 0;
+  background: white;
   font-family: Arial, sans-serif;
+  overflow-x: auto;
 }
 
 body {
-  background: #f3f3f3;
-}
-
-/* 整个页面 */
-.page {
-  width: 90%;
-  max-width: 1400px;
-  margin: 20px auto;
+  margin: 0;
+  padding: 0;
   background: white;
-  min-height: 900px;
+  overflow-x: auto;
 }
 
-/* 顶部导航栏 */
+.page {
+  min-width: 1440px;
+  width: 100%;
+  min-height: 100vh;
+  background: white;
+}
+/* Navbar */
+
 .navbar {
-  height: 80px;
+  width: 100%;
+  height: 120px;
+  padding: 0 60px;
 
   display: flex;
   justify-content: space-between;
   align-items: center;
 
-  padding: 0 30px;
+  background: white;
 }
 
-/* logo */
 .logo {
-  font-size: 36px;
-
-  font-style: italic;
-
-  font-weight: bold;
-
-  font-family: cursive;
-
-  color: black;
-
-  line-height: 0.9;
-
-  width: 120px;
+  display: flex;
+  flex-direction: column;
+  line-height: 0.85;
 }
 
-/* 右边区域 */
+.logo span {
+  font-size: 56px;
+  font-style: italic;
+  font-weight: 400;
+}
+
+.logo strong {
+  font-size: 58px;
+  font-weight: 800;
+}
+
 .nav-right {
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 26px;
 }
 
-/* 用户头像 */
 .user-icon {
-  width: 40px;
-  height: 40px;
+  width: 70px;
+  height: 70px;
   border-radius: 50%;
   background: #d9d9d9;
 }
 
-/* 登录按钮 */
 .signin-btn {
+  width: 150px;
+  height: 70px;
+
   border: none;
-  padding: 12px 24px;
-  border-radius: 8px;
-  background: #e5e5e5;
+  border-radius: 18px;
+
+  background: #d9d9d9;
+
+  font-size: 20px;
   cursor: pointer;
 }
 
-/* 搜索区域 */
-.search-area {
-  height: 120px;
+/* Search */
 
-  background: linear-gradient(
-    90deg,
-    #ff2d2d,
-    #3ad7df
-  );
+.search-area {
+  width: 100%;
+  height: 210px;
+
+  padding: 0 90px;
 
   display: flex;
   justify-content: center;
   align-items: center;
+  gap: 40px;
 
-  gap: 30px;
+  background: linear-gradient(
+    90deg,
+    #ff2727,
+    #35d0d0
+  );
 }
 
-/* 搜索输入框 */
 .search-input {
-  width: 60%;
-  height: 45px;
+  width: 860px;
+  height: 74px;
 
   border: none;
-  border-radius: 8px;
+  border-radius: 18px;
 
-  padding: 0 20px;
+  padding: 0 30px;
 
-  font-size: 15px;
+  font-size: 22px;
 }
 
-/* 搜索按钮 */
 .search-btn {
-  height: 45px;
+  width: 180px;
+  height: 74px;
 
   border: none;
-  border-radius: 8px;
-
-  padding: 0 25px;
+  border-radius: 18px;
 
   background: white;
 
-  font-weight: bold;
+  font-size: 22px;
+  font-weight: 700;
 
   cursor: pointer;
 }
 
-/* 主内容 */
+/* Main */
+
 .main-content {
-  display: flex;
+  width: 100%;
 
-  justify-content: space-between;
+  padding: 80px 80px;
 
-  padding: 40px;
+  display: grid;
+  grid-template-columns: 1fr 360px;
+
+  gap: 80px;
 }
 
-/* 左边推荐区 */
-.recommended-section {
-  width: 60%;
-}
+/* Left */
 
-/* Recommended 标题 */
 .recommended-section h1 {
-  font-size: 56px;
-  margin-bottom: 20px;
-}
-
-/* 下面提示 */
-.recommended-section p {
-  color: #666;
-  font-size: 14px;
-}
-
-.recommended-section span {
-  color: red;
-}
-
-/* 右边栏 */
-.side-panel {
-  width: 32%;
-}
-
-/* 每个保存区域 */
-.saved-section {
+  font-size: 92px;
   margin-bottom: 40px;
 }
 
-.saved-section h3 {
-  margin-bottom: 12px;
-}
-
-/* 空盒子 */
-.empty-box {
-  height: 220px;
-
-  border: 4px solid #cccccc;
-  border-radius: 18px;
-
-  padding: 20px;
-
-  color: #999;
-}
-
-
-
-
-/* Sign In / Register Form Page */
-
-.form-banner {
-  height: 90px;
-  background: linear-gradient(90deg, #ff2d2d, #3ad7df);
-}
-
-.register-card {
-  width: 70%;
-  max-width: 850px;
-  margin: -70px auto 0;
-  background: white;
-  padding: 45px 55px;
-  min-height: 520px;
-}
-
-.register-card h1 {
-  font-size: 32px;
-  margin-bottom: 35px;
-}
-
-.register-card label {
-  display: block;
-  font-size: 18px;
-  margin: 16px 0 8px;
-}
-
-.register-card input {
-  width: 100%;
-  height: 45px;
-  border: 1px solid #333;
-  border-radius: 10px;
-  padding: 0 12px;
-  font-size: 16px;
-}
-
-.form-links {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 16px;
-  font-size: 13px;
-}
-
-.form-links a,
-.bottom-links a {
-  color: #40dce5;
-  text-decoration: none;
-}
-
-.red-main-btn {
-  display: block;
-  width: 310px;
-  height: 58px;
-  margin: 40px auto 70px;
-  border: none;
-  border-radius: 12px;
-  background: #ff1f1f;
-  color: white;
-  font-size: 17px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.bottom-links {
-  display: flex;
-  justify-content: space-between;
-  font-size: 12px;
-}
-
-.register-card {
-  border-radius: 4px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-}
-
-/* Overlay form pages */
-
-.overlay-page {
-  position: relative;
-  overflow: hidden;
-}
-
-.form-modal {
-  position: absolute;
-  top: 100px;
-  left: 8%;
-  right: 8%;
-  background: white;
-  padding: 45px 55px 25px;
-  min-height: 520px;
-  box-shadow: 0 3px 4px rgba(0, 0, 0, 0.2);
-}
-
-.form-modal h1 {
-  font-size: 32px;
-  margin-bottom: 35px;
-}
-
-.form-modal label {
-  display: block;
-  font-size: 18px;
-  margin: 16px 0 8px;
-}
-
-.form-modal input {
-  width: 100%;
-  height: 52px;
-  border: 1px solid #333;
-  border-radius: 10px;
-  padding: 0 12px;
-  font-size: 16px;
-}
-
-.form-links {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 16px;
-  font-size: 13px;
-}
-
-.form-links a,
-.bottom-links a {
-  color: #40dce5;
-  text-decoration: none;
-}
-
-.red-main-btn {
-  display: block;
-  width: 310px;
-  height: 58px;
-  margin: 28px auto 70px;
-  border: none;
-  border-radius: 12px;
-  background: #ff1f1f;
-  color: white;
-  font-size: 17px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.bottom-links {
-  display: flex;
-  justify-content: space-between;
-  font-size: 12px;
-}
-
-/* Employer Profile   */
-
-.emp-page {
-  min-height: 650px;
-  background: white;
-}
-
-.emp-topbar {
-  height: 50px;
-  background: linear-gradient(90deg, #ff2d2d, #3ad7df);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 6px 18px;
-}
-
-.emp-logo-box {
-  width: 34px;
-  height: 34px;
-  background: #d9d9d9;
-}
-
-.emp-nav-right {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.emp-profile-content {
-  display: grid;
-  grid-template-columns: 1.2fr 1fr;
-  gap: 30px;
-  padding: 45px 70px;
-}
-
-.emp-left {
-  padding-right: 20px;
-}
-
-.emp-info-row {
-  display: flex;
-  align-items: flex-start;
-  gap: 25px;
-  margin-bottom: 25px;
-}
-
-.emp-avatar {
-  width: 110px;
-  height: 125px;
-  background: #d9d9d9;
-}
-
-.emp-text h1 {
-  font-size: 34px;
-  margin-bottom: 6px;
-}
-
-.emp-text p {
-  font-size: 15px;
-  margin-bottom: 6px;
-  font-weight: bold;
-}
-
-.emp-publish {
-  width: 360px;
-}
-
-.emp-publish h3 {
-  font-size: 17px;
-  margin-bottom: 10px;
-}
-
-.emp-input-box {
-  width: 100%;
-  height: 48px;
-  border: 1px solid #999999;
-  margin-bottom: 12px;
-  background: white;
-}
-
-.emp-add-btn {
-  display: block;
-  width: 100%;
-  height: 42px;
-  background: #d9d9d9;
-  color: black;
-  text-align: center;
-  line-height: 42px;
-  font-size: 34px;
-  text-decoration: none;
-}
-
-.emp-right {
-  position: relative;
-  border-left: 1px solid #cccccc;
-  padding-left: 30px;
-  min-height: 380px;
-}
-
-.emp-summary-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-}
-
-.emp-summary-head h3 {
-  font-size: 17px;
-}
-
-.emp-vip-btn {
-  width: 90px;
-  height: 30px;
-  border: none;
-  background: #d9d9d9;
-  font-weight: bold;
-}
-
-.emp-bottom-cards {
-  display: flex;
-  gap: 30px;
-  margin-top: 250px;
-}
-
-.emp-small-card {
-  width: 78px;
-  height: 88px;
-  background: #d9d9d9;
-}
-
-
-/* Post Job Modal */
-
-.job-modal {
-  position: absolute;
-  top: 125px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 520px;
-  min-height: 330px;
-  background: white;
-  border: 2px solid #999999;
-  padding: 35px;
-  z-index: 5;
-}
-
-.job-row {
-  display: flex;
-  align-items: center;
-  margin-bottom: 14px;
-  gap: 10px;
-}
-
-.job-row strong {
-  width: 130px;
-  font-size: 15px;
-}
-
-.job-line {
-  flex: 1;
-  height: 14px;
-  background: #d9d9d9;
-}
-
-.job-description strong {
-  display: block;
-  font-size: 15px;
-  margin-bottom: 10px;
-}
-
-.job-desc-box {
-  width: 100%;
-  height: 70px;
-  background: #d9d9d9;
-  margin-bottom: 18px;
-}
-
-.job-tags {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  margin-bottom: 12px;
-}
-
-.job-tags strong {
-  font-size: 15px;
-}
-
-.job-tags span {
-  background: #d9d9d9;
-  padding: 7px 16px;
-  font-size: 13px;
-  font-weight: bold;
-}
-
-.tag-placeholders {
-  display: flex;
-  gap: 16px;
-  margin-left: 50px;
-  margin-bottom: 14px;
-}
-
-.tag-placeholders div {
-  width: 78px;
-  height: 22px;
-  background: #d9d9d9;
-}
-
-.tag-add {
-  width: 100px;
-  height: 28px;
-  background: #d9d9d9;
-  text-align: center;
-  line-height: 28px;
-  font-size: 28px;
-  margin-left: 50px;
-}
-
-/* Candidate Profile Page */
-
-.candidate-page {
-  min-height: 650px;
-  background: white;
-}
-
-.candidate-profile-content {
-  display: grid;
-  grid-template-columns: 360px 1fr;
-  gap: 35px;
-  padding: 55px 70px;
-}
-
-.candidate-left {
-  border-right: 1px solid #cccccc;
-  padding-right: 35px;
-}
-
-.candidate-info-row {
-  display: flex;
-  gap: 22px;
-  align-items: flex-start;
-  margin-bottom: 35px;
-}
-
-.candidate-avatar {
-  width: 110px;
-  height: 125px;
-  background: #d9d9d9;
-}
-
-.candidate-text h1 {
-  font-size: 34px;
-  margin-bottom: 6px;
-}
-
-.candidate-text p {
-  font-size: 15px;
-  margin-bottom: 6px;
-  font-weight: bold;
-}
-
-.candidate-skills h3 {
-  font-size: 17px;
-  margin-bottom: 12px;
-}
-
-.skill-row {
-  display: flex;
-  gap: 18px;
-  margin-bottom: 12px;
-}
-
-.skill-row span {
-  width: 80px;
-  height: 18px;
-  background: #d9d9d9;
-  display: block;
-}
-
-.skill-add {
-  width: 80px;
-  height: 22px;
-  background: #d9d9d9;
-  text-align: center;
-  line-height: 22px;
+.recommended-section p {
   font-size: 24px;
+  color: #555;
+  line-height: 1.4;
 }
 
-.candidate-right {
-  position: relative;
+.recommended-section a {
+  color: blue;
 }
 
-.candidate-summary-head {
+.profile-link {
+  color: red !important;
+}
+
+/* Right */
+
+.side-panel {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  gap: 60px;
 }
 
-.candidate-summary-head h3 {
-  font-size: 17px;
-}
-
-.summary-box {
-  height: 145px;
-  border: 1px solid #999999;
-  margin-top: 10px;
+.saved-section h3 {
+  font-size: 28px;
   margin-bottom: 18px;
 }
 
-.work-title {
-  font-size: 17px;
-  margin-bottom: 10px;
+.empty-box {
+  width: 100%;
+  min-height: 280px;
+
+  border: 6px solid #cccccc;
+  border-radius: 30px;
+
+  padding: 28px;
+
+  color: #8c8c8c;
+  font-size: 20px;
+  line-height: 1.4;
 }
 
-.experience-box {
-  height: 52px;
-  border: 1px solid #999999;
-  margin-bottom: 12px;
+.search-filter {
+  width: 220px;
+  height: 72px;
+  border: none;
+  border-radius: 18px;
+  padding: 0 24px;
+
+  font-size: 22px;
+  font-weight: 500;
+  color: #555;
+
+  background: white;
+  outline: none;
+  cursor: pointer;
 }
