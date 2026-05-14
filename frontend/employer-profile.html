@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,58 +9,240 @@
 </head>
 
 <body>
-  <div class="page emp-page">
 
-    <header class="emp-topbar">
-      <div class="emp-logo-box"></div>
+  <div class="page">
 
-      <div class="emp-nav-right">
+    <header class="navbar">
+
+      <a href="employer-index.html" class="profile-logo-link">
+        <div class="logo">
+          <span>Job</span>
+          <strong>Radar</strong>
+        </div>
+      </a>
+
+      <div class="nav-right">
         <div class="user-icon"></div>
-        <button class="signin-btn">Name</button>
+
+        <div class="user-name-box" id="employerName">
+          Name
+        </div>
       </div>
+
     </header>
 
-    <main class="emp-profile-content">
+    <main class="employer-profile-layout">
 
-      <section class="emp-left">
+      <section class="employer-left-panel">
 
-        <div class="emp-info-row">
-          <div class="emp-avatar"></div>
+        <h2>Company Information</h2>
 
-          <div class="emp-text">
-            <h1>Name</h1>
-            <p>age</p>
-            <p>CP Location</p>
-            <p>Email</p>
-          </div>
+        <div class="profile-field">
+          <label>Company Name:</label>
+          <input type="text" id="companyNameInput">
         </div>
 
-        <div class="emp-publish">
-          <h3>Publish Job :</h3>
-
-          <div class="emp-input-box"></div>
-          <div class="emp-input-box"></div>
-          <div class="emp-input-box"></div>
-
-          <a href="post-job.html" class="emp-add-btn">＋</a>
+        <div class="profile-field">
+          <label>Company Location:</label>
+          <input type="text" id="companyLocationInput">
         </div>
+
+        <div class="profile-field">
+          <label>Email:</label>
+          <input type="email" id="companyEmailInput">
+        </div>
+
+        <button class="save-profile-btn" onclick="saveEmployerProfile()">
+          Save Profile
+        </button>
 
       </section>
 
-      <section class="emp-right">
-        <div class="emp-summary-head">
-          <h3>CP Summary:</h3>
-          <button class="emp-vip-btn">Vip</button>
+      <section class="employer-right-panel">
+
+        <div class="publish-header">
+
+          <h2>Published Jobs</h2>
+
+          <div class="publish-actions">
+
+            <button
+              class="profile-vip-btn"
+              id="employerVipButton"
+              onclick="openEmployerVipModal()"
+            >
+              Vip
+            </button>
+
+            <button class="job-add-btn" onclick="goToPostJob()">
+              +
+            </button>
+
+          </div>
+
         </div>
 
-        <div class="emp-bottom-cards">
-          <div class="emp-small-card"></div>
-          <div class="emp-small-card"></div>
-        </div>
+        <div class="published-job-list" id="publishedJobList"></div>
+
       </section>
 
     </main>
 
   </div>
+
+  <div class="vip-modal-bg" id="employerVipModal">
+
+    <div class="vip-modal">
+
+      <h2>Become a VIP Employer?</h2>
+
+      <p>
+        VIP employers can publish unlimited jobs and unlock premium features.
+      </p>
+
+      <div class="vip-modal-buttons">
+
+        <button class="vip-confirm-btn" onclick="becomeEmployerVip()">
+          Yes
+        </button>
+
+        <button class="vip-cancel-btn" onclick="closeEmployerVipModal()">
+          No
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+    function loadEmployerProfile() {
+      const savedName = localStorage.getItem("employerName");
+
+      if (savedName && savedName.trim() !== "") {
+        document.getElementById("employerName").innerText = savedName;
+        document.getElementById("companyNameInput").value = savedName;
+      }
+
+      document.getElementById("companyLocationInput").value =
+        localStorage.getItem("companyLocation") || "";
+
+      document.getElementById("companyEmailInput").value =
+        localStorage.getItem("companyEmail") || "";
+
+      renderPublishedJobs();
+    }
+
+    function saveEmployerProfile() {
+      const companyName = document.getElementById("companyNameInput").value.trim();
+
+      localStorage.setItem("employerName", companyName || "Name");
+      localStorage.setItem("companyLocation", document.getElementById("companyLocationInput").value);
+      localStorage.setItem("companyEmail", document.getElementById("companyEmailInput").value);
+
+      document.getElementById("employerName").innerText = companyName || "Name";
+
+      alert("Employer profile saved!");
+    }
+
+    function goToPostJob() {
+      window.location.href = "post-job.html";
+    }
+
+    function renderPublishedJobs() {
+      const jobListBox = document.getElementById("publishedJobList");
+
+      const jobs =
+        JSON.parse(localStorage.getItem("publishedJobs")) || [];
+
+      const isVip =
+        localStorage.getItem("employerVip") === "true";
+
+      jobListBox.innerHTML = "";
+
+      const visibleJobs =
+        isVip ? jobs : jobs.slice(0, 10);
+
+      if (visibleJobs.length === 0) {
+        jobListBox.innerHTML = `
+          <div class="empty-job-box">
+            <span>
+              No published jobs yet.<br>
+              Click + to publish a job.
+            </span>
+          </div>
+        `;
+        return;
+      }
+
+      visibleJobs.forEach(job => {
+        const jobCard = document.createElement("div");
+        jobCard.className = "published-job-card";
+
+        const skills = Array.isArray(job.skillTags)
+          ? job.skillTags
+          : [];
+
+        jobCard.innerHTML = `
+          <h3>${job.jobTitle}</h3>
+
+          <p>
+            <strong>Company:</strong>
+            ${job.companyName}
+          </p>
+
+          <div class="job-tag-row">
+            ${
+              job.experienceTag
+                ? `<span>${job.experienceTag}</span>`
+                : ""
+            }
+
+            ${
+              skills
+                .map(tag => `<span>${tag}</span>`)
+                .join("")
+            }
+          </div>
+        `;
+
+        jobListBox.appendChild(jobCard);
+      });
+    }
+
+    function openEmployerVipModal() {
+      document.getElementById("employerVipModal").style.display = "flex";
+    }
+
+    function closeEmployerVipModal() {
+      document.getElementById("employerVipModal").style.display = "none";
+    }
+
+    function becomeEmployerVip() {
+      localStorage.setItem("employerVip", "true");
+
+      updateEmployerVipButton();
+      renderPublishedJobs();
+      closeEmployerVipModal();
+
+      alert("You are now a VIP employer!");
+    }
+
+    function updateEmployerVipButton() {
+      const vipStatus = localStorage.getItem("employerVip");
+      const vipButton = document.getElementById("employerVipButton");
+
+      if (vipStatus === "true") {
+        vipButton.innerText = "VIP";
+        vipButton.classList.add("vip-active");
+      }
+    }
+
+    loadEmployerProfile();
+    updateEmployerVipButton();
+  </script>
+
 </body>
+
 </html>
