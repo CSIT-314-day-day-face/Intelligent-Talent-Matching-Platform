@@ -1162,3 +1162,75 @@ body {
   font-weight: 800;
   cursor: pointer;
 }
+
+/* New Sign In Page */
+
+.signin-page {
+  min-height: 100vh;
+  background: white;
+}
+
+.signin-header {
+  height: 220px;
+  background: linear-gradient(90deg, #ff2d2d, #3ad7df);
+  padding: 35px 60px;
+}
+
+.signin-content {
+  width: 70%;
+  max-width: 850px;
+  margin: 70px auto 0;
+}
+
+.signin-content h1 {
+  font-size: 36px;
+  margin-bottom: 50px;
+}
+
+.signin-content label {
+  display: block;
+  font-size: 28px;
+  margin: 25px 0 12px;
+}
+
+.signin-content input {
+  width: 100%;
+  height: 72px;
+  border: 2px solid #111;
+  border-radius: 18px;
+  padding: 0 18px;
+  font-size: 22px;
+}
+
+.signin-content .form-links {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 25px;
+  font-size: 18px;
+}
+
+.signin-content .form-links a,
+.signin-content .bottom-links a {
+  color: #22dce5;
+  text-decoration: none;
+}
+
+.signin-content .red-main-btn {
+  display: block;
+  width: 430px;
+  height: 85px;
+  margin: 45px auto 90px;
+  border: none;
+  border-radius: 18px;
+  background: #ff1f1f;
+  color: white;
+  font-size: 26px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.signin-content .bottom-links {
+  display: flex;
+  justify-content: space-between;
+  font-size: 18px;
+}
