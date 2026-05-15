@@ -184,15 +184,14 @@
           ? job.skillTags
           : [];
 
-        jobCard.innerHTML = `
-          <h3>${job.jobTitle}</h3>
+       jobCard.innerHTML = `
 
-          <p>
-            <strong>Company:</strong>
-            ${job.companyName}
-          </p>
-
-          <div class="job-tag-row">
+  <h3>${job.jobTitle}</h3>
+   <p>
+    <strong>Location:</strong>
+    ${job.jobLocation}
+    </p>
+    <div class="job-tag-row">
             ${
               job.experienceTag
                 ? `<span>${job.experienceTag}</span>`
