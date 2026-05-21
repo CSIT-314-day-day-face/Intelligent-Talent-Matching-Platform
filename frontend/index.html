@@ -4,7 +4,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>JOB RADAR</title>
+
+  <title>Job Radar</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+
   <link rel="stylesheet" href="style.css">
 </head>
 
@@ -12,58 +20,199 @@
 
   <div class="page">
 
+    <!-- NAVBAR -->
     <header class="navbar">
-      <div class="logo">
-        <span>Job</span>
-        <strong>Radar</strong>
-      </div>
 
-      <div class="nav-right">
-        <a href="SignIn.html">
-          <div class="user-icon"></div>
+      <a href="index.html" class="logo-link">
+        <div class="logo">
+          Job Radar
+        </div>
+      </a>
+
+      <div class="nav-actions">
+
+        <a href="SignIn.html" class="signin-link">
+          Sign In
         </a>
 
-        <a href="SignIn.html">
-          <button class="signin-btn">Sign in</button>
+        <a href="SignUp.html" class="signup-btn">
+          Sign Up
         </a>
+
       </div>
+
     </header>
 
-    <section class="search-area">
+    <!-- HERO -->
+    <section class="hero">
 
-      <select class="search-filter" name="searchType">
-        <option value="location">Location</option>
-        <option value="salary">Salary</option>
-        <option value="company">Company Name</option>
-        <option value="position">Job Position</option>
-      </select>
+      <div class="hero-content">
 
-      <input
-        class="search-input"
+        <div class="hero-badge">
+          ● 8,234 NEW J&BS TRACKED T& DAY
+        </div>
+
+        <h1>
+          Find your next mission
+          <br>
+          with pinpoint precision.
+        </h1>
+
+        <p>
+          Job Radar uses advanced AI matching to scan the global market and bring
+          the most relevant roles directly to your dashboard.
+        </p>
+
+        <!-- SEARCH -->
+      <div class="search-box">
+        <select class="search-select" id="searchType">
+          <option value="location">Address</option>
+          <option value="salary">Salary</option>
+          <option value="workmode">Work Mode</option>
+        </select>
+        <input
         type="text"
-        placeholder="Enter company name or Job Position"
-      >
+        class="search-input"
+        id="searchInput"
+        placeholder="Enter your preferred work address"
+        >
+        <button class="search-btn">
+          Search
+        </button>
+      </div>
 
-      <button class="search-btn">
-        Search
-      </button>
+    </div>
 
     </section>
 
-    <main class="main-content">
+    <!-- RECOMMENDED -->
+    <section class="recommended-section">
 
-      <section class="recommended-section">
-        <h1>Recommended</h1>
+      <div class="section-top">
+
+        <h2>Recommended</h2>
+
+        <a href="#" class="view-all">
+          View All →
+        </a>
+
+      </div>
+
+      <div class="recommended-grid">
+
+        <div class="job-card"></div>
+        <div class="job-card"></div>
+        <div class="job-card"></div>
+        <div class="job-card"></div>
+
+      </div>
+
+      <!-- LOCK CARD -->
+      <div class="lock-popup">
+
+        <div class="lock-icon">
+          🔒
+        </div>
+
+        <h3>Personalized for You</h3>
 
         <p>
-          Please <a href="SignIn.html">sign in</a> and complete your
-          profile to view recommendations
+          Please sign in and complete your profile to view
+          recommendations tailored to your skills and experience.
         </p>
-      </section>
 
-    </main>
+        <button>
+          Sign In to Radar
+        </button>
+
+      </div>
+
+    </section>
+
+    <!-- FEATURES -->
+    <section class="feature-section">
+
+      <!-- LEFT -->
+      <div class="feature-card">
+
+        <div class="feature-icon red-icon">
+          👥
+        </div>
+
+        <h3>For Candidates</h3>
+
+        <p>
+          Don’t just search—monitor. Set your preferences and let our radar tech
+          find the hidden gems across 100+ job boards and company career pages.
+        </p>
+
+        <ul>
+
+          <li>AI-Powered Skill Matching</li>
+
+          <li>Real-time Salary Benchmarking</li>
+
+          <li>One-Click Application Radar</li>
+
+        </ul>
+
+        <button class="outline-btn">
+          Start Job Search
+        </button>
+
+      </div>
+
+      <!-- RIGHT -->
+      <div class="feature-card">
+
+        <div class="feature-icon yellow-icon">
+          💼
+        </div>
+
+        <h3>For Employers</h3>
+
+        <p>
+          Stop waiting for applications. Proactively scan for the talent that fits
+          your culture and technical needs with surgical precision.
+        </p>
+
+        <ul>
+
+          <li>Targeted Talent Pipelines</li>
+
+          <li>Employer Branding Dashboard</li>
+
+          <li>Automated Candidate Sourcing</li>
+
+        </ul>
+
+        <button class="dark-btn">
+          Post a Job
+        </button>
+
+      </div>
+
+    </section>
 
   </div>
+  <script>
+  const searchType = document.getElementById("searchType");
+  const searchInput = document.getElementById("searchInput");
+
+  searchType.addEventListener("change", function () {
+    if (this.value === "location") {
+      searchInput.placeholder = "Enter your preferred work address";
+    }
+
+    if (this.value === "salary") {
+      searchInput.placeholder = "Enter your expected salary";
+    }
+
+    if (this.value === "workmode") {
+      searchInput.placeholder = "Online work or office work";
+    }
+  });
+</script>
 
 </body>
 
