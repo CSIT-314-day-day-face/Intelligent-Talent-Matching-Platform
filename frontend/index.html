@@ -10,8 +10,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
-    rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet"
+  >
 
   <link rel="stylesheet" href="style.css">
 </head>
@@ -49,7 +51,7 @@
       <div class="hero-content">
 
         <div class="hero-badge">
-          ● 8,234 NEW J&BS TRACKED T& DAY
+          ● 8,234 NEW JOBS TRACKED TODAY
         </div>
 
         <h1>
@@ -59,29 +61,43 @@
         </h1>
 
         <p>
-          Job Radar uses advanced AI matching to scan the global market and bring
-          the most relevant roles directly to your dashboard.
+          Job Radar uses advanced AI matching to scan the global market
+          and bring the most relevant roles directly to your dashboard.
         </p>
 
         <!-- SEARCH -->
-      <div class="search-box">
-        <select class="search-select" id="searchType">
-          <option value="location">Address</option>
-          <option value="salary">Salary</option>
-          <option value="workmode">Work Mode</option>
-        </select>
-        <input
-        type="text"
-        class="search-input"
-        id="searchInput"
-        placeholder="Enter your preferred work address"
-        >
-        <button class="search-btn">
-          Search
-        </button>
-      </div>
+        <div class="search-box">
 
-    </div>
+          <select class="search-select" id="searchType">
+
+            <option value="location">
+              Address
+            </option>
+
+            <option value="salary">
+              Salary
+            </option>
+
+            <option value="workmode">
+              Work Mode
+            </option>
+
+          </select>
+
+          <input
+            type="text"
+            class="search-input"
+            id="searchInput"
+            placeholder="Enter your preferred work address"
+          >
+
+          <button class="search-btn" onclick="goSearch()">
+            Search
+          </button>
+
+        </div>
+
+      </div>
 
     </section>
 
@@ -101,8 +117,11 @@
       <div class="recommended-grid">
 
         <div class="job-card"></div>
+
         <div class="job-card"></div>
+
         <div class="job-card"></div>
+
         <div class="job-card"></div>
 
       </div>
@@ -114,11 +133,14 @@
           🔒
         </div>
 
-        <h3>Personalized for You</h3>
+        <h3>
+          Personalized for You
+        </h3>
 
         <p>
-          Please sign in and complete your profile to view
-          recommendations tailored to your skills and experience.
+          Please sign in and complete your profile
+          to view recommendations tailored to your
+          skills and experience.
         </p>
 
         <button>
@@ -139,11 +161,15 @@
           👥
         </div>
 
-        <h3>For Candidates</h3>
+        <h3>
+          For Candidates
+        </h3>
 
         <p>
-          Don’t just search—monitor. Set your preferences and let our radar tech
-          find the hidden gems across 100+ job boards and company career pages.
+          Don’t just search—monitor.
+          Set your preferences and let our radar tech
+          find the hidden gems across 100+ job boards
+          and company career pages.
         </p>
 
         <ul>
@@ -169,11 +195,15 @@
           💼
         </div>
 
-        <h3>For Employers</h3>
+        <h3>
+          For Employers
+        </h3>
 
         <p>
-          Stop waiting for applications. Proactively scan for the talent that fits
-          your culture and technical needs with surgical precision.
+          Stop waiting for applications.
+          Proactively scan for the talent that fits
+          your culture and technical needs with
+          surgical precision.
         </p>
 
         <ul>
@@ -195,24 +225,57 @@
     </section>
 
   </div>
+
   <script>
-  const searchType = document.getElementById("searchType");
-  const searchInput = document.getElementById("searchInput");
 
-  searchType.addEventListener("change", function () {
-    if (this.value === "location") {
-      searchInput.placeholder = "Enter your preferred work address";
+    const searchType =
+      document.getElementById("searchType");
+
+    const searchInput =
+      document.getElementById("searchInput");
+
+    searchType.addEventListener("change", function () {
+
+      if (this.value === "location") {
+
+        searchInput.placeholder =
+          "Enter your preferred work address";
+
+      }
+
+      if (this.value === "salary") {
+
+        searchInput.placeholder =
+          "Enter your expected salary";
+
+      }
+
+      if (this.value === "workmode") {
+
+        searchInput.placeholder =
+          "Online work or office work";
+
+      }
+
+    });
+
+    function goSearch() {
+
+      const type =
+        searchType.value;
+
+      const keyword =
+        searchInput.value;
+
+      window.location.href =
+        "search-results.html?type="
+        + encodeURIComponent(type)
+        + "&keyword="
+        + encodeURIComponent(keyword);
+
     }
 
-    if (this.value === "salary") {
-      searchInput.placeholder = "Enter your expected salary";
-    }
-
-    if (this.value === "workmode") {
-      searchInput.placeholder = "Online work or office work";
-    }
-  });
-</script>
+  </script>
 
 </body>
 

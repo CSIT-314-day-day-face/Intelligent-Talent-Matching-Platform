@@ -4,104 +4,318 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Employer Home Page</title>
+
+  <title>Employer Dashboard | Job Radar</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin">
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+
   <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-  <div class="page">
+  <div class="employer-page">
 
-    <header class="navbar">
+    <!-- NAVBAR -->
+    <header class="employer-navbar">
+      <a href="index.html" class="logo-link">
+    <div class="employer-logo">Job Radar</div>
+  </a>
 
-      <div class="logo">
-        <span>Job</span>
-        <strong>Radar</strong>
-      </div>
+  <div class="employer-user">
 
-      <div class="nav-right">
+    <div>
+      <strong>Marcus Smith</strong>
+    </div>
 
-        <a href="employer-profile.html">
-          <div class="user-icon"></div>
-        </a>
+  </div>
 
-        <div class="user-name-box" id="employerName">
-          Employer
-        </div>
+</header>
 
-      </div>
+    <!-- MAIN -->
+    <main class="employer-main">
 
-    </header>
+      <!-- RADAR -->
+      <section class="candidate-radar">
 
-    <section class="search-area">
+        <h2>◎ Candidate Radar</h2>
 
-      <select class="search-filter" name="searchType">
-        <option value="skill">Skill</option>
-        <option value="candidate">Candidate Name</option>
-        <option value="position">Position</option>
-        <option value="location">Location</option>
-      </select>
+        <div class="employer-search-box">
 
-      <input
-        class="search-input"
-        type="text"
-        placeholder="Enter skill, candidate name or position"
-      >
+          <select id="employerSearchType">
+            <option value="location">Address</option>
+            <option value="salary">Salary</option>
+            <option value="workmode">Work Mode</option>
+          </select>
 
-      <button class="search-btn">
-        Search
-      </button>
+          <input
+            id="employerSearchInput"
+            type="text"
+            placeholder="Enter your preferred work address"
+          >
 
-    </section>
-
-    <main class="main-content">
-
-      <section class="recommended-section">
-
-        <div class="section-header">
-
-          <h1>Recommended Candidates</h1>
-
-          <p class="member-note">
-            Free employers can view up to 10 candidate recommendations.
-            Members can view unlimited candidate recommendations.
-          </p>
-
-        </div>
-
-        <div class="recommend-scroll" id="recommendList">
+          <button>
+            Update Radar
+          </button>
 
         </div>
 
       </section>
 
-      <aside class="side-panel">
+      <!-- TALENT -->
+      <section class="talent-section">
 
-        <section class="saved-section">
+        <div class="talent-title-row">
 
-          <h3>Employer Search History</h3>
+          <h2>Top Talent Matches</h2>
 
-          <div class="history-box" id="historyList">
+          <span>Sorted by: Radar Match %</span>
+
+        </div>
+
+        <!-- CARD 1 -->
+        <article class="talent-card">
+
+          <img
+            src="https://i.pravatar.cc/100?img=32"
+            alt="Candidate"
+          >
+
+          <div class="talent-info">
+
+            <h3>Sarah Chen</h3>
+
+            <p>Senior Product Designer • 8 Years Exp.</p>
+
+            <small>WORK EXPERIENCE</small>
+
+            <p>
+              Former Lead Designer at TechFlow,
+              Senior UI at PixelPerfect.
+            </p>
+
+            <div class="talent-bottom">
+
+              <span>Remote Preferred</span>
+
+              <span>San Francisco, CA</span>
+
+              <span>$140k - $165k</span>
+
+            </div>
 
           </div>
 
-        </section>
+          <div class="talent-side">
 
-      </aside>
+            <div class="match">
+              98% Match
+            </div>
+
+            <strong>
+              HIGHLY RECOMMENDED
+            </strong>
+
+            <div class="skills">
+
+              <span>Figma</span>
+
+              <span>Design Systems</span>
+
+              <span>React UI</span>
+
+            </div>
+
+          </div>
+
+        </article>
+
+        <!-- CARD 2 -->
+        <article class="talent-card">
+
+          <img
+            src="https://i.pravatar.cc/100?img=12"
+            alt="Candidate"
+          >
+
+          <div class="talent-info">
+
+            <h3>James Miller</h3>
+
+            <p>Full Stack Engineer • 5 Years Exp.</p>
+
+            <small>WORK EXPERIENCE</small>
+
+            <p>
+              Software Engineer at StreamLine,
+              Web Dev at CloudScale.
+            </p>
+
+            <div class="talent-bottom">
+
+              <span>Hybrid Preferred</span>
+
+              <span>Austin, TX</span>
+
+              <span>$115k - $130k</span>
+
+            </div>
+
+          </div>
+
+          <div class="talent-side">
+
+            <div class="match normal">
+              85% Match
+            </div>
+
+            <div class="skills">
+
+              <span>Node.js</span>
+
+              <span>TypeScript</span>
+
+              <span>AWS</span>
+
+            </div>
+
+          </div>
+
+        </article>
+
+        <!-- CARD 3 -->
+        <article class="talent-card urgent">
+
+          <img
+            src="https://i.pravatar.cc/100?img=68"
+            alt="Candidate"
+          >
+
+          <div class="talent-info">
+
+            <h3>Marcus Thompson</h3>
+
+            <p>Engineering Manager • 12 Years Exp.</p>
+
+            <small>WORK EXPERIENCE</small>
+
+            <p>
+              Engineering Director at ScaleOps,
+              Tech Lead at InnovateX.
+            </p>
+
+            <div class="talent-bottom">
+
+              <span>On-site Preferred</span>
+
+              <span>New York, NY</span>
+
+              <span>$180k - $210k</span>
+
+            </div>
+
+          </div>
+
+          <div class="talent-side">
+
+            <div class="urgent-tag">
+              URGENT APPLICANT
+            </div>
+
+            <div class="match">
+              92% Match
+            </div>
+
+            <div class="skills">
+
+              <span class="hot-skill">
+                Team Leadership
+              </span>
+
+              <span>Kubernetes</span>
+
+              <span>System Architecture</span>
+
+            </div>
+
+          </div>
+
+        </article>
+
+      </section>
 
     </main>
+
+    <!-- FOOTER -->
+    <footer class="employer-footer">
+
+      <div>
+
+        <strong>Job Radar</strong>
+
+        <p>
+          © 2024 Job Radar. All rights reserved.
+        </p>
+
+      </div>
+
+      <div>
+
+        <a href="#">Privacy Policy</a>
+
+        <a href="#">Terms of Service</a>
+
+        <a href="#">Contact Support</a>
+
+      </div>
+
+    </footer>
+
+    <!-- FLOAT -->
+    <button class="float-add">
+      ＋
+    </button>
 
   </div>
 
   <script>
-    const savedEmployerName = localStorage.getItem("employerName");
 
-    if (savedEmployerName && savedEmployerName.trim() !== "") {
-      document.getElementById("employerName").innerText = savedEmployerName;
-    }
+    const employerSearchType =
+      document.getElementById("employerSearchType");
+
+    const employerSearchInput =
+      document.getElementById("employerSearchInput");
+
+    employerSearchType.addEventListener("change", function () {
+
+      if (this.value === "location") {
+
+        employerSearchInput.placeholder =
+          "Enter your preferred work address";
+
+      }
+
+      if (this.value === "salary") {
+
+        employerSearchInput.placeholder =
+          "Enter your expected salary";
+
+      }
+
+      if (this.value === "workmode") {
+
+        employerSearchInput.placeholder =
+          "Online work or office work";
+
+      }
+
+    });
+
   </script>
-
-  <script src="script.js"></script>
 
 </body>
 

@@ -3,106 +3,238 @@
 
 <head>
   <meta charset="UTF-8">
-
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Employer Home | Job Radar</title>
 
-  <title>Job Seeker Home Page</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-  <div class="page">
+  <div class="employer-home-page">
 
-    <header class="navbar">
+    <header class="employer-home-navbar">
 
-      <div class="logo">
-        <span>Job</span>
-        <strong>Radar</strong>
-      </div>
+      <a href="index.html" class="logo-link">
+        <div class="employer-home-logo">Job Radar</div>
+      </a>
 
-      <div class="nav-right">
-
-        <a href="candidate-profile.html">
-          <div class="user-icon"></div>
-        </a>
-
-        <div class="user-name-box" id="userName">
-          User
+      <div class="nav-user">
+        <div>
+          <strong>Alex Thompson</strong>
         </div>
-
       </div>
 
     </header>
 
-    <section class="search-area">
-      <select class="search-filter" name="searchType">
-        <option value="location">Location</option>
-        <option value="salary">Salary</option>
-        <option value="company">Company Name</option>
-        <option value="position">Job Position</option>
-      </select>
+    <main class="employer-home-main">
 
-    <input
-      class="search-input"
-      type="text"
-      placeholder="Enter company name or Job Position"
-  >
+      <section class="employer-hero">
 
-    <button class="search-btn">
-       Search
-    </button>
-    </section>
+        <h1>Find your next big move.</h1>
 
-    <main class="main-content">
+        <p>
+          Radar is active. Currently scanning 14,290+ matching roles for Alex Thompson.
+        </p>
 
-      <section class="recommended-section">
+        <div class="employer-hero-search">
 
-        <div class="section-header">
+          <select class="search-select" id="searchType">
+            <option value="location">Address</option>
+            <option value="salary">Salary</option>
+            <option value="workmode">Work Mode</option>
+          </select>
 
-          <h1>Recommended</h1>
+          <input
+            type="text"
+            class="search-input"
+            id="searchInput"
+            placeholder="Enter your preferred work address"
+          >
 
-          <p class="member-note">
-            Free users can view up to 10 recommendations.
-            Members can view unlimited recommendations.
-          </p>
-
-        </div>
-
-        <div class="recommend-scroll" id="recommendList">
+          <button class="search-btn" onclick="goSearch()">
+            Search
+          </button>
 
         </div>
 
       </section>
 
-      <aside class="side-panel">
+      <section class="employer-recommend-section">
 
-        <section class="saved-section">
+        <div class="employer-section-title">
 
-          <h3>Search History</h3>
-
-          <div class="history-box" id="historyList">
-
+          <div>
+            <h2>Recommended Jobs for You</h2>
+            <p>Based on your profile and search history</p>
           </div>
 
-        </section>
+          <a href="search-results.html">View All</a>
 
-      </aside>
+        </div>
+
+        <div class="employer-job-grid">
+
+          <article class="employer-job-card">
+
+            <div class="job-card-top">
+              <div class="job-icon red-icon">◇</div>
+
+              <div>
+                <h3>Senior Product Designer</h3>
+                <p>Linear Systems</p>
+              </div>
+
+              <span class="bookmark">♡</span>
+            </div>
+
+            <div class="job-tags">
+              <span>Remote</span>
+              <span>$140k - $180k</span>
+              <span>Hot Role</span>
+            </div>
+
+            <div class="job-card-bottom">
+              <small>Posted 2h ago</small>
+              <a href="job-detail.html">Details →</a>
+            </div>
+
+          </article>
+
+          <article class="employer-job-card">
+
+            <div class="job-card-top">
+              <div class="job-icon yellow-icon">☁</div>
+
+              <div>
+                <h3>Lead UX Researcher</h3>
+                <p>CloudFlare Inc.</p>
+              </div>
+
+              <span class="bookmark">♡</span>
+            </div>
+
+            <div class="job-tags">
+              <span>San Francisco, CA</span>
+              <span>$160k - $210k</span>
+              <span class="blue-tag">Full-time</span>
+            </div>
+
+            <div class="job-card-bottom">
+              <small>Posted 5h ago</small>
+              <a href="job-detail.html">Details →</a>
+            </div>
+
+          </article>
+
+          <article class="employer-job-card">
+
+            <div class="job-card-top">
+              <div class="job-icon blue-icon">✣</div>
+
+              <div>
+                <h3>Interaction Designer</h3>
+                <p>Streamline AI</p>
+              </div>
+
+              <span class="bookmark">♡</span>
+            </div>
+
+            <div class="job-tags">
+              <span>Austin, TX</span>
+              <span>$120k - $155k</span>
+            </div>
+
+            <div class="job-card-bottom">
+              <small>Posted 1d ago</small>
+              <a href="job-detail.html">Details →</a>
+            </div>
+
+          </article>
+
+          <article class="employer-job-card">
+
+            <div class="job-card-top">
+              <div class="job-icon red-icon">ϟ</div>
+
+              <div>
+                <h3>Growth Product Designer</h3>
+                <p>Flash Pay</p>
+              </div>
+
+              <span class="bookmark">♡</span>
+            </div>
+
+            <div class="job-tags">
+              <span>Remote</span>
+              <span>$130k - $170k</span>
+              <span>Rapid Growth</span>
+            </div>
+
+            <div class="job-card-bottom">
+              <small>Posted 3d ago</small>
+              <a href="job-detail.html">Details →</a>
+            </div>
+
+          </article>
+
+        </div>
+
+      </section>
 
     </main>
+
+    <footer class="employer-home-footer">
+
+      <div>
+        <strong>Job Radar</strong>
+        <p>© 2024 Job Radar. All rights reserved.</p>
+      </div>
+
+      <div>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Cookie Policy</a>
+        <a href="#">Contact Support</a>
+      </div>
+
+    </footer>
 
   </div>
 
   <script>
-    const savedName = localStorage.getItem("userName");
+    const searchType = document.getElementById("searchType");
+    const searchInput = document.getElementById("searchInput");
 
-    if (savedName && savedName.trim() !== "") {
-      document.getElementById("userName").innerText = savedName;
+    searchType.addEventListener("change", function () {
+      if (this.value === "location") {
+        searchInput.placeholder = "Enter your preferred work address";
+      }
+
+      if (this.value === "salary") {
+        searchInput.placeholder = "Enter your expected salary";
+      }
+
+      if (this.value === "workmode") {
+        searchInput.placeholder = "Online work or office work";
+      }
+    });
+
+    function goSearch() {
+      const type = searchType.value;
+      const keyword = searchInput.value;
+
+      window.location.href =
+        "search-results.html?type=" +
+        encodeURIComponent(type) +
+        "&keyword=" +
+        encodeURIComponent(keyword);
     }
   </script>
-
-  <script src="script.js"></script>
 
 </body>
 

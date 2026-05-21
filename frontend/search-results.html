@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Search Results | Job Radar</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <div class="results-page">
+
+    <header class="results-navbar">
+
+      <a href="index.html" class="logo-link">
+        <div class="results-logo">Job Radar</div>
+      </a>
+
+      <div class="results-user">
+        <div>
+          <strong>Alex Thompson</strong>
+          <span>Product Designer</span>
+        </div>
+        <span>⌄</span>
+      </div>
+
+    </header>
+
+    <section class="results-search-wrapper">
+
+      <div class="results-search-box">
+
+        <select class="search-select" id="searchType">
+          <option value="location">Address</option>
+          <option value="salary">Salary</option>
+          <option value="workmode">Work Mode</option>
+        </select>
+
+        <input
+          class="search-input"
+          id="searchInput"
+          type="text"
+          placeholder="Enter your preferred work address"
+        >
+
+        <button class="search-btn">Search</button>
+
+      </div>
+
+    </section>
+
+    <main class="results-main">
+
+      <div class="results-title-row">
+
+        <div>
+          <h1>Search Results</h1>
+          <p>Found <span id="resultKeyword">128</span> matching jobs for you</p>
+        </div>
+
+        <div class="sort-box">
+          Sort by: <strong>Most Relevant</strong>⌄
+        </div>
+
+      </div>
+
+      <section class="results-list">
+
+        <article class="result-card">
+          <div class="result-icon red-bg">◎</div>
+
+          <div class="result-content">
+            <h3>Senior Product Designer</h3>
+            <p>Linear Systems · Remote</p>
+
+            <div class="tags">
+              <span>Remote</span>
+              <span>$130k - $180k</span>
+              <span>Hot Role</span>
+            </div>
+
+            <div class="card-bottom">
+              <small>Posted 2h ago</small>
+              <a href="job-detail.html">Details →</a>
+            </div>
+          </div>
+
+          <button class="save-btn">♡</button>
+        </article>
+
+        <article class="result-card">
+          <div class="result-icon pink-bg">⌂</div>
+
+          <div class="result-content">
+            <h3>Lead UX Researcher</h3>
+            <p>CloudFlare Inc. · San Francisco, CA</p>
+
+            <div class="tags">
+              <span>On-site</span>
+              <span>$150k - $210k</span>
+              <span>Full time</span>
+            </div>
+
+            <div class="card-bottom">
+              <small>Posted 5h ago</small>
+              <a href="job-detail.html">Details →</a>
+            </div>
+          </div>
+
+          <button class="save-btn">♡</button>
+        </article>
+
+        <article class="result-card">
+          <div class="result-icon light-bg">✣</div>
+
+          <div class="result-content">
+            <h3>Interaction Designer</h3>
+            <p>SiliconEdge AI · Austin, TX</p>
+
+            <div class="tags">
+              <span>Hybrid</span>
+              <span>$120k - $155k</span>
+            </div>
+
+            <div class="card-bottom">
+              <small>Posted 1d ago</small>
+              <a href="job-detail.html">Details →</a>
+            </div>
+          </div>
+
+          <button class="save-btn">♡</button>
+        </article>
+
+        <article class="result-card">
+          <div class="result-icon pink-bg">↗</div>
+
+          <div class="result-content">
+            <h3>Growth Product Designer</h3>
+            <p>Flash Pay · Remote</p>
+
+            <div class="tags">
+              <span>Remote</span>
+              <span>$90k - $170k</span>
+              <span>Rapid Growth</span>
+            </div>
+
+            <div class="card-bottom">
+              <small>Posted 3d ago</small>
+              <a href="job-detail.html">Details →</a>
+            </div>
+          </div>
+
+          <button class="save-btn">♡</button>
+        </article>
+
+      </section>
+
+      <div class="pagination">
+        <button>‹</button>
+        <button class="active-page">1</button>
+        <button>2</button>
+        <button>3</button>
+        <span>...</span>
+        <button>12</button>
+        <button>›</button>
+      </div>
+
+    </main>
+
+    <footer class="results-footer">
+
+      <div>
+        <strong>Job Radar</strong>
+        <p>© 2024 Job Radar. All rights reserved.</p>
+      </div>
+
+      <div class="footer-links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Cookie Policy</a>
+        <a href="#">Contact Support</a>
+      </div>
+
+    </footer>
+
+  </div>
+
+  <script>
+    const searchType = document.getElementById("searchType");
+    const searchInput = document.getElementById("searchInput");
+
+    searchType.addEventListener("change", function () {
+      if (this.value === "location") {
+        searchInput.placeholder = "Enter your preferred work address";
+      }
+
+      if (this.value === "salary") {
+        searchInput.placeholder = "Enter your expected salary";
+      }
+
+      if (this.value === "workmode") {
+        searchInput.placeholder = "Online work or office work";
+      }
+    });
+
+    const params = new URLSearchParams(window.location.search);
+    const keyword = params.get("keyword");
+    const type = params.get("type");
+
+    if (keyword) {
+      searchInput.value = keyword;
+      document.getElementById("resultKeyword").textContent = "128";
+    }
+
+    if (type) {
+      searchType.value = type;
+    }
+  </script>
+
+</body>
+
+</html>
