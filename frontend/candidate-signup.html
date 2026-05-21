@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Candidate Sign Up</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet"
+  >
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <div class="signup-page">
+
+    <a class="signup-logo">
+      Job Radar
+    </a>
+
+    <main class="signup-main">
+
+      <section class="signup-card">
+
+        <h1>Candidate Sign Up</h1>
+
+        <form>
+
+          <label>Name</label>
+
+          <div class="signup-input">
+            <span>♙</span>
+
+            <input
+              type="text"
+              placeholder="Firstname + Lastname"
+            >
+          </div>
+
+          <label>Work Email</label>
+
+          <div class="signup-input">
+            <span>✉</span>
+
+            <input
+              type="email"
+              placeholder="name@company.com"
+            >
+          </div>
+
+          <label>Password</label>
+
+          <div class="signup-input">
+            <span>▣</span>
+
+            <input
+              type="text"
+              maxlength="8"
+              placeholder="Min. 8 characters"
+            >
+          </div>
+
+          <button
+            type="button"
+            onclick="window.location.href='jobseeker-index.html'"
+          >
+            Sign Up
+          </button>
+
+          <p class="login-link">
+            Already have an account?
+
+            <a href="SignIn.html">
+              Log In
+            </a>
+          </p>
+
+          <a
+            href="employer-signup.html"
+            class="switch-link"
+          >
+            Register as Employer →
+          </a>
+
+        </form>
+
+      </section>
+
+    </main>
+
+    <footer class="signup-footer">
+
+      <div>
+        <strong>Job Radar</strong>
+
+        <p>
+          © 2024 Job Radar. All rights reserved.
+        </p>
+      </div>
+
+      <div class="signup-footer-links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">About Us</a>
+      </div>
+
+    </footer>
+
+  </div>
+
+</body>
+
+</html>

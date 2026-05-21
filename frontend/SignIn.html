@@ -4,43 +4,108 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Candidate Sign In</title>
+
+  <title>Job Radar - Sign In</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet"
+  >
+
   <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-  <div class="signin-page">
+  <div class="page login-page">
 
-    <header class="signin-header">
-      <div class="logo">
-        <span>Job</span>
-        <strong>Radar</strong>
+    <main class="login-main">
+
+      <section class="login-card">
+
+        <a href="index.html" class="login-logo">
+          Job Radar
+        </a>
+
+        <h1>Login</h1>
+
+        <p class="subtitle">
+          Welcome back to your career radar.
+        </p>
+
+        <form>
+
+          <!-- EMAIL -->
+
+          <label>Email Address</label>
+
+          <div class="input-box">
+
+            <span>✉</span>
+
+            <input
+              type="email"
+              placeholder="name@company.com"
+            >
+
+          </div>
+
+          <!-- PASSWORD -->
+
+          <label>Password</label>
+
+          <div class="input-box">
+
+            <span>◧</span>
+
+            <input
+              type="text"
+              maxlength="8"
+              placeholder="Password must be 8 characters"
+            >
+
+          </div>
+          </p>
+
+          <!-- BUTTON -->
+
+          <button type="submit">
+            Login
+          </button>
+
+          <!-- DIVIDER -->
+
+          <div class="divider"></div>
+
+          <!-- SIGN UP -->
+
+          <p class="signup-text">
+
+            Don't have an account?
+
+            <a href="#">
+              Sign up
+            </a>
+
+          </p>
+
+        </form>
+
+      </section>
+
+      <!-- SECURITY -->
+
+      <div class="secure-row">
+
       </div>
-    </header>
-
-    <main class="signin-content">
-
-      <h1>Sign in</h1>
-
-      <label>Email address:</label>
-      <input type="email">
-
-      <label>Password:</label>
-      <input type="password">
-
-      <div class="form-links">
-        <span>No account? <a href="candidate-register.html">Register</a></span>
-        <a href="#">Forgot your password?</a>
-      </div>
-
-      <button class="red-main-btn">GO</button>
-
-     
 
     </main>
 
   </div>
 
 </body>
+
 </html>
