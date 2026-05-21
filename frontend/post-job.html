@@ -5,162 +5,234 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Post Job</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
   <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-  <div class="page">
+  <div class="post-job-page">
 
-    <header class="navbar">
+    <header class="post-job-navbar">
 
-      <a href="employer-index.html" class="profile-logo-link">
-        <div class="logo">
-          <span>Job</span>
-          <strong>Radar</strong>
-        </div>
+      <a href="employer-index.html" class="post-job-logo">
+        Job Radar
       </a>
 
-      <div class="nav-right">
-        <div class="user-icon"></div>
-
-        <a href="employer-profile.html" class="user-name-box">
-          Name
-        </a>
-      </div>
+      <a href="employer-profile.html" class="post-job-user">
+        Marcus Smith
+      </a>
 
     </header>
 
-    <main class="post-job-layout">
+    <main class="post-job-main">
 
-      <section class="post-job-form">
+      <h1>Post a New Job</h1>
 
-        <h1>Post Job</h1>
+      <p class="post-job-subtitle">
+        Find the perfect candidate with precision matching on Job Radar.
+      </p>
 
-        <label>Job Name:</label>
-        <input type="text" id="jobNameInput" class="post-input">
+      <section class="post-job-card">
 
-        <label>Job Location:</label>
-        <input type="text" id="jobLocationInput" class="post-input">
+        <form>
 
-        <label>Job Description:</label>
-        <textarea id="jobDescriptionInput" class="post-textarea"></textarea>
+          <div class="post-form-grid">
 
-        <button type="button" class="save-job-btn" onclick="saveJob()">
-          Save Job
-        </button>
+            <div class="post-field">
+              <label>Job Title <span>*</span></label>
+              <input id="jobTitleInput" type="text" placeholder="Senior Software Engineer">
+            </div>
 
-      </section>
+            <div class="post-field">
+              <label>Location <span>*</span></label>
+              <input id="jobLocationInput" type="text" placeholder="City, Country">
+            </div>
 
-      <section class="post-job-tags">
+            <div class="post-field">
+              <label>Work Mode <span>*</span></label>
+              <select id="jobModeInput">
+                <option value="Remote">Remote</option>
+                <option value="On-site">On-site</option>
+                <option value="Hybrid">Hybrid</option>
+              </select>
+            </div>
 
-        <h2>Work Experience</h2>
+            <div class="post-field">
+              <label>Salary Range <span>*</span></label>
+              <select id="jobSalaryInput">
+                <option value="">Select Salary Range</option>
+                <option value="$10k - $20k">$10k - $20k</option>
+                <option value="$20k - $30k">$20k - $30k</option>
+                <option value="$30k - $40k">$30k - $40k</option>
+                <option value="$40k - $50k">$40k - $50k</option>
+                <option value="$50k - $60k">$50k - $60k</option>
+                <option value="$60k - $70k">$60k - $70k</option>
+                <option value="$70k - $80k">$70k - $80k</option>
+                <option value="$80k - $90k">$80k - $90k</option>
+                <option value="$90k - $100k">$90k - $100k</option>
+                <option value="$100k - $110k">$100k - $110k</option>
+              </select>
+            </div>
 
-        <div class="tag-grid">
-          <button type="button" class="tag-btn experience-tag" data-value="0-3 Years">0-3 Years</button>
-          <button type="button" class="tag-btn experience-tag" data-value="4-6 Years">4-6 Years</button>
-          <button type="button" class="tag-btn experience-tag" data-value="6-8 Years">6-8 Years</button>
-          <button type="button" class="tag-btn experience-tag" data-value="8+ Years">8+ Years</button>
-        </div>
+          </div>
 
-        <h2>Skills</h2>
+          <div class="post-tag-section">
 
-        <div class="tag-grid">
-          <button type="button" class="tag-btn skill-tag" data-value="JavaScript">JavaScript</button>
-          <button type="button" class="tag-btn skill-tag" data-value="Python">Python</button>
-          <button type="button" class="tag-btn skill-tag" data-value="Java">Java</button>
-          <button type="button" class="tag-btn skill-tag" data-value="C++">C++</button>
-          <button type="button" class="tag-btn skill-tag" data-value="HTML/CSS">HTML/CSS</button>
-          <button type="button" class="tag-btn skill-tag" data-value="React">React</button>
-          <button type="button" class="tag-btn skill-tag" data-value="Premiere Pro">Premiere Pro</button>
-          <button type="button" class="tag-btn skill-tag" data-value="Photoshop">Photoshop</button>
-          <button type="button" class="tag-btn skill-tag" data-value="Word">Word</button>
-          <button type="button" class="tag-btn skill-tag" data-value="Excel">Excel</button>
-        </div>
+            <label>Required Experience <span>*</span></label>
+
+            <div class="post-tags">
+              <button type="button" class="post-tag experience-tag" data-value="0-3 Years">0-3 Years</button>
+              <button type="button" class="post-tag experience-tag" data-value="3-5 Years">3-5 Years</button>
+              <button type="button" class="post-tag experience-tag" data-value="5-7 Years">5-7 Years</button>
+              <button type="button" class="post-tag experience-tag" data-value="7-9 Years">7-9 Years</button>
+              <button type="button" class="post-tag experience-tag" data-value="9-11 Years">9-11 Years</button>
+              <button type="button" class="post-tag experience-tag" data-value="11+ Years">11+ Years</button>
+            </div>
+
+          </div>
+
+          <div class="post-tag-section">
+
+            <label>Required Skills <span>*</span></label>
+
+            <div class="post-tags">
+              <button type="button" class="post-tag skill-tag" data-value="React">React</button>
+              <button type="button" class="post-tag skill-tag" data-value="TypeScript">TypeScript</button>
+              <button type="button" class="post-tag skill-tag" data-value="Node.js">Node.js</button>
+              <button type="button" class="post-tag skill-tag" data-value="Python">Python</button>
+              <button type="button" class="post-tag skill-tag" data-value="AWS">AWS</button>
+              <button type="button" class="post-tag skill-tag" data-value="Docker">Docker</button>
+              <button type="button" class="post-tag skill-tag" data-value="Figma">Figma</button>
+              <button type="button" class="post-tag skill-tag" data-value="Java">Java</button>
+              <button type="button" class="post-tag skill-tag" data-value="C++">C++</button>
+              <button type="button" class="post-tag skill-tag" data-value="SQL">SQL</button>
+              <button type="button" class="post-tag skill-tag" data-value="Go">Go</button>
+              <button type="button" class="post-tag skill-tag" data-value="Kubernetes">Kubernetes</button>
+              <button type="button" class="post-tag skill-tag" data-value="Swift">Swift</button>
+              <button type="button" class="post-tag skill-tag" data-value="Kotlin">Kotlin</button>
+              <button type="button" class="post-tag skill-tag" data-value="Vue.js">Vue.js</button>
+              <button type="button" class="post-tag skill-tag" data-value="Angular">Angular</button>
+            </div>
+
+          </div>
+
+          <div class="post-divider"></div>
+
+          <div class="post-actions">
+            <button type="button" class="post-submit-btn" onclick="saveJob()">
+              ◎ Post Job
+            </button>
+          </div>
+
+        </form>
 
       </section>
 
     </main>
 
+    <footer class="post-job-footer">
+
+      <div>
+        <strong>Job Radar</strong>
+        <p>© 2024 Job Radar. All rights reserved.</p>
+      </div>
+
+      <div class="post-job-footer-links">
+        <a href="#">Support</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Cookie Settings</a>
+      </div>
+
+    </footer>
+
   </div>
 
- <script>
-  let selectedExperience = "";
-  let selectedSkills = [];
+  <script>
+    let selectedExperience = "";
+    let selectedSkills = [];
 
-  const experienceTags = document.querySelectorAll(".experience-tag");
-  const skillTags = document.querySelectorAll(".skill-tag");
+    const experienceTags = document.querySelectorAll(".experience-tag");
+    const skillTags = document.querySelectorAll(".skill-tag");
 
-  experienceTags.forEach(tag => {
-    tag.addEventListener("click", () => {
-      experienceTags.forEach(item => item.classList.remove("selected"));
-      tag.classList.add("selected");
-      selectedExperience = tag.dataset.value;
+    experienceTags.forEach(tag => {
+      tag.addEventListener("click", () => {
+        experienceTags.forEach(item => item.classList.remove("selected"));
+        tag.classList.add("selected");
+        selectedExperience = tag.dataset.value;
+      });
     });
-  });
 
-  skillTags.forEach(tag => {
-    tag.addEventListener("click", () => {
-      const skill = tag.dataset.value;
+    skillTags.forEach(tag => {
+      tag.addEventListener("click", () => {
+        const skill = tag.dataset.value;
 
-      if (tag.classList.contains("selected")) {
-        tag.classList.remove("selected");
-        selectedSkills = selectedSkills.filter(item => item !== skill);
+        if (tag.classList.contains("selected")) {
+          tag.classList.remove("selected");
+          selectedSkills = selectedSkills.filter(item => item !== skill);
+          return;
+        }
+
+        if (selectedSkills.length >= 6) {
+          alert("You can select up to 6 skills only.");
+          return;
+        }
+
+        tag.classList.add("selected");
+        selectedSkills.push(skill);
+      });
+    });
+
+    function saveJob() {
+      const title = document.getElementById("jobTitleInput").value.trim();
+      const location = document.getElementById("jobLocationInput").value.trim();
+      const mode = document.getElementById("jobModeInput").value;
+      const salary = document.getElementById("jobSalaryInput").value.trim();
+
+      if (!title || !location || !mode || !salary) {
+        alert("Please fill in all job information.");
         return;
       }
 
-      if (selectedSkills.length >= 6) {
-        alert("You can select up to 6 skills only.");
+      if (!selectedExperience) {
+        alert("Please select one required experience.");
         return;
       }
 
-      tag.classList.add("selected");
-      selectedSkills.push(skill);
-    });
-  });
+      if (selectedSkills.length === 0) {
+        alert("Please select at least one required skill.");
+        return;
+      }
 
-  function saveJob() {
-    const jobTitle = document.getElementById("jobNameInput").value.trim();
-    const jobLocation = document.getElementById("jobLocationInput").value.trim();
-    const jobDescription = document.getElementById("jobDescriptionInput").value.trim();
+      const employerProfile =
+        JSON.parse(localStorage.getItem("employerProfile")) || {};
 
-    if (!jobTitle || !jobLocation || !jobDescription) {
-      alert("Please fill in all job information.");
-      return;
+      const newJob = {
+        title: title,
+        location: location,
+        mode: mode,
+        salary: salary,
+        experience: selectedExperience,
+        skills: selectedSkills,
+        companyName: employerProfile.companyName || "Company Name"
+      };
+
+      const jobs =
+        JSON.parse(localStorage.getItem("publishedJobs")) || [];
+
+      jobs.push(newJob);
+
+      localStorage.setItem("publishedJobs", JSON.stringify(jobs));
+
+      window.location.href = "employer-profile.html";
     }
-
-    if (!selectedExperience) {
-      alert("Please select one work experience tag.");
-      return;
-    }
-
-    if (selectedSkills.length === 0) {
-      alert("Please select at least one skill.");
-      return;
-    }
-
-    const companyName =
-      localStorage.getItem("employerName") || "Company Name";
-
-    const newJob = {
-      jobTitle: jobTitle,
-      jobLocation: jobLocation,
-      jobDescription: jobDescription,
-      companyName: companyName,
-      experienceTag: selectedExperience,
-      skillTags: selectedSkills
-    };
-
-    const jobs =
-      JSON.parse(localStorage.getItem("publishedJobs")) || [];
-
-    jobs.push(newJob);
-
-    localStorage.setItem("publishedJobs", JSON.stringify(jobs));
-
-    window.location.href = "employer-profile.html";
-  }
-</script>
+  </script>
 
 </body>
 

@@ -4,110 +4,214 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Employer Profile</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet"
+  >
+
   <link rel="stylesheet" href="style.css">
+
 </head>
 
 <body>
 
-  <div class="page">
+  <div class="employer-profile-page">
 
-    <header class="navbar">
+    <!-- NAVBAR -->
 
-      <a href="employer-index.html" class="profile-logo-link">
-        <div class="logo">
-          <span>Job</span>
-          <strong>Radar</strong>
-        </div>
+    <header class="employer-profile-navbar">
+
+      <a
+        href="employer-index.html"
+        class="employer-profile-logo"
+      >
+        Job Radar
       </a>
 
-      <div class="nav-right">
-        <div class="user-icon"></div>
-
-        <div class="user-name-box" id="employerName">
-          Name
-        </div>
-      </div>
+      <strong
+        class="employer-profile-name"
+        id="profileName"
+      >
+        Guest
+      </strong>
 
     </header>
 
-    <main class="employer-profile-layout">
+    <!-- MAIN -->
 
-      <section class="employer-left-panel">
+    <main class="employer-profile-main">
 
-        <h2>Company Information</h2>
+      <!-- LEFT -->
 
-        <div class="profile-field">
-          <label>Company Name:</label>
-          <input type="text" id="companyNameInput">
-        </div>
+      <section class="company-panel">
 
-        <div class="profile-field">
-          <label>Company Location:</label>
-          <input type="text" id="companyLocationInput">
-        </div>
+        <h2>
+          <span>▣</span>
+          Company Information
+        </h2>
 
-        <div class="profile-field">
-          <label>Email:</label>
-          <input type="email" id="companyEmailInput">
-        </div>
+        <label>Your Name:</label>
 
-        <button class="save-profile-btn" onclick="saveEmployerProfile()">
+        <input
+          id="ownerNameInput"
+          type="text"
+          placeholder="e.g. Marcus Smith"
+        >
+
+        <label>Company Name:</label>
+
+        <input
+          id="companyNameInput"
+          type="text"
+          placeholder="e.g. Radar Tech Global"
+        >
+
+        <label>Company Location:</label>
+
+        <input
+          id="companyLocationInput"
+          type="text"
+          placeholder="e.g. Sydney, NSW"
+        >
+
+        <label>Email:</label>
+
+        <input
+          id="companyEmailInput"
+          type="email"
+          placeholder="e.g. name@company.com"
+        >
+
+        <button onclick="saveEmployerProfile()">
           Save Profile
         </button>
 
       </section>
 
-      <section class="employer-right-panel">
+      <!-- RIGHT -->
 
-        <div class="publish-header">
+      <section class="published-panel">
 
-          <h2>Published Jobs</h2>
+        <div class="published-header">
 
-          <div class="publish-actions">
+          <h2>
+            <span>●</span>
+            Published Jobs
+          </h2>
+
+          <div class="published-actions">
+
+            <!-- POST JOB -->
 
             <button
-              class="profile-vip-btn"
-              id="employerVipButton"
-              onclick="openEmployerVipModal()"
+              class="post-job-header-btn"
+              onclick="goToPostJob()"
             >
-              Vip
+              + Post Job
             </button>
 
-            <button class="job-add-btn" onclick="goToPostJob()">
-              +
+            <!-- VIP -->
+
+            <button
+              class="vip-btn"
+              id="vipButton"
+              onclick="openVipModal()"
+            >
+              VIP
             </button>
 
           </div>
 
         </div>
 
-        <div class="published-job-list" id="publishedJobList"></div>
+        <!-- JOB LIST -->
+
+       <div
+       id="publishedJobsList"
+       class="published-jobs-list"
+       >
+      </div>
 
       </section>
 
     </main>
 
+    <!-- FOOTER -->
+
+    <footer class="employer-profile-footer">
+
+      <div>
+
+        <strong>Job Radar</strong>
+
+        <p>
+          © 2024 Job Radar. Precision matching for the modern workforce.
+        </p>
+
+      </div>
+
+      <div class="employer-profile-footer-links">
+
+        <a href="#">
+          Privacy Policy
+        </a>
+
+        <a href="#">
+          Terms of Service
+        </a>
+
+        <a href="#">
+          Help Center
+        </a>
+
+        <a href="#">
+          Contact
+        </a>
+
+      </div>
+
+    </footer>
+
   </div>
 
-  <div class="vip-modal-bg" id="employerVipModal">
+  <!-- VIP MODAL -->
+
+  <div
+    class="vip-modal-overlay"
+    id="vipModal"
+  >
 
     <div class="vip-modal">
 
-      <h2>Become a VIP Employer?</h2>
+      <h2>
+        Become a VIP Member?
+      </h2>
 
       <p>
-        VIP employers can publish unlimited jobs and unlock premium features.
+        VIP members can publish unlimited jobs
+        and receive higher exposure.
       </p>
 
-      <div class="vip-modal-buttons">
+      <div class="vip-modal-actions">
 
-        <button class="vip-confirm-btn" onclick="becomeEmployerVip()">
-          Yes
+        <button
+          class="vip-confirm-btn"
+          onclick="confirmVip()"
+        >
+          Confirm
         </button>
 
-        <button class="vip-cancel-btn" onclick="closeEmployerVipModal()">
-          No
+        <button
+          class="vip-cancel-btn"
+          onclick="closeVipModal()"
+        >
+          Cancel
         </button>
 
       </div>
@@ -116,130 +220,225 @@
 
   </div>
 
-  <script>
-    function loadEmployerProfile() {
-      const savedName = localStorage.getItem("employerName");
+  <!-- SCRIPT -->
 
-      if (savedName && savedName.trim() !== "") {
-        document.getElementById("employerName").innerText = savedName;
-        document.getElementById("companyNameInput").value = savedName;
+  <script>
+
+    const profileName =
+      document.getElementById("profileName");
+
+    const vipButton =
+      document.getElementById("vipButton");
+
+    const ownerNameInput =
+      document.getElementById("ownerNameInput");
+
+    const companyNameInput =
+      document.getElementById("companyNameInput");
+
+    const companyLocationInput =
+      document.getElementById("companyLocationInput");
+
+    const companyEmailInput =
+      document.getElementById("companyEmailInput");
+
+    let employerProfile =
+      JSON.parse(
+        localStorage.getItem("employerProfile")
+      ) || {
+        name: "",
+        companyName: "",
+        location: "",
+        email: "",
+        isVip: false
+      };
+
+    /* LOAD PROFILE */
+
+    function loadEmployerProfile() {
+
+      ownerNameInput.value =
+        employerProfile.name;
+
+      companyNameInput.value =
+        employerProfile.companyName;
+
+      companyLocationInput.value =
+        employerProfile.location;
+
+      companyEmailInput.value =
+        employerProfile.email;
+
+      profileName.textContent =
+        employerProfile.name || "Guest";
+
+      if (employerProfile.isVip === true) {
+
+        vipButton.classList.add("vip-active");
+
+      } else {
+
+        vipButton.classList.remove("vip-active");
+
       }
 
-      document.getElementById("companyLocationInput").value =
-        localStorage.getItem("companyLocation") || "";
-
-      document.getElementById("companyEmailInput").value =
-        localStorage.getItem("companyEmail") || "";
-
-      renderPublishedJobs();
     }
+
+    /* SAVE PROFILE */
 
     function saveEmployerProfile() {
-      const companyName = document.getElementById("companyNameInput").value.trim();
 
-      localStorage.setItem("employerName", companyName || "Name");
-      localStorage.setItem("companyLocation", document.getElementById("companyLocationInput").value);
-      localStorage.setItem("companyEmail", document.getElementById("companyEmailInput").value);
+      employerProfile.name =
+        ownerNameInput.value.trim();
 
-      document.getElementById("employerName").innerText = companyName || "Name";
+      employerProfile.companyName =
+        companyNameInput.value.trim();
 
-      alert("Employer profile saved!");
+      employerProfile.location =
+        companyLocationInput.value.trim();
+
+      employerProfile.email =
+        companyEmailInput.value.trim();
+
+      localStorage.setItem(
+        "employerProfile",
+        JSON.stringify(employerProfile)
+      );
+
+      loadEmployerProfile();
+
+      alert("Profile saved successfully.");
+
     }
+
+    /* GO TO POST JOB */
 
     function goToPostJob() {
-      window.location.href = "post-job.html";
-    }
-
-    function renderPublishedJobs() {
-      const jobListBox = document.getElementById("publishedJobList");
 
       const jobs =
-        JSON.parse(localStorage.getItem("publishedJobs")) || [];
+        JSON.parse(
+          localStorage.getItem("publishedJobs")
+        ) || [];
 
-      const isVip =
-        localStorage.getItem("employerVip") === "true";
+      if (
+        employerProfile.isVip !== true &&
+        jobs.length >= 10
+      ) {
 
-      jobListBox.innerHTML = "";
+        alert(
+          "Non-VIP employers can publish up to 10 jobs only."
+        );
 
-      const visibleJobs =
-        isVip ? jobs : jobs.slice(0, 10);
-
-      if (visibleJobs.length === 0) {
-        jobListBox.innerHTML = `
-          <div class="empty-job-box">
-            <span>
-              No published jobs yet.<br>
-              Click + to publish a job.
-            </span>
-          </div>
-        `;
         return;
+
       }
 
-      visibleJobs.forEach(job => {
-        const jobCard = document.createElement("div");
-        jobCard.className = "published-job-card";
+      window.location.href =
+        "post-job.html";
 
-        const skills = Array.isArray(job.skillTags)
-          ? job.skillTags
-          : [];
-
-       jobCard.innerHTML = `
-
-  <h3>${job.jobTitle}</h3>
-   <p>
-    <strong>Location:</strong>
-    ${job.jobLocation}
-    </p>
-    <div class="job-tag-row">
-            ${
-              job.experienceTag
-                ? `<span>${job.experienceTag}</span>`
-                : ""
-            }
-
-            ${
-              skills
-                .map(tag => `<span>${tag}</span>`)
-                .join("")
-            }
-          </div>
-        `;
-
-        jobListBox.appendChild(jobCard);
-      });
     }
 
-    function openEmployerVipModal() {
-      document.getElementById("employerVipModal").style.display = "flex";
+    /* VIP */
+
+    function openVipModal() {
+
+      document
+        .getElementById("vipModal")
+        .style.display = "flex";
+
     }
 
-    function closeEmployerVipModal() {
-      document.getElementById("employerVipModal").style.display = "none";
+    function closeVipModal() {
+
+      document
+        .getElementById("vipModal")
+        .style.display = "none";
+
     }
 
-    function becomeEmployerVip() {
-      localStorage.setItem("employerVip", "true");
+    function confirmVip() {
 
-      updateEmployerVipButton();
-      renderPublishedJobs();
-      closeEmployerVipModal();
+      employerProfile.isVip = true;
 
-      alert("You are now a VIP employer!");
+      localStorage.setItem(
+        "employerProfile",
+        JSON.stringify(employerProfile)
+      );
+
+      loadEmployerProfile();
+
+      closeVipModal();
+
     }
 
-    function updateEmployerVipButton() {
-      const vipStatus = localStorage.getItem("employerVip");
-      const vipButton = document.getElementById("employerVipButton");
+    /* LOAD JOBS */
 
-      if (vipStatus === "true") {
-        vipButton.innerText = "VIP";
-        vipButton.classList.add("vip-active");
-      }
+    const jobsList =
+      document.getElementById("publishedJobsList");
+
+    const jobs =
+      JSON.parse(
+        localStorage.getItem("publishedJobs")
+      ) || [];
+
+    if (jobs.length === 0) {
+
+      jobsList.innerHTML = `
+
+        <div class="empty-job-box">
+
+          <button
+            class="empty-add-btn"
+            onclick="goToPostJob()"
+          >
+            +
+          </button>
+
+        </div>
+
+      `;
+
+    } else {
+
+      jobsList.innerHTML =
+        jobs.map(job => `
+
+          <article class="published-job-card">
+
+            <div class="job-title-row">
+
+              <h3>${job.title}</h3>
+
+              <span class="interest-label">
+                ${job.salary}
+              </span>
+
+            </div>
+
+            <p>
+              ⌾ ${job.location}
+            </p>
+
+            <div class="profile-job-tags">
+
+              <span>${job.mode}</span>
+
+              <span>${job.experience}</span>
+
+              ${job.skills.map(skill =>
+                `<span>${skill}</span>`
+              ).join("")}
+
+            </div>
+
+          </article>
+
+        `).join("");
+
     }
 
     loadEmployerProfile();
-    updateEmployerVipButton();
+
   </script>
 
 </body>
