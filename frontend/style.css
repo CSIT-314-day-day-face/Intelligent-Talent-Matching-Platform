@@ -2967,3 +2967,367 @@ body {
 .published-jobs-list::-webkit-scrollbar-track {
   background: transparent;
 }
+/* CANDIDATE NEW PROFILE */
+
+.candidate-new-page {
+  width: 100%;
+  min-height: 100vh;
+  min-width: 1200px;
+
+  background: #fff8f8;
+  font-family: 'Inter', sans-serif;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.candidate-new-navbar {
+  width: 100%;
+  height: 90px;
+  padding: 0 70px;
+
+  background: #fff8f8;
+  border-bottom: 1px solid #f0caca;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.candidate-new-logo {
+  text-decoration: none;
+
+  color: #c80013;
+
+  font-size: 42px;
+  font-weight: 900;
+
+  letter-spacing: -2px;
+}
+
+.candidate-new-navbar strong {
+  font-size: 14px;
+  color: #241414;
+}
+
+.candidate-new-main {
+  flex: 1;
+
+  width: calc(100% - 120px);
+  max-width: 1500px;
+
+  margin: 36px auto 40px;
+
+  display: grid;
+  grid-template-columns: 360px 270px minmax(0, 1fr);
+  gap: 24px;
+}
+
+.candidate-info-card,
+.candidate-tags-card,
+.candidate-summary-card,
+.candidate-experience-card {
+  background: white;
+
+  border: 1px solid #f0caca;
+  border-radius: 18px;
+
+  box-shadow:
+    0 10px 26px rgba(60, 20, 20, 0.06);
+}
+
+.candidate-info-card {
+  padding: 28px 24px;
+}
+
+.candidate-tags-card {
+  padding: 28px 24px;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.candidate-right-area {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.candidate-summary-card,
+.candidate-experience-card {
+  padding: 24px;
+}
+
+.candidate-info-card h2,
+.candidate-tags-card h2,
+.candidate-summary-card h2,
+.candidate-experience-card h2 {
+  font-size: 22px;
+  color: #241414;
+  margin-bottom: 24px;
+}
+
+.candidate-info-card h2,
+.candidate-tags-card h2,
+.candidate-summary-card h2,
+.candidate-experience-card h2 {
+  color: #241414;
+}
+
+.candidate-info-card label {
+  display: block;
+
+  margin-top: 16px;
+  margin-bottom: 8px;
+
+  font-size: 13px;
+  font-weight: 700;
+
+  color: #5f3737;
+}
+
+.candidate-info-card input {
+  width: 100%;
+  height: 46px;
+
+  border: 1px solid #e6b8b8;
+  border-radius: 10px;
+
+  padding: 0 14px;
+
+  font-size: 14px;
+  font-family: inherit;
+
+  outline: none;
+}
+
+.candidate-info-card button {
+  width: 100%;
+  height: 52px;
+
+  margin-top: 22px;
+
+  border: none;
+  border-radius: 12px;
+
+  background: #d6001c;
+  color: white;
+
+  font-size: 15px;
+  font-weight: 800;
+
+  cursor: pointer;
+}
+
+.tag-container {
+  min-height: 260px;
+
+  display: flex;
+  align-content: flex-start;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.selected-tag {
+  height: 32px;
+
+  padding: 0 12px;
+
+  border-radius: 999px;
+
+  background: #ffe4df;
+  color: #5f3737;
+
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  font-size: 12px;
+}
+
+.selected-tag span {
+  cursor: pointer;
+  font-weight: 900;
+}
+
+.selected-tag.experience-tag {
+  background: #ffd400;
+  color: #5c4300;
+}
+
+.candidate-tag-add {
+  margin-top: auto;
+
+  width: 100%;
+  height: 44px;
+
+  border: 2px dashed #d9b8b8;
+  border-radius: 12px;
+
+  background: transparent;
+  color: #8b5d5d;
+
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.candidate-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.candidate-card-head h2 {
+  margin-bottom: 18px;
+}
+
+.candidate-summary-card textarea,
+.candidate-experience-card textarea {
+  width: 100%;
+
+  border: 1px solid #e6b8b8;
+  border-radius: 12px;
+
+  padding: 16px;
+
+  resize: none;
+
+  font-size: 14px;
+  line-height: 1.6;
+  font-family: inherit;
+
+  outline: none;
+}
+
+.candidate-summary-card textarea {
+  height: 140px;
+}
+
+.candidate-experience-card textarea {
+  height: 160px;
+}
+
+.candidate-new-footer {
+  width: 100%;
+  height: 90px;
+  padding: 0 70px;
+
+  background: #ffd8d8;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.candidate-new-footer strong {
+  color: #c80013;
+  font-size: 18px;
+}
+
+.candidate-new-footer p {
+  margin-top: 8px;
+
+  color: #5f5353;
+  font-size: 13px;
+}
+
+.candidate-new-footer-links {
+  display: flex;
+  gap: 28px;
+}
+
+.candidate-new-footer-links a {
+  color: #4b2f2f;
+  text-decoration: none;
+  font-size: 13px;
+}
+
+/* TAG MODAL */
+
+.tag-modal-bg {
+  position: fixed;
+  inset: 0;
+
+  background: rgba(36, 20, 20, 0.32);
+  backdrop-filter: blur(8px);
+
+  display: none;
+  align-items: center;
+  justify-content: center;
+
+  z-index: 999;
+}
+
+.tag-modal {
+  width: 560px;
+
+  background: #fffafa;
+
+  border: 1px solid #f0caca;
+  border-radius: 24px;
+
+  padding: 34px;
+
+  box-shadow:
+    0 28px 70px rgba(80, 30, 30, 0.22);
+}
+
+.tag-modal h2 {
+  font-size: 30px;
+  font-weight: 900;
+
+  color: #241414;
+
+  margin-bottom: 24px;
+}
+
+.tag-modal h3 {
+  margin: 22px 0 12px;
+
+  color: #5f3737;
+}
+
+.tag-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.tag-options button {
+  height: 34px;
+
+  padding: 0 14px;
+
+  border: 1px solid #efbebe;
+  border-radius: 999px;
+
+  background: white;
+  color: #241414;
+
+  font-family: inherit;
+  font-size: 12px;
+
+  cursor: pointer;
+}
+
+.tag-options button.active-tag {
+  background: #d6001c;
+  color: white;
+  border-color: #d6001c;
+}
+
+.close-modal-btn {
+  width: 100%;
+  height: 48px;
+
+  margin-top: 30px;
+
+  border: none;
+  border-radius: 12px;
+
+  background: #d6001c;
+  color: white;
+
+  font-weight: 800;
+  cursor: pointer;
+}

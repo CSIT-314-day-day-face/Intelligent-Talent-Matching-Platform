@@ -5,101 +5,134 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Candidate Profile</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
   <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-  <div class="page">
+  <div class="candidate-new-page">
 
-    <header class="navbar">
+    <header class="candidate-new-navbar">
 
-      <a href="jobseeker-index.html" class="profile-logo-link">
-        <div class="logo">
-          <span>Job</span>
-          <strong>Radar</strong>
-        </div>
+      <a href="jobseeker-index.html" class="candidate-new-logo">
+        Job Radar
       </a>
 
-      <div class="nav-right">
-        <div class="user-icon"></div>
-
-        <div class="user-name-box" id="userName">
-          Name
-        </div>
-      </div>
+      <strong id="userName">
+        Guest
+      </strong>
 
     </header>
 
-    <main class="candidate-profile-layout">
+    <main class="candidate-new-main">
 
-      <section class="profile-left-panel">
+      <section class="candidate-info-card">
 
-        <h2>Personal Information</h2>
+        <h2>
+          ♙ Personal Information
+        </h2>
 
-        <div class="profile-field">
-          <label>Name:</label>
-          <input type="text" id="nameInput">
-        </div>
+        <label>Name:</label>
+        <input type="text" id="nameInput" placeholder="e.g. Alex Thompson">
 
-        <div class="profile-field">
-          <label>Age:</label>
-          <input type="text" id="ageInput">
-        </div>
+        <label>Age:</label>
+        <input type="text" id="ageInput" placeholder="e.g. 28">
 
-        <div class="profile-field">
-          <label>Location:</label>
-          <input type="text" id="locationInput">
-        </div>
+        <label>Location:</label>
+        <input type="text" id="locationInput" placeholder="e.g. Sydney, NSW">
 
-        <div class="profile-field">
-          <label>Email:</label>
-          <input type="email" id="emailInput">
-        </div>
+        <label>Email:</label>
+        <input type="email" id="emailInput" placeholder="e.g. name@email.com">
 
-        <button class="save-profile-btn" onclick="saveCandidateProfile()">
+        <button onclick="saveCandidateProfile()">
           Save Profile
         </button>
 
       </section>
 
-      <section class="profile-middle-panel">
+      <section class="candidate-tags-card">
 
-        <h2>Tag</h2>
+        <h2>
+          ◇ Tags
+        </h2>
 
         <div class="tag-container" id="selectedTags"></div>
 
-        <button class="tag-add-btn" onclick="openTagModal()">
+        <button class="candidate-tag-add" onclick="openTagModal()">
           +
         </button>
 
       </section>
 
-      <section class="profile-right-panel">
+      <section class="candidate-right-area">
 
-        <div class="summary-head">
-          <h2>Summary</h2>
+        <div class="candidate-summary-card">
 
-          <button
-            class="vip-btn"
-            id="vipButton"
-            onclick="openVipModal()"
-          >
-            Vip
-          </button>
+          <div class="candidate-card-head">
+
+            <h2>
+              ▤ Summary
+            </h2>
+
+            <button
+              class="vip-btn"
+              id="vipButton"
+              onclick="openVipModal()"
+            >
+              VIP
+            </button>
+
+          </div>
+
+          <textarea
+            id="summaryInput"
+            placeholder="Write your personal summary..."
+          ></textarea>
+
         </div>
 
-        <textarea class="summary-box" id="summaryInput"></textarea>
+        <div class="candidate-experience-card">
 
-        <h2>Work Experience</h2>
+          <h2>
+            ▣ Work Experience
+          </h2>
 
-        <textarea class="experience-box" id="experienceInput"></textarea>
+          <textarea
+            id="experienceInput"
+            placeholder="Write your work experience..."
+          ></textarea>
+
+        </div>
 
       </section>
 
     </main>
 
+    <footer class="candidate-new-footer">
+
+      <div>
+        <strong>Job Radar</strong>
+        <p>© 2024 Job Radar. Precision matching for the modern workforce.</p>
+      </div>
+
+      <div class="candidate-new-footer-links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Help Center</a>
+        <a href="#">Contact Support</a>
+      </div>
+
+    </footer>
+
   </div>
+
+  <!-- TAG MODAL -->
 
   <div class="tag-modal-bg" id="tagModal">
 
@@ -111,9 +144,11 @@
 
       <div class="tag-options">
         <button class="experience-option" data-tag="0-3 Years" onclick="selectExperience('0-3 Years')">0-3 Years</button>
-        <button class="experience-option" data-tag="4-6 Years" onclick="selectExperience('4-6 Years')">4-6 Years</button>
-        <button class="experience-option" data-tag="6-8 Years" onclick="selectExperience('6-8 Years')">6-8 Years</button>
-        <button class="experience-option" data-tag="8+ Years" onclick="selectExperience('8+ Years')">8+ Years</button>
+        <button class="experience-option" data-tag="3-5 Years" onclick="selectExperience('3-5 Years')">3-5 Years</button>
+        <button class="experience-option" data-tag="5-7 Years" onclick="selectExperience('5-7 Years')">5-7 Years</button>
+        <button class="experience-option" data-tag="7-9 Years" onclick="selectExperience('7-9 Years')">7-9 Years</button>
+        <button class="experience-option" data-tag="9-11 Years" onclick="selectExperience('9-11 Years')">9-11 Years</button>
+        <button class="experience-option" data-tag="11+ Years" onclick="selectExperience('11+ Years')">11+ Years</button>
       </div>
 
       <h3>Skills</h3>
@@ -125,10 +160,12 @@
         <button class="skill-option" data-tag="C++" onclick="toggleSkill('C++')">C++</button>
         <button class="skill-option" data-tag="HTML/CSS" onclick="toggleSkill('HTML/CSS')">HTML/CSS</button>
         <button class="skill-option" data-tag="React" onclick="toggleSkill('React')">React</button>
-        <button class="skill-option" data-tag="Premiere Pro" onclick="toggleSkill('Premiere Pro')">Premiere Pro</button>
+        <button class="skill-option" data-tag="TypeScript" onclick="toggleSkill('TypeScript')">TypeScript</button>
+        <button class="skill-option" data-tag="Next.js" onclick="toggleSkill('Next.js')">Next.js</button>
+        <button class="skill-option" data-tag="Node.js" onclick="toggleSkill('Node.js')">Node.js</button>
+        <button class="skill-option" data-tag="Figma" onclick="toggleSkill('Figma')">Figma</button>
         <button class="skill-option" data-tag="Photoshop" onclick="toggleSkill('Photoshop')">Photoshop</button>
-        <button class="skill-option" data-tag="Word" onclick="toggleSkill('Word')">Word</button>
-        <button class="skill-option" data-tag="Excel" onclick="toggleSkill('Excel')">Excel</button>
+        <button class="skill-option" data-tag="SQL" onclick="toggleSkill('SQL')">SQL</button>
       </div>
 
       <button class="close-modal-btn" onclick="closeTagModal()">
@@ -139,24 +176,26 @@
 
   </div>
 
-  <div class="vip-modal-bg" id="vipModal">
+  <!-- VIP MODAL -->
+
+  <div class="vip-modal-overlay" id="vipModal">
 
     <div class="vip-modal">
 
       <h2>Become a VIP Member?</h2>
 
       <p>
-        VIP members can unlock unlimited recommendations and premium features.
+        VIP members can unlock unlimited job recommendations and premium matching features.
       </p>
 
-      <div class="vip-modal-buttons">
+      <div class="vip-modal-actions">
 
         <button class="vip-confirm-btn" onclick="becomeVip()">
-          Yes
+          Confirm
         </button>
 
         <button class="vip-cancel-btn" onclick="closeVipModal()">
-          No
+          Cancel
         </button>
 
       </div>
@@ -170,51 +209,61 @@
     let selectedSkills = [];
 
     function loadCandidateProfile() {
-      const savedName = localStorage.getItem("userName");
+      const savedProfile =
+        JSON.parse(localStorage.getItem("candidateProfile")) || {
+          name: "",
+          age: "",
+          location: "",
+          email: "",
+          summary: "",
+          experienceText: "",
+          experienceTag: "",
+          skills: [],
+          isVip: false
+        };
 
-      if (savedName && savedName.trim() !== "") {
-        document.getElementById("userName").innerText = savedName;
-        document.getElementById("nameInput").value = savedName;
+      document.getElementById("nameInput").value = savedProfile.name;
+      document.getElementById("ageInput").value = savedProfile.age;
+      document.getElementById("locationInput").value = savedProfile.location;
+      document.getElementById("emailInput").value = savedProfile.email;
+      document.getElementById("summaryInput").value = savedProfile.summary;
+      document.getElementById("experienceInput").value = savedProfile.experienceText;
+
+      document.getElementById("userName").innerText =
+        savedProfile.name || "Guest";
+
+      selectedExperience = savedProfile.experienceTag || "";
+      selectedSkills = savedProfile.skills || [];
+
+      if (savedProfile.isVip === true) {
+        document.getElementById("vipButton").classList.add("vip-active");
+        document.getElementById("vipButton").innerText = "VIP";
       }
-
-      document.getElementById("ageInput").value =
-        localStorage.getItem("candidateAge") || "";
-
-      document.getElementById("locationInput").value =
-        localStorage.getItem("candidateLocation") || "";
-
-      document.getElementById("emailInput").value =
-        localStorage.getItem("candidateEmail") || "";
-
-      document.getElementById("summaryInput").value =
-        localStorage.getItem("candidateSummary") || "";
-
-      document.getElementById("experienceInput").value =
-        localStorage.getItem("candidateExperience") || "";
-
-      selectedExperience =
-        localStorage.getItem("candidateExperienceTag") || "";
-
-      selectedSkills =
-        JSON.parse(localStorage.getItem("candidateSkillTags")) || [];
 
       renderTags();
     }
 
     function saveCandidateProfile() {
-      const name = document.getElementById("nameInput").value.trim();
+      const candidateProfile = {
+        name: document.getElementById("nameInput").value.trim(),
+        age: document.getElementById("ageInput").value.trim(),
+        location: document.getElementById("locationInput").value.trim(),
+        email: document.getElementById("emailInput").value.trim(),
+        summary: document.getElementById("summaryInput").value.trim(),
+        experienceText: document.getElementById("experienceInput").value.trim(),
+        experienceTag: selectedExperience,
+        skills: selectedSkills,
+        isVip:
+          JSON.parse(localStorage.getItem("candidateProfile"))?.isVip || false
+      };
 
-      localStorage.setItem("userName", name || "Name");
-      localStorage.setItem("candidateAge", document.getElementById("ageInput").value);
-      localStorage.setItem("candidateLocation", document.getElementById("locationInput").value);
-      localStorage.setItem("candidateEmail", document.getElementById("emailInput").value);
-      localStorage.setItem("candidateSummary", document.getElementById("summaryInput").value);
-      localStorage.setItem("candidateExperience", document.getElementById("experienceInput").value);
+      localStorage.setItem(
+        "candidateProfile",
+        JSON.stringify(candidateProfile)
+      );
 
-      localStorage.setItem("candidateExperienceTag", selectedExperience);
-      localStorage.setItem("candidateSkillTags", JSON.stringify(selectedSkills));
-
-      document.getElementById("userName").innerText = name || "Name";
+      document.getElementById("userName").innerText =
+        candidateProfile.name || "Guest";
 
       alert("Profile saved!");
     }
@@ -283,19 +332,17 @@
 
     function updateSelectedButtons() {
       document.querySelectorAll(".experience-option").forEach(button => {
-        if (button.dataset.tag === selectedExperience) {
-          button.classList.add("active-tag");
-        } else {
-          button.classList.remove("active-tag");
-        }
+        button.classList.toggle(
+          "active-tag",
+          button.dataset.tag === selectedExperience
+        );
       });
 
       document.querySelectorAll(".skill-option").forEach(button => {
-        if (selectedSkills.includes(button.dataset.tag)) {
-          button.classList.add("active-tag");
-        } else {
-          button.classList.remove("active-tag");
-        }
+        button.classList.toggle(
+          "active-tag",
+          selectedSkills.includes(button.dataset.tag)
+        );
       });
     }
 
@@ -308,27 +355,22 @@
     }
 
     function becomeVip() {
-      localStorage.setItem("candidateVip", "true");
+      const candidateProfile =
+        JSON.parse(localStorage.getItem("candidateProfile")) || {};
 
-      updateVipButton();
+      candidateProfile.isVip = true;
+
+      localStorage.setItem(
+        "candidateProfile",
+        JSON.stringify(candidateProfile)
+      );
+
+      document.getElementById("vipButton").classList.add("vip-active");
 
       closeVipModal();
-
-      alert("You are now a VIP member!");
-    }
-
-    function updateVipButton() {
-      const vipStatus = localStorage.getItem("candidateVip");
-      const vipButton = document.getElementById("vipButton");
-
-      if (vipStatus === "true") {
-        vipButton.innerText = "VIP Member";
-        vipButton.classList.add("vip-active");
-      }
     }
 
     loadCandidateProfile();
-    updateVipButton();
   </script>
 
 </body>
