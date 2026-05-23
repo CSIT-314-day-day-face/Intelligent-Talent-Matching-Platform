@@ -22,13 +22,9 @@
 
   <div class="signup-page">
 
-    <!-- LOGO -->
-
-    <a class="signup-logo">
+    <a href="index.html" class="signup-logo">
       Job Radar
     </a>
-
-    <!-- CARD -->
 
     <main class="signup-main">
 
@@ -38,74 +34,57 @@
 
         <form>
 
-          <!-- COMPANY -->
-
           <label>Company Name</label>
 
           <div class="signup-input">
-
             <span>⌂</span>
 
             <input
+              id="companyNameInput"
               type="text"
               placeholder="e.g. Acme Corp"
             >
-
           </div>
-
-          <!-- EMAIL -->
 
           <label>Work Email</label>
 
           <div class="signup-input">
-
             <span>✉</span>
 
             <input
+              id="emailInput"
               type="email"
               placeholder="name@company.com"
             >
-
           </div>
-
-          <!-- PASSWORD -->
 
           <label>Password</label>
 
           <div class="signup-input">
-
             <span>◧</span>
 
             <input
+              id="passwordInput"
               type="text"
               maxlength="8"
               placeholder="Min. 8 characters"
             >
-
           </div>
-
-          <!-- BUTTON -->
 
           <button
             type="button"
-            onclick="window.location.href='employer-index.html'"
+            onclick="registerEmployer()"
           >
             Sign Up
           </button>
 
-          <!-- LOGIN -->
-
           <p class="login-link">
-
             Already have an account?
 
             <a href="SignIn.html">
               Log In
             </a>
-
           </p>
-
-          <!-- SWITCH -->
 
           <a
             href="candidate-signup.html"
@@ -120,33 +99,91 @@
 
     </main>
 
-    <!-- FOOTER -->
-
     <footer class="signup-footer">
 
       <div>
-
         <strong>Job Radar</strong>
 
         <p>
           © 2024 Job Radar. All rights reserved.
         </p>
-
       </div>
 
       <div class="signup-footer-links">
-
         <a href="#">Privacy Policy</a>
-
         <a href="#">Terms of Service</a>
-
         <a href="#">About Us</a>
-
       </div>
 
     </footer>
 
   </div>
+
+  <script>
+    function registerEmployer() {
+      const companyName =
+        document.getElementById("companyNameInput").value.trim();
+
+      const email =
+        document.getElementById("emailInput").value.trim();
+
+      const password =
+        document.getElementById("passwordInput").value.trim();
+
+      if (!companyName || !email || !password) {
+        alert("Please complete all fields.");
+        return;
+      }
+
+      if (password.length < 8) {
+        alert("Password must be 8 characters.");
+        return;
+      }
+
+      fetch("http://localhost:5001/api/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          email: email,
+          password: password,
+          role: "employer"
+        })
+      })
+
+      .then(response => response.json())
+
+      .then(data => {
+        if (data.status === "success") {
+          const employerProfile = {
+            name: "",
+            companyName: companyName,
+            location: "",
+            email: email,
+            isVip: false
+          };
+
+          localStorage.setItem(
+            "employerProfile",
+            JSON.stringify(employerProfile)
+          );
+
+          alert("Registration successful. Please log in.");
+
+          window.location.href = "SignIn.html";
+        } else {
+          alert(data.message || "Registration failed.");
+        }
+      })
+
+      .catch(error => {
+        console.error("Register error:", error);
+        alert("Cannot connect to backend. Please make sure Flask is running.");
+      });
+    }
+  </script>
 
 </body>
 

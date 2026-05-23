@@ -10,8 +10,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
-    rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet"
+  >
 
   <link rel="stylesheet" href="style.css">
 </head>
@@ -23,7 +25,9 @@
     <header class="results-navbar">
 
       <a href="index.html" class="logo-link">
-        <div class="results-logo">Job Radar</div>
+        <div class="results-logo">
+          Job Radar
+        </div>
       </a>
 
       <div class="results-user">
@@ -41,8 +45,8 @@
       <div class="results-search-box">
 
         <select class="search-select" id="searchType">
+          <option value="keyword">Keyword</option>
           <option value="location">Address</option>
-          <option value="salary">Salary</option>
           <option value="workmode">Work Mode</option>
         </select>
 
@@ -50,10 +54,15 @@
           class="search-input"
           id="searchInput"
           type="text"
-          placeholder="Enter your preferred work address"
+          placeholder="Search job title or description"
         >
 
-        <button class="search-btn">Search</button>
+        <button
+          class="search-btn"
+          onclick="searchAgain()"
+        >
+          Search
+        </button>
 
       </div>
 
@@ -65,7 +74,11 @@
 
         <div>
           <h1>Search Results</h1>
-          <p>Found <span id="resultKeyword">128</span> matching jobs for you</p>
+          <p>
+            Found
+            <span id="resultKeyword">0</span>
+            matching jobs for you
+          </p>
         </div>
 
         <div class="sort-box">
@@ -74,105 +87,23 @@
 
       </div>
 
-      <section class="results-list">
-
-        <article class="result-card">
-          <div class="result-icon red-bg">◎</div>
-
-          <div class="result-content">
-            <h3>Senior Product Designer</h3>
-            <p>Linear Systems · Remote</p>
-
-            <div class="tags">
-              <span>Remote</span>
-              <span>$130k - $180k</span>
-              <span>Hot Role</span>
-            </div>
-
-            <div class="card-bottom">
-              <small>Posted 2h ago</small>
-              <a href="job-detail.html">Details →</a>
-            </div>
-          </div>
-
-          <button class="save-btn">♡</button>
-        </article>
-
-        <article class="result-card">
-          <div class="result-icon pink-bg">⌂</div>
-
-          <div class="result-content">
-            <h3>Lead UX Researcher</h3>
-            <p>CloudFlare Inc. · San Francisco, CA</p>
-
-            <div class="tags">
-              <span>On-site</span>
-              <span>$150k - $210k</span>
-              <span>Full time</span>
-            </div>
-
-            <div class="card-bottom">
-              <small>Posted 5h ago</small>
-              <a href="job-detail.html">Details →</a>
-            </div>
-          </div>
-
-          <button class="save-btn">♡</button>
-        </article>
-
-        <article class="result-card">
-          <div class="result-icon light-bg">✣</div>
-
-          <div class="result-content">
-            <h3>Interaction Designer</h3>
-            <p>SiliconEdge AI · Austin, TX</p>
-
-            <div class="tags">
-              <span>Hybrid</span>
-              <span>$120k - $155k</span>
-            </div>
-
-            <div class="card-bottom">
-              <small>Posted 1d ago</small>
-              <a href="job-detail.html">Details →</a>
-            </div>
-          </div>
-
-          <button class="save-btn">♡</button>
-        </article>
-
-        <article class="result-card">
-          <div class="result-icon pink-bg">↗</div>
-
-          <div class="result-content">
-            <h3>Growth Product Designer</h3>
-            <p>Flash Pay · Remote</p>
-
-            <div class="tags">
-              <span>Remote</span>
-              <span>$90k - $170k</span>
-              <span>Rapid Growth</span>
-            </div>
-
-            <div class="card-bottom">
-              <small>Posted 3d ago</small>
-              <a href="job-detail.html">Details →</a>
-            </div>
-          </div>
-
-          <button class="save-btn">♡</button>
-        </article>
-
-      </section>
+      <section
+        class="results-list"
+        id="resultsContainer"
+      ></section>
 
       <div class="pagination">
-        <button>‹</button>
-        <button class="active-page">1</button>
-        <button>2</button>
-        <button>3</button>
-        <span>...</span>
-        <button>12</button>
-        <button>›</button>
+
+        <button onclick="changePage(-1)">
+          ‹
+        </button>
+
+        <div id="pageNumbers"></div>
+
+        <button onclick="changePage(1)">
+          ›
+        </button>
+
       </div>
 
     </main>
@@ -199,31 +130,183 @@
     const searchType = document.getElementById("searchType");
     const searchInput = document.getElementById("searchInput");
 
+    let currentPage = 1;
+    const jobsPerPage = 4;
+    let allResults = [];
+
     searchType.addEventListener("change", function () {
+      if (this.value === "keyword") {
+        searchInput.placeholder = "Search job title or description";
+      }
+
       if (this.value === "location") {
         searchInput.placeholder = "Enter your preferred work address";
       }
 
-      if (this.value === "salary") {
-        searchInput.placeholder = "Enter your expected salary";
-      }
-
       if (this.value === "workmode") {
-        searchInput.placeholder = "Online work or office work";
+        searchInput.placeholder = "Remote, On-site, or Hybrid";
       }
     });
 
     const params = new URLSearchParams(window.location.search);
-    const keyword = params.get("keyword");
-    const type = params.get("type");
+    const keyword = params.get("keyword") || "";
+    const type = params.get("type") || "keyword";
 
-    if (keyword) {
-      searchInput.value = keyword;
-      document.getElementById("resultKeyword").textContent = "128";
+    searchInput.value = keyword;
+    searchType.value = type;
+
+    let apiUrl = "http://localhost:5001/api/search?";
+
+    if (type === "location") {
+      apiUrl += "location=" + encodeURIComponent(keyword);
+    } else if (type === "workmode") {
+      apiUrl += "job_type=" + encodeURIComponent(keyword);
+    } else {
+      apiUrl += "q=" + encodeURIComponent(keyword);
     }
 
-    if (type) {
-      searchType.value = type;
+    fetch(apiUrl, {
+      method: "GET",
+      credentials: "include"
+    })
+      .then(response => response.json())
+      .then(data => {
+        allResults = data.results || [];
+
+        document.getElementById("resultKeyword").textContent =
+          data.count || allResults.length;
+
+        if (allResults.length === 0) {
+          document.getElementById("resultsContainer").innerHTML = `
+            <div class="no-results">
+              No matching jobs found.
+            </div>
+          `;
+
+          document.getElementById("pageNumbers").innerHTML = "";
+          return;
+        }
+
+        renderPage(1);
+        renderPagination();
+      })
+      .catch(error => {
+        console.error("Search error:", error);
+
+        document.getElementById("resultsContainer").innerHTML = `
+          <div class="no-results">
+            Search failed. Please make sure the backend is running.
+          </div>
+        `;
+      });
+
+    function renderPage(page) {
+      currentPage = page;
+
+      const resultsContainer =
+        document.getElementById("resultsContainer");
+
+      resultsContainer.innerHTML = "";
+
+      const start = (page - 1) * jobsPerPage;
+      const end = start + jobsPerPage;
+
+      const jobsToShow =
+        allResults.slice(start, end);
+
+      jobsToShow.forEach(job => {
+        resultsContainer.innerHTML += `
+          <article class="result-card">
+
+            <div class="result-icon red-bg">
+              ◎
+            </div>
+
+            <div class="result-content">
+
+              <h3>
+                ${job.title}
+              </h3>
+
+              <p>
+                ${job.location} · ${job.job_type}
+              </p>
+
+              <div class="tags">
+                <span>${job.job_type}</span>
+                <span>${job.salary}</span>
+                <span>${job.score}% Match</span>
+              </div>
+
+              <div class="card-bottom">
+                <small>AI matched result</small>
+                <a href="job-detail.html?id=${job.id}">
+                  Details →
+                </a>
+              </div>
+
+            </div>
+
+            <button class="save-btn">
+              ♡
+            </button>
+
+          </article>
+        `;
+      });
+
+      renderPagination();
+    }
+
+    function renderPagination() {
+      const totalPages =
+        Math.ceil(allResults.length / jobsPerPage);
+
+      const pageNumbers =
+        document.getElementById("pageNumbers");
+
+      pageNumbers.innerHTML = "";
+
+      for (let i = 1; i <= totalPages; i++) {
+        pageNumbers.innerHTML += `
+          <button
+            class="${i === currentPage ? "active-page" : ""}"
+            onclick="renderPage(${i})"
+          >
+            ${i}
+          </button>
+        `;
+      }
+    }
+
+    function changePage(direction) {
+      const totalPages =
+        Math.ceil(allResults.length / jobsPerPage);
+
+      const nextPage =
+        currentPage + direction;
+
+      if (nextPage < 1 || nextPage > totalPages) {
+        return;
+      }
+
+      renderPage(nextPage);
+    }
+
+    function searchAgain() {
+      const type = searchType.value;
+      const keyword = searchInput.value.trim();
+
+      if (!keyword) {
+        alert("Please enter a keyword.");
+        return;
+      }
+
+      window.location.href =
+        "search-results.html?type="
+        + encodeURIComponent(type)
+        + "&keyword="
+        + encodeURIComponent(keyword);
     }
   </script>
 

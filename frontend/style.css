@@ -3331,3 +3331,16 @@ body {
   font-weight: 800;
   cursor: pointer;
 }
+.login-role-select {
+  flex: 1;
+  height: 100%;
+
+  border: none;
+  outline: none;
+  background: transparent;
+
+  font-family: inherit;
+  font-size: 14px;
+
+  color: #241414;
+}

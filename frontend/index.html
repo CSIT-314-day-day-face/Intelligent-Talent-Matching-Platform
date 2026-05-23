@@ -256,20 +256,19 @@
     });
 
     function goSearch() {
+      const type = searchType.value;
+      const keyword = searchInput.value.trim();
+      if (!keyword) {
+        alert("Please enter a keyword.");
+        return;
+      }
 
-      const type =
-        searchType.value;
-
-      const keyword =
-        searchInput.value;
-
-      window.location.href =
-        "search-results.html?type="
-        + encodeURIComponent(type)
-        + "&keyword="
-        + encodeURIComponent(keyword);
-
-    }
+  window.location.href =
+    "search-results.html?type=" +
+    encodeURIComponent(type) +
+    "&keyword=" +
+    encodeURIComponent(keyword);
+}
 
   </script>
 
