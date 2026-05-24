@@ -48,6 +48,7 @@
       <a
         href="index.html"
         class="logo-link"
+        onclick="goHome(event)"
       >
 
         <div class="logo">
@@ -288,6 +289,7 @@
 
   <!-- SCRIPT -->
 
+  <script src="api.js"></script>
   <script>
 
     const searchType =
@@ -295,6 +297,59 @@
 
     const searchInput =
       document.getElementById("searchInput");
+
+    const navActions =
+      document.querySelector(".nav-actions");
+
+    const auth =
+      getLoginState();
+
+    const loginEmail =
+      auth.authToken ? auth.email : "";
+
+    const loginName =
+      auth.authToken ? (auth.name || auth.email) : "";
+
+    const loginRole =
+      auth.authToken ? auth.role : "";
+
+    function getDashboardPage() {
+      return loginRole === "employer"
+        ? "employer-index.html"
+        : "jobseeker-index.html";
+    }
+
+    function getProfilePage() {
+      return loginRole === "employer"
+        ? "employer-profile.html"
+        : "candidate-profile.html";
+    }
+
+    if (loginEmail && loginRole) {
+      navActions.innerHTML = `
+        <a
+          href="${getProfilePage()}"
+          class="signup-btn"
+        >
+          ${loginName}
+        </a>
+
+        <a
+          href="${getDashboardPage()}"
+          class="signup-btn"
+        >
+          Dashboard
+        </a>
+
+        <button
+          type="button"
+          class="logout-btn"
+          onclick="logoutUser()"
+        >
+          Logout
+        </button>
+      `;
+    }
 
     /* PLACEHOLDER CHANGE */
 
@@ -339,16 +394,6 @@
 
       const keyword =
         searchInput.value.trim();
-
-      if (!keyword) {
-
-        alert(
-          "Please enter a keyword."
-        );
-
-        return;
-
-      }
 
       window.location.href =
         "search-results.html?type=" +

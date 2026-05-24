@@ -48,9 +48,9 @@
       
       
 
-        <div class="employer-logo">
+        <a href="index.html" class="employer-logo" onclick="goHome(event)">
           Job Radar
-        </div>
+        </a>
 
   
 
@@ -58,11 +58,17 @@
 
         <div>
 
-          <strong id="employerNavName">
-            Guest
-          </strong>
+          <a href="employer-profile.html">
+            <strong id="employerNavName">
+              Guest
+            </strong>
+          </a>
 
         </div>
+
+        <button type="button" class="logout-btn" onclick="logoutUser()">
+          Logout
+        </button>
 
       </div>
 
@@ -109,7 +115,7 @@
           >
 
           <button onclick="goEmployerSearch()">
-            Update Radar
+            Search
           </button>
 
         </div>
@@ -407,15 +413,19 @@
 
     <button
       class="float-add"
-      onclick="window.location.href='employer-profile.html'"
+      type="button"
+      aria-label="Post a job"
+      title="Post a job"
+      onclick="window.location.href='post-job.html'"
     >
-      ＋
+      +
     </button>
 
   </div>
 
   <!-- SCRIPT -->
 
+  <script src="api.js"></script>
   <script>
 
     const employerNavName =
@@ -435,14 +445,16 @@
 
     /* USER */
 
+    const auth =
+      getLoginState();
+
     employerNavName.textContent =
-      localStorage.getItem("loginEmail")
-      || "Guest";
+      auth.name || auth.email || "Guest";
 
     /* MEMBERSHIP */
 
     const membership =
-      localStorage.getItem("membership");
+      auth.membership;
 
     if (membership === "1") {
 
@@ -502,22 +514,77 @@
       const keyword =
         employerSearchInput.value.trim();
 
-      if (!keyword) {
-
-        alert(
-          "Please enter a keyword."
-        );
-
-        return;
-
-      }
-
       window.location.href =
-        "search-results.html?type="
+        "search-results.html?target=candidates&type="
         + encodeURIComponent(type)
         + "&keyword="
         + encodeURIComponent(keyword);
 
+    }
+
+    function renderCandidateCards(candidates) {
+      if (!candidates.length) {
+        talentContainer.innerHTML = `
+          <article class="talent-card">
+            <div class="talent-info">
+              <h3>No candidate matches yet</h3>
+              <p>Create a job post or adjust the search criteria.</p>
+            </div>
+          </article>
+        `;
+        return;
+      }
+
+      talentContainer.innerHTML = candidates.map(candidate => {
+        const score = Number(candidate.score || 0);
+        const matchText = score > 0
+          ? `${Math.round(score)}% Match`
+          : "Needs job criteria";
+        const matchQuality = candidate.match_quality || "Profile match";
+
+        return `
+        <article class="talent-card">
+          <div class="talent-info">
+            <h3>${candidate.full_name || candidate.name || "Unnamed Candidate"}</h3>
+            <p>${candidate.major || ""} ${candidate.years_experience || ""}</p>
+            <small>WORK EXPERIENCE</small>
+            <p>${candidate.work_experience || candidate.summary || ""}</p>
+            <div class="talent-bottom">
+              <span>${candidate.preferred_mode || ""} Preferred</span>
+              <span>${candidate.preferred_location || candidate.location || ""}</span>
+              <span>${candidate.education || ""}</span>
+            </div>
+          </div>
+
+          <div class="talent-side">
+            <div class="match ${score < 50 ? "normal" : ""}">
+              ${matchText}
+            </div>
+            <strong>${matchQuality}</strong>
+            <div class="skills">
+              ${skillsToArray(candidate.skills).map(skill =>
+                `<span>${skill}</span>`
+              ).join("")}
+            </div>
+            <a href="candidate-detail.html?id=${candidate.id}">View Profile</a>
+          </div>
+        </article>
+      `;
+      }).join("");
+    }
+
+    async function loadCandidateRecommendations() {
+      try {
+        const data = await apiRequest("/recommendations/candidates");
+        renderCandidateCards(data.results || []);
+      } catch (error) {
+        try {
+          const data = await apiRequest("/candidates/search");
+          renderCandidateCards(data.results || []);
+        } catch (fallbackError) {
+          console.warn("Unable to load candidate recommendations:", fallbackError.message);
+        }
+      }
     }
 
     /* VIP LIMIT */
@@ -543,7 +610,7 @@
 
     }
 
-    applyMembershipLimit();
+    loadCandidateRecommendations().then(applyMembershipLimit);
 
   </script>
 

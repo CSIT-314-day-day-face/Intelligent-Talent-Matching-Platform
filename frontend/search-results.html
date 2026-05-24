@@ -24,7 +24,7 @@
 
     <header class="results-navbar">
 
-      <a href="index.html" class="logo-link">
+      <a href="index.html" class="logo-link" onclick="goHome(event)">
         <div class="results-logo">
           Job Radar
         </div>
@@ -77,7 +77,7 @@
           <p>
             Found
             <span id="resultKeyword">0</span>
-            matching jobs for you
+            matching results for you
           </p>
         </div>
 
@@ -126,12 +126,16 @@
 
   </div>
 
+  <script src="api.js"></script>
   <script>
     const resultsUserName =
       document.getElementById("resultsUserName");
 
-    resultsUserName.textContent =
-      localStorage.getItem("loginEmail") || "Guest";
+    const auth = getLoginState();
+    renderUserMenu(
+      resultsUserName,
+      auth.role === "employer" ? "employer-profile.html" : "candidate-profile.html"
+    );
 
     const searchType = document.getElementById("searchType");
     const searchInput = document.getElementById("searchInput");
@@ -161,18 +165,23 @@
     const params = new URLSearchParams(window.location.search);
     const keyword = params.get("keyword") || "";
     const type = params.get("type") || "keyword";
+    const target = params.get("target") || "jobs";
 
     searchInput.value = keyword;
     searchType.value = type;
 
-    let apiUrl = "http://127.0.0.1:5001/api/search?";
+    let apiUrl = target === "candidates"
+      ? `${API_BASE}/candidates/search?`
+      : `${API_BASE}/search?`;
 
     if (type === "location") {
       apiUrl += "location=" + encodeURIComponent(keyword);
     } else if (type === "workmode") {
-      apiUrl += "job_type=" + encodeURIComponent(keyword);
+      apiUrl += "work_mode=" + encodeURIComponent(keyword);
     } else if (type === "salary") {
-      apiUrl += "q=" + encodeURIComponent(keyword);
+      apiUrl += target === "candidates"
+        ? "q=" + encodeURIComponent(keyword)
+        : "salary=" + encodeURIComponent(keyword);
     } else {
       apiUrl += "q=" + encodeURIComponent(keyword);
     }
@@ -191,7 +200,7 @@
         if (allResults.length === 0) {
           document.getElementById("resultsContainer").innerHTML = `
             <div class="no-results">
-              No matching jobs found.
+              No matching results found.
             </div>
           `;
 
@@ -226,7 +235,38 @@
       const jobsToShow =
         allResults.slice(start, end);
 
-      jobsToShow.forEach(job => {
+      jobsToShow.forEach(item => {
+        if (target === "candidates") {
+          resultsContainer.innerHTML += `
+          <article class="result-card">
+            <div class="result-content">
+              <h3>
+                ${item.full_name || item.name || "Unnamed Candidate"}
+              </h3>
+
+              <p>
+                ${item.education || ""} ${item.major || ""}
+              </p>
+
+              <div class="tags">
+                <span>${item.preferred_mode || ""}</span>
+                <span>${item.preferred_location || item.location || ""}</span>
+                <span>${Math.round(item.score || 0)}% Match</span>
+              </div>
+
+              <div class="card-bottom">
+                <small>${item.skills || ""}</small>
+                <a href="candidate-detail.html?id=${item.id}">
+                  View Profile
+                </a>
+              </div>
+            </div>
+          </article>
+          `;
+          return;
+        }
+
+        const job = item;
         resultsContainer.innerHTML += `
           <article class="result-card">
 
@@ -241,11 +281,11 @@
               </h3>
 
               <p>
-                ${job.location} · ${job.job_type}
+                ${job.location} - ${job.work_mode || job.job_type || ""}
               </p>
 
               <div class="tags">
-                <span>${job.job_type}</span>
+                <span>${job.work_mode || job.job_type || ""}</span>
                 <span>${job.salary}</span>
                 <span>${job.score}% Match</span>
               </div>
@@ -309,13 +349,10 @@
       const type = searchType.value;
       const keyword = searchInput.value.trim();
 
-      if (!keyword) {
-        alert("Please enter a keyword.");
-        return;
-      }
-
       window.location.href =
-        "search-results.html?type="
+        "search-results.html?target="
+        + encodeURIComponent(target)
+        + "&type="
         + encodeURIComponent(type)
         + "&keyword="
         + encodeURIComponent(keyword);

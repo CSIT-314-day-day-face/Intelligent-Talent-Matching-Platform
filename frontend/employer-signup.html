@@ -22,7 +22,7 @@
 
   <div class="signup-page">
 
-    <a href="index.html" class="signup-logo">
+    <a href="index.html" class="signup-logo" onclick="goHome(event)">
       Job Radar
     </a>
 
@@ -65,7 +65,7 @@
 
             <input
               id="passwordInput"
-              type="text"
+              type="password"
               maxlength="8"
               placeholder="Min. 8 characters"
             >
@@ -119,6 +119,7 @@
 
   </div>
 
+  <script src="api.js"></script>
   <script>
     function registerEmployer() {
       const companyName =
@@ -140,20 +141,16 @@
         return;
       }
 
-      fetch("http://localhost:5001/api/register", {
+      apiRequest("/register", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        credentials: "include",
-        body: JSON.stringify({
+        body: {
           email: email,
           password: password,
-          role: "employer"
-        })
+          role: "employer",
+          company_name: companyName,
+          contact_info: email
+        }
       })
-
-      .then(response => response.json())
 
       .then(data => {
         if (data.status === "success") {
@@ -172,7 +169,7 @@
 
           alert("Registration successful. Please log in.");
 
-          window.location.href = "SignIn.html";
+          window.location.replace("SignIn.html");
         } else {
           alert(data.message || "Registration failed.");
         }

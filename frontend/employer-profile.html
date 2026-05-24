@@ -28,18 +28,24 @@
     <header class="employer-profile-navbar">
 
       <a
-        href="employer-index.html"
+        href="index.html"
         class="employer-profile-logo"
+        onclick="goHome(event)"
       >
         Job Radar
       </a>
 
-      <strong
-        class="employer-profile-name"
-        id="profileName"
-      >
-        Guest
-      </strong>
+      <div class="profile-nav-actions">
+        <strong
+          class="employer-profile-name"
+          id="profileName"
+        >
+          Guest
+        </strong>
+        <button type="button" class="logout-btn" onclick="logoutUser()">
+          Logout
+        </button>
+      </div>
 
     </header>
 
@@ -74,11 +80,26 @@
 
         <label>Company Location:</label>
 
-        <input
-          id="companyLocationInput"
-          type="text"
-          placeholder="e.g. Sydney, NSW"
-        >
+        <select id="companyLocationInput">
+          <option value="">Select location</option>
+          <option value="Sydney">Sydney</option>
+          <option value="Melbourne">Melbourne</option>
+          <option value="Brisbane">Brisbane</option>
+          <option value="Canberra">Canberra</option>
+          <option value="Perth">Perth</option>
+          <option value="Adelaide">Adelaide</option>
+          <option value="Wollongong">Wollongong</option>
+          <option value="Newcastle">Newcastle</option>
+          <option value="Parramatta">Parramatta</option>
+          <option value="Remote">Remote</option>
+        </select>
+
+        <label>Company Information:</label>
+
+        <textarea
+          id="companyInfoInput"
+          placeholder="Briefly describe the company, industry, team, and hiring focus"
+        ></textarea>
 
         <label>Email:</label>
 
@@ -129,6 +150,19 @@
           </div>
 
         </div>
+
+        <div class="published-header">
+
+          <h2>
+            Recent Applicants
+          </h2>
+
+        </div>
+
+        <div
+          id="recentApplicantsList"
+          class="published-jobs-list"
+        ></div>
 
         <!-- JOB LIST -->
 
@@ -239,8 +273,26 @@
     const companyLocationInput =
       document.getElementById("companyLocationInput");
 
+    const companyInfoInput =
+      document.getElementById("companyInfoInput");
+
     const companyEmailInput =
       document.getElementById("companyEmailInput");
+
+    function setSelectValue(selectElement, value) {
+      const normalizedValue = value || "";
+      if (
+        normalizedValue !== "" &&
+        !Array.from(selectElement.options).some(option => option.value === normalizedValue)
+      ) {
+        const option = document.createElement("option");
+        option.value = normalizedValue;
+        option.textContent = normalizedValue;
+        selectElement.appendChild(option);
+      }
+
+      selectElement.value = normalizedValue;
+    }
 
     let employerProfile =
       JSON.parse(
@@ -248,6 +300,7 @@
       ) || {
         name: "",
         companyName: "",
+        companyInfo: "",
         location: "",
         email: "",
         isVip: false
@@ -263,8 +316,13 @@
       companyNameInput.value =
         employerProfile.companyName;
 
-      companyLocationInput.value =
-        employerProfile.location;
+      setSelectValue(
+        companyLocationInput,
+        employerProfile.location
+      );
+
+      companyInfoInput.value =
+        employerProfile.companyInfo || "";
 
       companyEmailInput.value =
         employerProfile.email;
@@ -296,6 +354,9 @@
 
       employerProfile.location =
         companyLocationInput.value.trim();
+
+      employerProfile.companyInfo =
+        companyInfoInput.value.trim();
 
       employerProfile.email =
         companyEmailInput.value.trim();
@@ -439,6 +500,331 @@
 
     loadEmployerProfile();
 
+  </script>
+
+  <script src="api.js"></script>
+  <script>
+    (() => {
+      const profileName = document.getElementById("profileName");
+      const vipButton = document.getElementById("vipButton");
+      const ownerNameInput = document.getElementById("ownerNameInput");
+      const companyNameInput = document.getElementById("companyNameInput");
+      const companyLocationInput = document.getElementById("companyLocationInput");
+      const companyInfoInput = document.getElementById("companyInfoInput");
+      const companyEmailInput = document.getElementById("companyEmailInput");
+      const jobsList = document.getElementById("publishedJobsList");
+      const applicantsList = document.getElementById("recentApplicantsList");
+
+      function setSelectValue(selectElement, value) {
+        const normalizedValue = value || "";
+        if (
+          normalizedValue !== "" &&
+          !Array.from(selectElement.options).some(option => option.value === normalizedValue)
+        ) {
+          const option = document.createElement("option");
+          option.value = normalizedValue;
+          option.textContent = normalizedValue;
+          selectElement.appendChild(option);
+        }
+
+        selectElement.value = normalizedValue;
+      }
+
+      let profile =
+        JSON.parse(localStorage.getItem("employerProfile")) || {
+          name: "",
+          companyName: "",
+          companyInfo: "",
+          location: "",
+          email: "",
+          isVip: false
+        };
+
+      window.loadEmployerProfile = async function () {
+        const auth = requireLogin("employer");
+        if (!auth) {
+          return;
+        }
+
+        try {
+          const data = await apiRequest("/profile");
+          if (data.role === "employer" && data.profile) {
+            setLoginState(
+              {
+                email: data.profile.email || auth.email,
+                display_name:
+                  data.profile.contact_info ||
+                  data.profile.company_name ||
+                  auth.name ||
+                  auth.email,
+                role: "employer",
+                membership: data.profile.membership_status,
+                auth_token: auth.authToken
+              },
+              auth.email,
+              "employer"
+            );
+            profile = {
+              name: data.profile.contact_info || "",
+              companyName: data.profile.company_name || "",
+              companyInfo: data.profile.company_info || "",
+              location: data.profile.location || "",
+              email: data.profile.email || "",
+              isVip: Number(data.profile.membership_status) === 1
+            };
+            localStorage.setItem("employerProfile", JSON.stringify(profile));
+            localStorage.setItem("membership", data.profile.membership_status);
+          }
+        } catch (error) {
+          console.warn("Using local employer profile fallback:", error.message);
+        }
+
+        ownerNameInput.value = profile.name;
+        companyNameInput.value = profile.companyName;
+        setSelectValue(companyLocationInput, profile.location);
+        companyInfoInput.value = profile.companyInfo;
+        companyEmailInput.value = profile.email;
+        profileName.textContent = profile.name || profile.companyName || "Guest";
+
+        if (profile.isVip === true) {
+          vipButton.classList.add("vip-active");
+        } else {
+          vipButton.classList.remove("vip-active");
+        }
+      };
+
+      window.saveEmployerProfile = async function () {
+        profile.name = ownerNameInput.value.trim();
+        profile.companyName = companyNameInput.value.trim();
+        profile.location = companyLocationInput.value.trim();
+        profile.email = companyEmailInput.value.trim();
+        profile.companyInfo = companyInfoInput.value.trim();
+
+        if (!profile.companyName || !profile.location || !profile.companyInfo) {
+          alert("Please complete company name, company location, and company information.");
+          return;
+        }
+
+        localStorage.setItem(
+          "loginName",
+          profile.name || profile.companyName || profile.email || ""
+        );
+
+        try {
+          await apiRequest("/profile", {
+            method: "PUT",
+            body: {
+              company_name: profile.companyName,
+              company_info: profile.companyInfo,
+              contact_info: profile.name || profile.email,
+              location: profile.location
+            }
+          });
+
+          localStorage.setItem("employerProfile", JSON.stringify(profile));
+          await window.loadEmployerProfile();
+          alert("Profile saved successfully.");
+        } catch (error) {
+          alert(error.message || "Profile save failed. Please log in first.");
+        }
+      };
+
+      window.goToPostJob = function () {
+        window.location.href = "post-job.html";
+      };
+
+      window.confirmVip = async function () {
+        const auth = requireLogin("employer");
+        if (!auth) {
+          return;
+        }
+
+        try {
+          const data = await apiRequest("/membership/upgrade", {
+            method: "POST"
+          });
+
+          profile.isVip = true;
+          setLoginState(
+            {
+              email: auth.email,
+              display_name: profile.name || profile.companyName || auth.name || auth.email,
+              role: "employer",
+              membership: data.membership ?? 1,
+              auth_token: data.auth_token || auth.authToken
+            },
+            auth.email,
+            "employer"
+          );
+          localStorage.setItem("employerProfile", JSON.stringify(profile));
+          await window.loadEmployerProfile();
+          closeVipModal();
+        } catch (error) {
+          alert(error.message || "VIP upgrade failed. Please log in first.");
+        }
+      };
+
+      async function loadPublishedJobs() {
+        try {
+          const data = await apiRequest("/employer/jobs");
+          renderPublishedJobs(data.results || []);
+        } catch (error) {
+          const localJobs =
+            JSON.parse(localStorage.getItem("publishedJobs")) || [];
+          renderPublishedJobs(localJobs);
+        }
+      }
+
+      async function loadRecentApplicants() {
+        try {
+          const data = await apiRequest("/applications/employer?limit=3");
+          renderRecentApplicants(data.results || []);
+        } catch (error) {
+          applicantsList.innerHTML = `
+            <article class="published-job-card">
+              <h3>Unable to load applicants</h3>
+              <p>${error.message || "Please try again later."}</p>
+            </article>
+          `;
+        }
+      }
+
+      function renderRecentApplicants(applications) {
+        if (applications.length === 0) {
+          applicantsList.innerHTML = `
+            <article class="published-job-card">
+              <h3>No applicants yet</h3>
+              <p>Applicants will appear here after candidates apply for your jobs.</p>
+            </article>
+          `;
+          return;
+        }
+
+        applicantsList.innerHTML = applications.map(application => `
+          <article class="published-job-card">
+            <div class="job-title-row">
+              <h3>${application.full_name || "Unnamed Candidate"}</h3>
+              <span class="interest-label">${application.status || "Applied"}</span>
+            </div>
+            <p>Applied for ${application.title || ""}</p>
+            <div class="profile-job-tags">
+              <span>${application.major || ""}</span>
+              <span>${application.years_experience || ""}</span>
+              <span>${application.applied_at || ""}</span>
+            </div>
+            <div class="profile-job-tags">
+              ${skillsToArray(application.skills).slice(0, 4).map(skill =>
+                `<span>${skill}</span>`
+              ).join("")}
+            </div>
+            <div class="profile-job-tags">
+              <button type="button" onclick="window.location.href='candidate-detail.html?id=${application.candidate_id}'">
+                View Profile
+              </button>
+            </div>
+          </article>
+        `).join("");
+      }
+
+      function renderPublishedJobs(jobs) {
+        if (jobs.length === 0) {
+          jobsList.innerHTML = `
+            <div class="empty-job-box">
+              <button
+                class="empty-add-btn"
+                onclick="goToPostJob()"
+              >
+                +
+              </button>
+            </div>
+          `;
+          return;
+        }
+
+        jobsList.innerHTML =
+          jobs.map(job => `
+            <article class="published-job-card">
+              <div class="job-title-row">
+                <h3>${job.title}</h3>
+                <span class="interest-label">
+                  ${job.salary || job.salary_range || ""}
+                </span>
+              </div>
+              <p>${job.location || ""}</p>
+              <div class="profile-job-tags">
+                <span>${job.work_mode || job.mode || ""}</span>
+                <span>${job.years_experience || job.experience || ""}</span>
+                ${skillsToArray(job.required_skills || job.skills).map(skill =>
+                  `<span>${skill}</span>`
+                ).join("")}
+              </div>
+              <div class="profile-job-tags">
+                <button type="button" onclick="viewJob(${job.id})">Details</button>
+                <button type="button" onclick="editJob(${job.id})">Edit</button>
+                <button type="button" onclick="deleteJob(${job.id})">Delete</button>
+              </div>
+            </article>
+          `).join("");
+      }
+
+      window.viewJob = function (jobId) {
+        window.location.href = `job-detail.html?id=${jobId}`;
+      };
+
+      window.editJob = async function (jobId) {
+        try {
+          const job = await apiRequest(`/jobs/${jobId}`);
+          const title = prompt("Job title", job.title || "") || job.title;
+          const location = prompt("Job location", job.location || "") || job.location;
+          const description = prompt("Job description", job.description || "") || job.description;
+          const requiredEducation = prompt("Required education", job.required_education || "") || job.required_education;
+          const requiredSkills = prompt("Required skills", job.required_skills || "") || job.required_skills;
+          const yearsExperience = prompt("Years of experience", job.years_experience || "") || job.years_experience;
+          const workMode = prompt("Work mode", job.work_mode || "") || job.work_mode;
+          const salary = prompt("Salary range", job.salary_range || "") || job.salary_range;
+          const jobType = prompt("Job type", job.job_type || "") || job.job_type;
+
+          await apiRequest(`/jobs/${jobId}`, {
+            method: "PUT",
+            body: {
+              title,
+              location,
+              description,
+              required_education: requiredEducation,
+              required_skills: requiredSkills,
+              years_experience: yearsExperience,
+              work_mode: workMode,
+              salary,
+              job_type: jobType,
+              company_info: profile.companyInfo || profile.companyName
+            }
+          });
+
+          loadPublishedJobs();
+        } catch (error) {
+          alert(error.message || "Unable to edit this job.");
+        }
+      };
+
+      window.deleteJob = async function (jobId) {
+        if (!confirm("Delete this job posting?")) {
+          return;
+        }
+
+        try {
+          await apiRequest(`/jobs/${jobId}`, {
+            method: "DELETE"
+          });
+          loadPublishedJobs();
+        } catch (error) {
+          alert(error.message || "Unable to delete this job.");
+        }
+      };
+
+      window.loadEmployerProfile();
+      loadPublishedJobs();
+      loadRecentApplicants();
+    })();
   </script>
 
 </body>

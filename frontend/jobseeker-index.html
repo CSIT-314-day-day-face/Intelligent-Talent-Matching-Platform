@@ -19,14 +19,19 @@
 
     <header class="employer-home-navbar">
 
-      <div class="employer-home-logo">
+      <a href="index.html" class="employer-home-logo" onclick="goHome(event)">
         Job Radar
-      </div>
+      </a>
 
       <div class="nav-user">
         <div>
-          <strong id="homeUserName">Guest</strong>
+          <a href="candidate-profile.html">
+            <strong id="homeUserName">Guest</strong>
+          </a>
         </div>
+        <button type="button" class="logout-btn" onclick="logoutUser()">
+          Logout
+        </button>
       </div>
 
     </header>
@@ -189,6 +194,7 @@
 
   </div>
 
+  <script src="api.js"></script>
   <script>
     const homeUserName = document.getElementById("homeUserName");
     const heroText = document.getElementById("heroText");
@@ -198,14 +204,16 @@
     const searchType = document.getElementById("searchType");
     const searchInput = document.getElementById("searchInput");
 
-    const loginEmail = localStorage.getItem("loginEmail");
-    const membership = localStorage.getItem("membership");
+    const auth = getLoginState();
+    const loginEmail = auth.email;
+    const loginName = auth.name || auth.email;
+    const membership = auth.membership;
 
-    homeUserName.textContent = loginEmail || "Guest";
+    homeUserName.textContent = loginName || "Guest";
 
     if (loginEmail) {
       heroText.textContent =
-        "Radar is active. Currently scanning matching roles for " + loginEmail + ".";
+        "Radar is active. Currently scanning matching roles for " + (loginName || loginEmail) + ".";
     } else {
       heroText.textContent =
         "Radar is active. Please sign in to receive personalized recommendations.";
@@ -239,16 +247,61 @@
       const type = searchType.value;
       const keyword = searchInput.value.trim();
 
-      if (!keyword) {
-        alert("Please enter a keyword.");
-        return;
-      }
-
       window.location.href =
         "search-results.html?type=" +
         encodeURIComponent(type) +
         "&keyword=" +
         encodeURIComponent(keyword);
+    }
+
+    function renderRecommendedJobs(jobs) {
+      if (!jobs.length) {
+        recommendedJobs.innerHTML = `
+          <article class="employer-job-card">
+            <div class="job-card-top">
+              <div>
+                <h3>No recommendations yet</h3>
+                <p>Complete your profile to improve matching.</p>
+              </div>
+            </div>
+          </article>
+        `;
+        return;
+      }
+
+      recommendedJobs.innerHTML = jobs.map(job => `
+        <article class="employer-job-card">
+          <div class="job-card-top">
+            <div class="job-icon red-icon"></div>
+            <div>
+              <h3>${job.title}</h3>
+              <p>${job.company_name || ""}</p>
+            </div>
+            <span class="bookmark">${Math.round(job.score || 0)}%</span>
+          </div>
+
+          <div class="job-tags">
+            <span>${job.work_mode || job.job_type || ""}</span>
+            <span>${job.location || ""}</span>
+            <span>${job.salary || job.salary_range || ""}</span>
+          </div>
+
+          <div class="job-card-bottom">
+            <small>${job.required_skills || "AI matched result"}</small>
+            <a href="job-detail.html?id=${job.id}">Details</a>
+          </div>
+        </article>
+      `).join("");
+    }
+
+    async function loadRecommendedJobs() {
+      try {
+        const data = await apiRequest("/recommendations/jobs");
+        renderRecommendedJobs(data.results || []);
+      } catch (error) {
+        const data = await apiRequest("/jobs?limit=10");
+        renderRecommendedJobs(data.results || []);
+      }
     }
 
     function applyMembershipLimit() {
@@ -263,7 +316,7 @@
       }
     }
 
-    applyMembershipLimit();
+    loadRecommendedJobs().then(applyMembershipLimit);
   </script>
 
 </body>

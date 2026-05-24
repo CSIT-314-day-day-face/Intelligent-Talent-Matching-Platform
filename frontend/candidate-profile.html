@@ -20,13 +20,18 @@
 
     <header class="candidate-new-navbar">
 
-      <a href="jobseeker-index.html" class="candidate-new-logo">
+      <a href="index.html" class="candidate-new-logo" onclick="goHome(event)">
         Job Radar
       </a>
 
-      <strong id="userName">
-        Guest
-      </strong>
+      <div class="profile-nav-actions">
+        <strong id="userName">
+          Guest
+        </strong>
+        <button type="button" class="logout-btn" onclick="logoutUser()">
+          Logout
+        </button>
+      </div>
 
     </header>
 
@@ -41,11 +46,87 @@
         <label>Name:</label>
         <input type="text" id="nameInput" placeholder="e.g. Alex Thompson">
 
-        <label>Age:</label>
-        <input type="text" id="ageInput" placeholder="e.g. 28">
+        <label>Years of Experience:</label>
+        <select id="ageInput" onchange="selectExperienceFromInput(this.value)">
+          <option value="">Select experience</option>
+          <option value="0-3 Years">0-3 Years</option>
+          <option value="3-5 Years">3-5 Years</option>
+          <option value="5-7 Years">5-7 Years</option>
+          <option value="7-9 Years">7-9 Years</option>
+          <option value="9-11 Years">9-11 Years</option>
+          <option value="11+ Years">11+ Years</option>
+        </select>
 
-        <label>Location:</label>
-        <input type="text" id="locationInput" placeholder="e.g. Sydney, NSW">
+        <label>Preferred Location:</label>
+        <select id="locationInput">
+          <option value="">Select location</option>
+          <option value="Sydney">Sydney</option>
+          <option value="Melbourne">Melbourne</option>
+          <option value="Brisbane">Brisbane</option>
+          <option value="Canberra">Canberra</option>
+          <option value="Perth">Perth</option>
+          <option value="Adelaide">Adelaide</option>
+          <option value="Wollongong">Wollongong</option>
+          <option value="Newcastle">Newcastle</option>
+          <option value="Parramatta">Parramatta</option>
+          <option value="Remote">Remote</option>
+        </select>
+
+        <label>Education:</label>
+        <select id="educationInput">
+          <option value="">Select education</option>
+          <option value="High School">High School</option>
+          <option value="Certificate">Certificate</option>
+          <option value="Diploma">Diploma</option>
+          <option value="Bachelor">Bachelor</option>
+          <option value="Master">Master</option>
+          <option value="PhD">PhD</option>
+        </select>
+
+        <label>Major / Field of Study:</label>
+        <select id="majorInput">
+          <option value="">Select major</option>
+          <option value="Computer Science">Computer Science</option>
+          <option value="Software Engineering">Software Engineering</option>
+          <option value="Information Technology">Information Technology</option>
+          <option value="Data Science">Data Science</option>
+          <option value="Artificial Intelligence">Artificial Intelligence</option>
+          <option value="Cyber Security">Cyber Security</option>
+          <option value="Business Information Systems">Business Information Systems</option>
+          <option value="Information Systems">Information Systems</option>
+          <option value="Cloud Computing">Cloud Computing</option>
+          <option value="User Experience Design">User Experience Design</option>
+        </select>
+
+        <label>Preferred Work Mode:</label>
+        <div class="profile-choice-group" aria-label="Preferred work mode">
+          <button type="button" class="profile-choice mode-choice" data-value="Remote" onclick="selectPreferredMode('Remote')">
+            Remote
+          </button>
+          <button type="button" class="profile-choice mode-choice" data-value="On-site" onclick="selectPreferredMode('On-site')">
+            On-site
+          </button>
+          <button type="button" class="profile-choice mode-choice" data-value="Hybrid" onclick="selectPreferredMode('Hybrid')">
+            Hybrid
+          </button>
+        </div>
+
+        <div class="candidate-inline-tags">
+          <label>Tags:</label>
+
+          <div class="candidate-inline-tag-row">
+            <div class="tag-container" id="selectedTags"></div>
+
+            <button
+              type="button"
+              class="candidate-tag-add"
+              onclick="openTagModal()"
+              aria-label="Add tags"
+            >
+              +
+            </button>
+          </div>
+        </div>
 
         <label>Email:</label>
         <input type="email" id="emailInput" placeholder="e.g. name@email.com">
@@ -62,7 +143,7 @@
           ◇ Tags
         </h2>
 
-        <div class="tag-container" id="selectedTags"></div>
+        <div class="tag-container" id="legacySelectedTags"></div>
 
         <button class="candidate-tag-add" onclick="openTagModal()">
           +
@@ -107,6 +188,19 @@
             id="experienceInput"
             placeholder="Write your work experience..."
           ></textarea>
+
+        </div>
+
+        <div class="candidate-experience-card">
+
+          <h2>
+            Applied Jobs
+          </h2>
+
+          <div
+            class="published-jobs-list"
+            id="recentApplicationsList"
+          ></div>
 
         </div>
 
@@ -204,27 +298,91 @@
 
   </div>
 
+  <script src="api.js"></script>
   <script>
     let selectedExperience = "";
     let selectedSkills = [];
+    let selectedPreferredMode = "";
+    let candidateProfile = {};
 
-    function loadCandidateProfile() {
-      const savedProfile =
+    function setSelectValue(selectElement, value) {
+      const normalizedValue = value || "";
+      if (
+        normalizedValue !== "" &&
+        !Array.from(selectElement.options).some(option => option.value === normalizedValue)
+      ) {
+        const option = document.createElement("option");
+        option.value = normalizedValue;
+        option.textContent = normalizedValue;
+        selectElement.appendChild(option);
+      }
+
+      selectElement.value = normalizedValue;
+    }
+
+    async function loadCandidateProfile() {
+      const auth = requireLogin("candidate");
+      if (!auth) {
+        return;
+      }
+
+      let savedProfile =
         JSON.parse(localStorage.getItem("candidateProfile")) || {
           name: "",
           age: "",
           location: "",
-          email: "",
+          email: auth.email,
           summary: "",
+          education: "",
+          major: "",
+          preferredMode: "",
           experienceText: "",
           experienceTag: "",
           skills: [],
           isVip: false
         };
 
+      try {
+        const data = await apiRequest("/profile");
+        if (data.role === "candidate" && data.profile) {
+          setLoginState(
+            {
+              email: data.profile.email || auth.email,
+              display_name: data.profile.full_name || auth.name || auth.email,
+              role: "candidate",
+              membership: data.profile.membership_status,
+              auth_token: auth.authToken
+            },
+            auth.email,
+            "candidate"
+          );
+          savedProfile = {
+            id: data.profile.id,
+            name: data.profile.full_name || "",
+            age: data.profile.years_experience || "",
+            location: data.profile.preferred_location || data.profile.location || "",
+            email: data.profile.contact_info || data.profile.email || "",
+            summary: data.profile.summary || "",
+            education: data.profile.education || "",
+            major: data.profile.major || "",
+            preferredMode: data.profile.preferred_mode || "",
+            experienceText: data.profile.work_experience || "",
+            experienceTag: data.profile.years_experience || "",
+            skills: skillsToArray(data.profile.skills),
+            isVip: Number(data.profile.membership_status) === 1
+          };
+        }
+      } catch (error) {
+        console.warn("Using local candidate profile fallback:", error.message);
+      }
+
+      candidateProfile = savedProfile;
+
       document.getElementById("nameInput").value = savedProfile.name;
-      document.getElementById("ageInput").value = savedProfile.age;
-      document.getElementById("locationInput").value = savedProfile.location;
+      setSelectValue(document.getElementById("ageInput"), savedProfile.age);
+      setSelectValue(document.getElementById("locationInput"), savedProfile.location);
+      setSelectValue(document.getElementById("educationInput"), savedProfile.education);
+      setSelectValue(document.getElementById("majorInput"), savedProfile.major);
       document.getElementById("emailInput").value = savedProfile.email;
       document.getElementById("summaryInput").value = savedProfile.summary;
       document.getElementById("experienceInput").value = savedProfile.experienceText;
@@ -232,8 +390,10 @@
       document.getElementById("userName").innerText =
         savedProfile.name || "Guest";
 
-      selectedExperience = savedProfile.experienceTag || "";
+      selectedExperience = savedProfile.experienceTag || savedProfile.age || "";
       selectedSkills = savedProfile.skills || [];
+      selectedPreferredMode = savedProfile.preferredMode || "";
+      setSelectValue(document.getElementById("ageInput"), selectedExperience);
 
       if (savedProfile.isVip === true) {
         document.getElementById("vipButton").classList.add("vip-active");
@@ -241,20 +401,88 @@
       }
 
       renderTags();
+      updatePreferredModeButtons();
     }
 
-    function saveCandidateProfile() {
-      const candidateProfile = {
+    async function loadRecentApplications() {
+      const list = document.getElementById("recentApplicationsList");
+      if (!list) {
+        return;
+      }
+
+      try {
+        const data = await apiRequest("/applications/candidate?limit=3");
+        const applications = data.results || [];
+
+        if (applications.length === 0) {
+          list.innerHTML = `
+            <article class="published-job-card">
+              <h3>No applications yet</h3>
+              <p>Apply for jobs to see your recent applications here.</p>
+            </article>
+          `;
+          return;
+        }
+
+        list.innerHTML = applications.map(application => `
+          <article class="published-job-card">
+            <div class="job-title-row">
+              <h3>${application.title || ""}</h3>
+              <span class="interest-label">${application.status || "Applied"}</span>
+            </div>
+            <p>${application.company_name || application.company_info || ""} - ${application.location || ""}</p>
+            <div class="profile-job-tags">
+              <span>${application.work_mode || ""}</span>
+              <span>${application.job_type || ""}</span>
+              <span>${application.applied_at || ""}</span>
+            </div>
+            <div class="profile-job-tags">
+              <button type="button" onclick="window.location.href='job-detail.html?id=${application.job_id}'">
+                Details
+              </button>
+            </div>
+          </article>
+        `).join("");
+      } catch (error) {
+        list.innerHTML = `
+          <article class="published-job-card">
+            <h3>Unable to load applications</h3>
+            <p>${error.message || "Please try again later."}</p>
+          </article>
+        `;
+      }
+    }
+
+    async function saveCandidateProfile() {
+      const education = document.getElementById("educationInput").value.trim();
+      const major = document.getElementById("majorInput").value.trim();
+      const preferredMode = selectedPreferredMode;
+      const yearsExperience =
+        selectedExperience || document.getElementById("ageInput").value.trim();
+      const preferredLocation =
+        document.getElementById("locationInput").value.trim();
+
+      if (!education || !major || !yearsExperience || !preferredMode || !preferredLocation) {
+        alert("Please complete education, major, experience, preferred work mode, and preferred location.");
+        return;
+      }
+
+      candidateProfile = {
         name: document.getElementById("nameInput").value.trim(),
-        age: document.getElementById("ageInput").value.trim(),
-        location: document.getElementById("locationInput").value.trim(),
+        age: yearsExperience,
+        location: preferredLocation,
         email: document.getElementById("emailInput").value.trim(),
         summary: document.getElementById("summaryInput").value.trim(),
+        education: education,
+        major: major,
+        preferredMode: preferredMode,
         experienceText: document.getElementById("experienceInput").value.trim(),
-        experienceTag: selectedExperience,
+        experienceTag: yearsExperience,
         skills: selectedSkills,
         isVip:
-          JSON.parse(localStorage.getItem("candidateProfile"))?.isVip || false
+          candidateProfile.isVip ||
+          JSON.parse(localStorage.getItem("candidateProfile"))?.isVip ||
+          false
       };
 
       localStorage.setItem(
@@ -264,8 +492,33 @@
 
       document.getElementById("userName").innerText =
         candidateProfile.name || "Guest";
+      localStorage.setItem(
+        "loginName",
+        candidateProfile.name || candidateProfile.email || ""
+      );
 
-      alert("Profile saved!");
+      try {
+        await apiRequest("/profile/update", {
+          method: "POST",
+          body: {
+            full_name: candidateProfile.name,
+            contact_info: candidateProfile.email,
+            education: candidateProfile.education,
+            major: candidateProfile.major,
+            years_experience: candidateProfile.experienceTag,
+            summary: candidateProfile.summary,
+            work_experience: candidateProfile.experienceText,
+            skills: candidateProfile.skills,
+            preferred_mode: candidateProfile.preferredMode,
+            preferred_location: candidateProfile.location,
+            location: candidateProfile.location
+          }
+        });
+
+        alert("Profile saved!");
+      } catch (error) {
+        alert(error.message || "Profile save failed. Please log in first.");
+      }
     }
 
     function openTagModal() {
@@ -277,10 +530,30 @@
       document.getElementById("tagModal").style.display = "none";
     }
 
-    function selectExperience(tag) {
-      selectedExperience = tag;
+    function selectExperienceFromInput(value) {
+      selectedExperience = value;
       renderTags();
       updateSelectedButtons();
+    }
+
+    function selectExperience(tag) {
+      selectedExperience = tag;
+      setSelectValue(document.getElementById("ageInput"), tag);
+      renderTags();
+      updateSelectedButtons();
+    }
+
+    function selectPreferredMode(mode) {
+      selectedPreferredMode = mode;
+      updatePreferredModeButtons();
+    }
+
+    function updatePreferredModeButtons() {
+      document.querySelectorAll(".mode-choice").forEach(button => {
+        const isSelected = button.dataset.value === selectedPreferredMode;
+        button.classList.toggle("selected", isSelected);
+        button.setAttribute("aria-pressed", String(isSelected));
+      });
     }
 
     function toggleSkill(tag) {
@@ -307,6 +580,7 @@
 
     function removeExperience() {
       selectedExperience = "";
+      document.getElementById("ageInput").value = "";
       renderTags();
       updateSelectedButtons();
     }
@@ -354,23 +628,43 @@
       document.getElementById("vipModal").style.display = "none";
     }
 
-    function becomeVip() {
-      const candidateProfile =
-        JSON.parse(localStorage.getItem("candidateProfile")) || {};
+    async function becomeVip() {
+      const auth = requireLogin("candidate");
+      if (!auth) {
+        return;
+      }
 
-      candidateProfile.isVip = true;
+      try {
+        const data = await apiRequest("/membership/upgrade", {
+          method: "POST"
+        });
 
-      localStorage.setItem(
-        "candidateProfile",
-        JSON.stringify(candidateProfile)
-      );
+        candidateProfile.isVip = true;
+        setLoginState(
+          {
+            email: auth.email,
+            display_name: candidateProfile.name || auth.name || auth.email,
+            role: "candidate",
+            membership: data.membership ?? 1,
+            auth_token: data.auth_token || auth.authToken
+          },
+          auth.email,
+          "candidate"
+        );
+        localStorage.setItem(
+          "candidateProfile",
+          JSON.stringify(candidateProfile)
+        );
 
-      document.getElementById("vipButton").classList.add("vip-active");
-
-      closeVipModal();
+        document.getElementById("vipButton").classList.add("vip-active");
+        closeVipModal();
+      } catch (error) {
+        alert(error.message || "VIP upgrade failed. Please log in first.");
+      }
     }
 
     loadCandidateProfile();
+    loadRecentApplications();
   </script>
 
 </body>

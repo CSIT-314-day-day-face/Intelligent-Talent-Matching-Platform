@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Job Detail | Job Radar</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div class="results-page">
+    <header class="results-navbar">
+      <a href="index.html" class="logo-link" onclick="goHome(event)">
+        <div class="results-logo">Job Radar</div>
+      </a>
+      <div class="results-user" id="resultsUserName">Guest</div>
+    </header>
+
+    <main class="results-main">
+      <div class="results-title-row">
+        <div>
+          <h1 id="jobTitle">Job Detail</h1>
+          <p id="jobCompany">Loading...</p>
+        </div>
+      </div>
+
+      <section class="results-list" id="jobDetailContainer"></section>
+    </main>
+  </div>
+
+  <script src="api.js"></script>
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const jobId = params.get("id");
+    const container = document.getElementById("jobDetailContainer");
+    let currentJob = null;
+
+    const auth = getLoginState();
+    renderUserMenu(
+      "resultsUserName",
+      auth.role === "employer" ? "employer-profile.html" : "candidate-profile.html"
+    );
+
+    async function loadJobDetail() {
+      if (!jobId) {
+        container.innerHTML = `<div class="no-results">Missing job id.</div>`;
+        return;
+      }
+
+      try {
+        const job = await apiRequest(`/jobs/${jobId}`);
+        currentJob = job;
+        document.getElementById("jobTitle").textContent = job.title || "Job Detail";
+        document.getElementById("jobCompany").textContent = job.company_name || job.company_info || "";
+        const alreadyApplied = Boolean(job.application);
+        const canApply = auth.role === "candidate" && auth.authToken;
+
+        container.innerHTML = `
+          <article class="result-card">
+            <div class="result-content">
+              <h3>${job.title || ""}</h3>
+              <p>${job.company_name || job.company_info || ""} - ${job.location || ""}</p>
+
+              <p>
+                <strong>Company Information:</strong>
+                ${job.company_info || job.company_name || "Not specified"}
+              </p>
+
+              <div class="tags">
+                <span>${job.work_mode || ""}</span>
+                <span>${job.job_type || ""}</span>
+                <span>${job.salary_range || ""}</span>
+              </div>
+
+              <p>${job.description || ""}</p>
+
+              <div class="tags">
+                <span>Education: ${job.required_education || "Not specified"}</span>
+                <span>Experience: ${job.years_experience || "Not specified"}</span>
+              </div>
+
+              <div class="tags">
+                ${skillsToArray(job.required_skills).map(skill =>
+                  `<span>${skill}</span>`
+                ).join("")}
+              </div>
+
+              <button
+                type="button"
+                class="search-btn"
+                id="applyButton"
+                onclick="applyForCurrentJob()"
+                ${!canApply || alreadyApplied ? "disabled" : ""}
+              >
+                ${alreadyApplied ? "Already Applied" : "Apply"}
+              </button>
+            </div>
+          </article>
+        `;
+      } catch (error) {
+        container.innerHTML = `<div class="no-results">${error.message || "Job not found."}</div>`;
+      }
+    }
+
+    async function applyForCurrentJob() {
+      const authState = requireLogin("candidate");
+      if (!authState || !currentJob) {
+        return;
+      }
+
+      const applyButton = document.getElementById("applyButton");
+
+      try {
+        const data = await apiRequest(`/jobs/${jobId}/apply`, {
+          method: "POST"
+        });
+
+        if (applyButton) {
+          applyButton.textContent = "Already Applied";
+          applyButton.disabled = true;
+        }
+
+        alert(data.message || "Application submitted.");
+      } catch (error) {
+        alert(error.message || "Application failed. Please try again.");
+      }
+    }
+
+    loadJobDetail();
+  </script>
+</body>
+
+</html>

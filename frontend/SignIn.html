@@ -26,7 +26,7 @@
 
       <section class="login-card">
 
-        <a href="index.html" class="login-logo">
+        <a href="index.html" class="login-logo" onclick="goHome(event)">
           Job Radar
         </a>
 
@@ -57,7 +57,7 @@
 
             <input
               id="passwordInput"
-              type="text"
+              type="password"
               maxlength="8"
               placeholder="Password must be 8 characters"
             >
@@ -99,6 +99,7 @@
 
   </div>
 
+  <script src="api.js"></script>
   <script>
     function loginUser() {
       const email =
@@ -115,28 +116,20 @@
         return;
       }
 
-      fetch("http://localhost:5001/api/login", {
+      apiRequest("/login", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        credentials: "include",
-        body: JSON.stringify({
+        body: {
           email: email,
           password: password,
           role: role
-        })
+        }
       })
-
-      .then(response => response.json())
 
       .then(data => {
 
         if (data.status === "success") {
 
-          localStorage.setItem("loginRole", role);
-          localStorage.setItem("membership", data.membership);
-          localStorage.setItem("loginEmail", email);
+          setLoginState(data, email, role);
           if (role === "employer") {
             window.location.href = "employer-index.html";
           } else {

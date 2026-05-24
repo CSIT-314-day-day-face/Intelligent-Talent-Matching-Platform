@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Candidate Detail | Job Radar</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div class="results-page">
+    <header class="results-navbar">
+      <a href="index.html" class="logo-link" onclick="goHome(event)">
+        <div class="results-logo">Job Radar</div>
+      </a>
+      <div class="results-user" id="resultsUserName">Guest</div>
+    </header>
+
+    <main class="results-main">
+      <div class="results-title-row">
+        <div>
+          <h1 id="candidateName">Candidate Detail</h1>
+          <p id="candidateMeta">Loading...</p>
+        </div>
+      </div>
+
+      <section class="results-list" id="candidateDetailContainer"></section>
+    </main>
+  </div>
+
+  <script src="api.js"></script>
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const candidateId = params.get("id");
+    const container = document.getElementById("candidateDetailContainer");
+
+    const auth = getLoginState();
+    renderUserMenu(
+      "resultsUserName",
+      auth.role === "employer" ? "employer-profile.html" : "candidate-profile.html"
+    );
+
+    async function loadCandidateDetail() {
+      if (!candidateId) {
+        container.innerHTML = `<div class="no-results">Missing candidate id.</div>`;
+        return;
+      }
+
+      try {
+        const candidate = await apiRequest(`/candidates/${candidateId}`);
+        document.getElementById("candidateName").textContent =
+          candidate.full_name || "Candidate Detail";
+        document.getElementById("candidateMeta").textContent =
+          `${candidate.education || ""} ${candidate.major || ""}`;
+
+        container.innerHTML = `
+          <article class="result-card">
+            <div class="result-content">
+              <h3>${candidate.full_name || ""}</h3>
+              <p>${candidate.summary || ""}</p>
+
+              <div class="tags">
+                <span>${candidate.contact_info || candidate.email || ""}</span>
+                <span>${candidate.preferred_mode || ""}</span>
+                <span>${candidate.preferred_location || candidate.location || ""}</span>
+              </div>
+
+              <p>${candidate.work_experience || ""}</p>
+
+              <div class="tags">
+                <span>Education: ${candidate.education || "Not specified"}</span>
+                <span>Major: ${candidate.major || "Not specified"}</span>
+                <span>Experience: ${candidate.years_experience || "Not specified"}</span>
+              </div>
+
+              <div class="tags">
+                ${skillsToArray(candidate.skills).map(skill =>
+                  `<span>${skill}</span>`
+                ).join("")}
+              </div>
+            </div>
+          </article>
+        `;
+      } catch (error) {
+        container.innerHTML = `<div class="no-results">${error.message || "Candidate not found."}</div>`;
+      }
+    }
+
+    loadCandidateDetail();
+  </script>
+</body>
+
+</html>

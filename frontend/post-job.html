@@ -20,13 +20,18 @@
 
     <header class="post-job-navbar">
 
-      <a href="employer-index.html" class="post-job-logo">
+      <a href="index.html" class="post-job-logo" onclick="goHome(event)">
         Job Radar
       </a>
 
-      <a href="employer-profile.html" class="post-job-user">
-        Marcus Smith
-      </a>
+      <div class="post-job-nav-actions">
+        <a href="employer-profile.html" class="post-job-user" id="postJobUserName">
+          Employer
+        </a>
+        <button type="button" class="logout-btn" onclick="logoutUser()">
+          Logout
+        </button>
+      </div>
 
     </header>
 
@@ -154,7 +159,13 @@
 
   </div>
 
+  <script src="api.js"></script>
   <script>
+    const postJobUserName = document.getElementById("postJobUserName");
+    const auth = getLoginState();
+    postJobUserName.textContent =
+      auth.name || auth.email || "Employer";
+
     let selectedExperience = "";
     let selectedSkills = [];
 
@@ -189,7 +200,7 @@
       });
     });
 
-    function saveJob() {
+    async function saveJob() {
       const title = document.getElementById("jobTitleInput").value.trim();
       const location = document.getElementById("jobLocationInput").value.trim();
       const mode = document.getElementById("jobModeInput").value;
@@ -213,24 +224,55 @@
       const employerProfile =
         JSON.parse(localStorage.getItem("employerProfile")) || {};
 
+      const description =
+        prompt("Job description", `${title} role requiring ${selectedSkills.join(", ")}.`) ||
+        `${title} role requiring ${selectedSkills.join(", ")}.`;
+
+      const requiredEducation =
+        prompt("Required education level", "Bachelor degree or equivalent experience") ||
+        "Bachelor degree or equivalent experience";
+
+      const jobType =
+        prompt("Job type (e.g. Full-time, Part-time, Contract)", "Full-time") ||
+        "Full-time";
+
       const newJob = {
         title: title,
         location: location,
+        work_mode: mode,
         mode: mode,
         salary: salary,
+        description: description,
+        required_education: requiredEducation,
+        job_type: jobType,
         experience: selectedExperience,
+        years_experience: selectedExperience,
+        required_skills: selectedSkills,
         skills: selectedSkills,
         companyName: employerProfile.companyName || "Company Name"
       };
 
-      const jobs =
-        JSON.parse(localStorage.getItem("publishedJobs")) || [];
+      try {
+        await apiRequest("/jobs", {
+          method: "POST",
+          body: {
+            title: newJob.title,
+            location: newJob.location,
+            work_mode: newJob.work_mode,
+            salary: newJob.salary,
+            description: newJob.description,
+            required_education: newJob.required_education,
+            required_skills: newJob.required_skills,
+            years_experience: newJob.years_experience,
+            job_type: newJob.job_type,
+            company_info: employerProfile.companyName || ""
+          }
+        });
 
-      jobs.push(newJob);
-
-      localStorage.setItem("publishedJobs", JSON.stringify(jobs));
-
-      window.location.href = "employer-profile.html";
+        window.location.href = "employer-profile.html";
+      } catch (error) {
+        alert(error.message || "Job posting failed. Please log in as an employer.");
+      }
     }
   </script>
 

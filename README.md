@@ -7,10 +7,10 @@ source .venv/bin/activate  # macOS/Linux
 pip install -r requirements.txt
 
 3. Initialize Database:
-python3 setup_db.py
+python setup_db.py
 
 4. Running the Backend:
-python3 -m backend.app
+python -m backend.app
 
 5. System Verification:
-python3 test/test_backend_flow.py
+python test/test_backend_flow.py
