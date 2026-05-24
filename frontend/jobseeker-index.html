@@ -19,13 +19,13 @@
 
     <header class="employer-home-navbar">
 
-      <a href="index.html" class="logo-link">
-        <div class="employer-home-logo">Job Radar</div>
-      </a>
+      <div class="employer-home-logo">
+        Job Radar
+      </div>
 
       <div class="nav-user">
         <div>
-          <strong>Alex Thompson</strong>
+          <strong id="homeUserName">Guest</strong>
         </div>
       </div>
 
@@ -37,23 +37,24 @@
 
         <h1>Find your next big move.</h1>
 
-        <p>
-          Radar is active. Currently scanning 14,290+ matching roles for Alex Thompson.
+        <p id="heroText">
+          Radar is active. Currently scanning matching roles for you.
         </p>
 
         <div class="employer-hero-search">
 
           <select class="search-select" id="searchType">
+            <option value="keyword">Keyword</option>
             <option value="location">Address</option>
-            <option value="salary">Salary</option>
             <option value="workmode">Work Mode</option>
+            <option value="salary">Salary</option>
           </select>
 
           <input
             type="text"
             class="search-input"
             id="searchInput"
-            placeholder="Enter your preferred work address"
+            placeholder="Search jobs by title or skill"
           >
 
           <button class="search-btn" onclick="goSearch()">
@@ -70,25 +71,20 @@
 
           <div>
             <h2>Recommended Jobs for You</h2>
-            <p>Based on your profile and search history</p>
+            <p id="membershipText">Non-VIP: Top 10 recommended jobs only</p>
           </div>
-
-          <a href="search-results.html">View All</a>
 
         </div>
 
-        <div class="employer-job-grid">
+        <div class="employer-job-grid employer-job-scroll" id="recommendedJobs">
 
           <article class="employer-job-card">
-
             <div class="job-card-top">
               <div class="job-icon red-icon">◇</div>
-
               <div>
                 <h3>Senior Product Designer</h3>
                 <p>Linear Systems</p>
               </div>
-
               <span class="bookmark">♡</span>
             </div>
 
@@ -102,19 +98,15 @@
               <small>Posted 2h ago</small>
               <a href="job-detail.html">Details →</a>
             </div>
-
           </article>
 
           <article class="employer-job-card">
-
             <div class="job-card-top">
               <div class="job-icon yellow-icon">☁</div>
-
               <div>
                 <h3>Lead UX Researcher</h3>
                 <p>CloudFlare Inc.</p>
               </div>
-
               <span class="bookmark">♡</span>
             </div>
 
@@ -128,19 +120,15 @@
               <small>Posted 5h ago</small>
               <a href="job-detail.html">Details →</a>
             </div>
-
           </article>
 
           <article class="employer-job-card">
-
             <div class="job-card-top">
               <div class="job-icon blue-icon">✣</div>
-
               <div>
                 <h3>Interaction Designer</h3>
                 <p>Streamline AI</p>
               </div>
-
               <span class="bookmark">♡</span>
             </div>
 
@@ -153,19 +141,15 @@
               <small>Posted 1d ago</small>
               <a href="job-detail.html">Details →</a>
             </div>
-
           </article>
 
           <article class="employer-job-card">
-
             <div class="job-card-top">
               <div class="job-icon red-icon">ϟ</div>
-
               <div>
                 <h3>Growth Product Designer</h3>
                 <p>Flash Pay</p>
               </div>
-
               <span class="bookmark">♡</span>
             </div>
 
@@ -179,7 +163,6 @@
               <small>Posted 3d ago</small>
               <a href="job-detail.html">Details →</a>
             </div>
-
           </article>
 
         </div>
@@ -207,26 +190,59 @@
   </div>
 
   <script>
+    const homeUserName = document.getElementById("homeUserName");
+    const heroText = document.getElementById("heroText");
+    const membershipText = document.getElementById("membershipText");
+    const recommendedJobs = document.getElementById("recommendedJobs");
+
     const searchType = document.getElementById("searchType");
     const searchInput = document.getElementById("searchInput");
 
+    const loginEmail = localStorage.getItem("loginEmail");
+    const membership = localStorage.getItem("membership");
+
+    homeUserName.textContent = loginEmail || "Guest";
+
+    if (loginEmail) {
+      heroText.textContent =
+        "Radar is active. Currently scanning matching roles for " + loginEmail + ".";
+    } else {
+      heroText.textContent =
+        "Radar is active. Please sign in to receive personalized recommendations.";
+    }
+
+    if (membership === "1") {
+      membershipText.textContent = "VIP: Unlimited recommended jobs";
+    } else {
+      membershipText.textContent = "Non-VIP: Top 10 recommended jobs only";
+    }
+
     searchType.addEventListener("change", function () {
+      if (this.value === "keyword") {
+        searchInput.placeholder = "Search jobs by title or skill";
+      }
+
       if (this.value === "location") {
         searchInput.placeholder = "Enter your preferred work address";
+      }
+
+      if (this.value === "workmode") {
+        searchInput.placeholder = "Remote, Hybrid, or On-site";
       }
 
       if (this.value === "salary") {
         searchInput.placeholder = "Enter your expected salary";
       }
-
-      if (this.value === "workmode") {
-        searchInput.placeholder = "Online work or office work";
-      }
     });
 
     function goSearch() {
       const type = searchType.value;
-      const keyword = searchInput.value;
+      const keyword = searchInput.value.trim();
+
+      if (!keyword) {
+        alert("Please enter a keyword.");
+        return;
+      }
 
       window.location.href =
         "search-results.html?type=" +
@@ -234,6 +250,20 @@
         "&keyword=" +
         encodeURIComponent(keyword);
     }
+
+    function applyMembershipLimit() {
+      const cards = recommendedJobs.querySelectorAll(".employer-job-card");
+
+      if (membership !== "1") {
+        cards.forEach((card, index) => {
+          if (index >= 10) {
+            card.style.display = "none";
+          }
+        });
+      }
+    }
+
+    applyMembershipLimit();
   </script>
 
 </body>

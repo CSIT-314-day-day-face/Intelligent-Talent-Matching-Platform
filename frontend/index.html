@@ -2,20 +2,39 @@
 <html lang="en">
 
 <head>
+
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Job Radar</title>
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <title>
+    Job Radar
+  </title>
+
+  <link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+  >
+
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
 
   <link
     href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
     rel="stylesheet"
   >
 
-  <link rel="stylesheet" href="style.css">
+  <link
+    rel="stylesheet"
+    href="style.css"
+  >
+
 </head>
 
 <body>
@@ -23,17 +42,26 @@
   <div class="page">
 
     <!-- NAVBAR -->
+
     <header class="navbar">
 
-      <a href="index.html" class="logo-link">
+      <a
+        href="index.html"
+        class="logo-link"
+      >
+
         <div class="logo">
           Job Radar
         </div>
+
       </a>
 
       <div class="nav-actions">
 
-        <a href="Signin.html" class="signup-btn">
+        <a
+          href="SignIn.html"
+          class="signup-btn"
+        >
           Sign in
         </a>
 
@@ -42,6 +70,7 @@
     </header>
 
     <!-- HERO -->
+
     <section class="hero">
 
       <div class="hero-content">
@@ -62,20 +91,28 @@
         </p>
 
         <!-- SEARCH -->
+
         <div class="search-box">
 
-          <select class="search-select" id="searchType">
+          <select
+            class="search-select"
+            id="searchType"
+          >
+
+            <option value="keyword">
+              Keyword
+            </option>
 
             <option value="location">
               Address
             </option>
 
-            <option value="salary">
-              Salary
-            </option>
-
             <option value="workmode">
               Work Mode
+            </option>
+
+            <option value="salary">
+              Salary
             </option>
 
           </select>
@@ -84,10 +121,13 @@
             type="text"
             class="search-input"
             id="searchInput"
-            placeholder="Enter your preferred work address"
+            placeholder="Search jobs by title or skill"
           >
 
-          <button class="search-btn" onclick="goSearch()">
+          <button
+            class="search-btn"
+            onclick="goSearch()"
+          >
             Search
           </button>
 
@@ -98,13 +138,19 @@
     </section>
 
     <!-- RECOMMENDED -->
+
     <section class="recommended-section">
 
       <div class="section-top">
 
-        <h2>Recommended</h2>
+        <h2>
+          Recommended
+        </h2>
 
-        <a href="#" class="view-all">
+        <a
+          href="#"
+          class="view-all"
+        >
           View All →
         </a>
 
@@ -122,7 +168,8 @@
 
       </div>
 
-      <!-- LOCK CARD -->
+      <!-- LOCK -->
+
       <div class="lock-popup">
 
         <div class="lock-icon">
@@ -139,7 +186,9 @@
           skills and experience.
         </p>
 
-        <button onclick="window.location.href='SignIn.html'">
+        <button
+          onclick="window.location.href='SignIn.html'"
+        >
           Sign In to Radar
         </button>
 
@@ -148,9 +197,11 @@
     </section>
 
     <!-- FEATURES -->
+
     <section class="feature-section">
 
       <!-- LEFT -->
+
       <div class="feature-card">
 
         <div class="feature-icon red-icon">
@@ -170,11 +221,17 @@
 
         <ul>
 
-          <li>AI-Powered Skill Matching</li>
+          <li>
+            AI-Powered Skill Matching
+          </li>
 
-          <li>Real-time Salary Benchmarking</li>
+          <li>
+            Real-time Salary Benchmarking
+          </li>
 
-          <li>One-Click Application Radar</li>
+          <li>
+            One-Click Application Radar
+          </li>
 
         </ul>
 
@@ -185,6 +242,7 @@
       </div>
 
       <!-- RIGHT -->
+
       <div class="feature-card">
 
         <div class="feature-icon yellow-icon">
@@ -204,11 +262,17 @@
 
         <ul>
 
-          <li>Targeted Talent Pipelines</li>
+          <li>
+            Targeted Talent Pipelines
+          </li>
 
-          <li>Employer Branding Dashboard</li>
+          <li>
+            Employer Branding Dashboard
+          </li>
 
-          <li>Automated Candidate Sourcing</li>
+          <li>
+            Automated Candidate Sourcing
+          </li>
 
         </ul>
 
@@ -222,6 +286,8 @@
 
   </div>
 
+  <!-- SCRIPT -->
+
   <script>
 
     const searchType =
@@ -230,12 +296,28 @@
     const searchInput =
       document.getElementById("searchInput");
 
+    /* PLACEHOLDER CHANGE */
+
     searchType.addEventListener("change", function () {
+
+      if (this.value === "keyword") {
+
+        searchInput.placeholder =
+          "Search jobs by title or skill";
+
+      }
 
       if (this.value === "location") {
 
         searchInput.placeholder =
           "Enter your preferred work address";
+
+      }
+
+      if (this.value === "workmode") {
+
+        searchInput.placeholder =
+          "Remote, Hybrid, or On-site";
 
       }
 
@@ -246,29 +328,35 @@
 
       }
 
-      if (this.value === "workmode") {
-
-        searchInput.placeholder =
-          "Online work or office work";
-
-      }
-
     });
 
+    /* SEARCH */
+
     function goSearch() {
-      const type = searchType.value;
-      const keyword = searchInput.value.trim();
+
+      const type =
+        searchType.value;
+
+      const keyword =
+        searchInput.value.trim();
+
       if (!keyword) {
-        alert("Please enter a keyword.");
+
+        alert(
+          "Please enter a keyword."
+        );
+
         return;
+
       }
 
-  window.location.href =
-    "search-results.html?type=" +
-    encodeURIComponent(type) +
-    "&keyword=" +
-    encodeURIComponent(keyword);
-}
+      window.location.href =
+        "search-results.html?type=" +
+        encodeURIComponent(type) +
+        "&keyword=" +
+        encodeURIComponent(keyword);
+
+    }
 
   </script>
 

@@ -2,18 +2,39 @@
 <html lang="en">
 
 <head>
+
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Employer Dashboard | Job Radar</title>
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin">
+  <title>
+    Employer Dashboard | Job Radar
+  </title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
-    rel="stylesheet">
+  <link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+  >
 
-  <link rel="stylesheet" href="style.css">
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet"
+  >
+
+  <link
+    rel="stylesheet"
+    href="style.css"
+  >
+
 </head>
 
 <body>
@@ -21,44 +42,73 @@
   <div class="employer-page">
 
     <!-- NAVBAR -->
+
     <header class="employer-navbar">
-      <a href="index.html" class="logo-link">
-    <div class="employer-logo">Job Radar</div>
-  </a>
 
-  <div class="employer-user">
+      
+      
 
-    <div>
-      <strong>Marcus Smith</strong>
-    </div>
+        <div class="employer-logo">
+          Job Radar
+        </div>
 
-  </div>
+  
 
-</header>
+      <div class="employer-user">
+
+        <div>
+
+          <strong id="employerNavName">
+            Guest
+          </strong>
+
+        </div>
+
+      </div>
+
+    </header>
 
     <!-- MAIN -->
+
     <main class="employer-main">
 
       <!-- RADAR -->
+
       <section class="candidate-radar">
 
-        <h2>◎ Candidate Radar</h2>
+        <h2>
+          ◎ Candidate Radar
+        </h2>
 
         <div class="employer-search-box">
 
           <select id="employerSearchType">
-            <option value="location">Address</option>
-            <option value="salary">Salary</option>
-            <option value="workmode">Work Mode</option>
+
+            <option value="keyword">
+              Keyword
+            </option>
+
+            <option value="location">
+              Address
+            </option>
+
+            <option value="workmode">
+              Work Mode
+            </option>
+
+            <option value="salary">
+              Salary
+            </option>
+
           </select>
 
           <input
             id="employerSearchInput"
             type="text"
-            placeholder="Enter your preferred work address"
+            placeholder="Search candidate skills or experience"
           >
 
-          <button>
+          <button onclick="goEmployerSearch()">
             Update Radar
           </button>
 
@@ -67,195 +117,267 @@
       </section>
 
       <!-- TALENT -->
+
       <section class="talent-section">
 
         <div class="talent-title-row">
 
-          <h2>Top Talent Matches</h2>
+          <h2>
+            Top Talent Matches
+          </h2>
 
-          <span>Sorted by: Radar Match %</span>
+          <span id="memberLimitText">
+            Non-VIP: Top 10 candidates only
+          </span>
 
         </div>
 
-        <!-- CARD 1 -->
-        <article class="talent-card">
+        <!-- SCROLL AREA -->
 
-          <img
-            src="https://i.pravatar.cc/100?img=32"
-            alt="Candidate"
-          >
+        <div
+          class="talent-list-scroll"
+          id="talentContainer"
+        >
 
-          <div class="talent-info">
+          <!-- CARD 1 -->
 
-            <h3>Sarah Chen</h3>
+          <article class="talent-card">
 
-            <p>Senior Product Designer • 8 Years Exp.</p>
+            <img
+              src="https://i.pravatar.cc/100?img=32"
+              alt="Candidate"
+            >
 
-            <small>WORK EXPERIENCE</small>
+            <div class="talent-info">
 
-            <p>
-              Former Lead Designer at TechFlow,
-              Senior UI at PixelPerfect.
-            </p>
+              <h3>
+                Sarah Chen
+              </h3>
 
-            <div class="talent-bottom">
+              <p>
+                Senior Product Designer • 8 Years Exp.
+              </p>
 
-              <span>Remote Preferred</span>
+              <small>
+                WORK EXPERIENCE
+              </small>
 
-              <span>San Francisco, CA</span>
+              <p>
+                Former Lead Designer at TechFlow,
+                Senior UI at PixelPerfect.
+              </p>
 
-              <span>$140k - $165k</span>
+              <div class="talent-bottom">
 
-            </div>
+                <span>
+                  Remote Preferred
+                </span>
 
-          </div>
+                <span>
+                  San Francisco, CA
+                </span>
 
-          <div class="talent-side">
+                <span>
+                  $140k - $165k
+                </span>
 
-            <div class="match">
-              98% Match
-            </div>
-
-            <strong>
-              HIGHLY RECOMMENDED
-            </strong>
-
-            <div class="skills">
-
-              <span>Figma</span>
-
-              <span>Design Systems</span>
-
-              <span>React UI</span>
-
-            </div>
-
-          </div>
-
-        </article>
-
-        <!-- CARD 2 -->
-        <article class="talent-card">
-
-          <img
-            src="https://i.pravatar.cc/100?img=12"
-            alt="Candidate"
-          >
-
-          <div class="talent-info">
-
-            <h3>James Miller</h3>
-
-            <p>Full Stack Engineer • 5 Years Exp.</p>
-
-            <small>WORK EXPERIENCE</small>
-
-            <p>
-              Software Engineer at StreamLine,
-              Web Dev at CloudScale.
-            </p>
-
-            <div class="talent-bottom">
-
-              <span>Hybrid Preferred</span>
-
-              <span>Austin, TX</span>
-
-              <span>$115k - $130k</span>
+              </div>
 
             </div>
 
-          </div>
+            <div class="talent-side">
 
-          <div class="talent-side">
+              <div class="match">
+                98% Match
+              </div>
 
-            <div class="match normal">
-              85% Match
-            </div>
+              <strong>
+                HIGHLY RECOMMENDED
+              </strong>
 
-            <div class="skills">
+              <div class="skills">
 
-              <span>Node.js</span>
+                <span>
+                  Figma
+                </span>
 
-              <span>TypeScript</span>
+                <span>
+                  Design Systems
+                </span>
 
-              <span>AWS</span>
+                <span>
+                  React UI
+                </span>
 
-            </div>
-
-          </div>
-
-        </article>
-
-        <!-- CARD 3 -->
-        <article class="talent-card urgent">
-
-          <img
-            src="https://i.pravatar.cc/100?img=68"
-            alt="Candidate"
-          >
-
-          <div class="talent-info">
-
-            <h3>Marcus Thompson</h3>
-
-            <p>Engineering Manager • 12 Years Exp.</p>
-
-            <small>WORK EXPERIENCE</small>
-
-            <p>
-              Engineering Director at ScaleOps,
-              Tech Lead at InnovateX.
-            </p>
-
-            <div class="talent-bottom">
-
-              <span>On-site Preferred</span>
-
-              <span>New York, NY</span>
-
-              <span>$180k - $210k</span>
+              </div>
 
             </div>
 
-          </div>
+          </article>
 
-          <div class="talent-side">
+          <!-- CARD 2 -->
 
-            <div class="urgent-tag">
-              URGENT APPLICANT
+          <article class="talent-card">
+
+            <img
+              src="https://i.pravatar.cc/100?img=12"
+              alt="Candidate"
+            >
+
+            <div class="talent-info">
+
+              <h3>
+                James Miller
+              </h3>
+
+              <p>
+                Full Stack Engineer • 5 Years Exp.
+              </p>
+
+              <small>
+                WORK EXPERIENCE
+              </small>
+
+              <p>
+                Software Engineer at StreamLine,
+                Web Dev at CloudScale.
+              </p>
+
+              <div class="talent-bottom">
+
+                <span>
+                  Hybrid Preferred
+                </span>
+
+                <span>
+                  Austin, TX
+                </span>
+
+                <span>
+                  $115k - $130k
+                </span>
+
+              </div>
+
             </div>
 
-            <div class="match">
-              92% Match
+            <div class="talent-side">
+
+              <div class="match normal">
+                85% Match
+              </div>
+
+              <div class="skills">
+
+                <span>
+                  Node.js
+                </span>
+
+                <span>
+                  TypeScript
+                </span>
+
+                <span>
+                  AWS
+                </span>
+
+              </div>
+
             </div>
 
-            <div class="skills">
+          </article>
 
-              <span class="hot-skill">
-                Team Leadership
-              </span>
+          <!-- CARD 3 -->
 
-              <span>Kubernetes</span>
+          <article class="talent-card urgent">
 
-              <span>System Architecture</span>
+            <img
+              src="https://i.pravatar.cc/100?img=68"
+              alt="Candidate"
+            >
+
+            <div class="talent-info">
+
+              <h3>
+                Marcus Thompson
+              </h3>
+
+              <p>
+                Engineering Manager • 12 Years Exp.
+              </p>
+
+              <small>
+                WORK EXPERIENCE
+              </small>
+
+              <p>
+                Engineering Director at ScaleOps,
+                Tech Lead at InnovateX.
+              </p>
+
+              <div class="talent-bottom">
+
+                <span>
+                  On-site Preferred
+                </span>
+
+                <span>
+                  New York, NY
+                </span>
+
+                <span>
+                  $180k - $210k
+                </span>
+
+              </div>
 
             </div>
 
-          </div>
+            <div class="talent-side">
 
-        </article>
+              <div class="urgent-tag">
+                URGENT APPLICANT
+              </div>
+
+              <div class="match">
+                92% Match
+              </div>
+
+              <div class="skills">
+
+                <span class="hot-skill">
+                  Team Leadership
+                </span>
+
+                <span>
+                  Kubernetes
+                </span>
+
+                <span>
+                  System Architecture
+                </span>
+
+              </div>
+
+            </div>
+
+          </article>
+
+        </div>
 
       </section>
 
     </main>
 
     <!-- FOOTER -->
+
     <footer class="employer-footer">
 
       <div>
 
-        <strong>Job Radar</strong>
+        <strong>
+          Job Radar
+        </strong>
 
         <p>
           © 2024 Job Radar. All rights reserved.
@@ -265,24 +387,39 @@
 
       <div>
 
-        <a href="#">Privacy Policy</a>
+        <a href="#">
+          Privacy Policy
+        </a>
 
-        <a href="#">Terms of Service</a>
+        <a href="#">
+          Terms of Service
+        </a>
 
-        <a href="#">Contact Support</a>
+        <a href="#">
+          Contact Support
+        </a>
 
       </div>
 
     </footer>
 
-    <!-- FLOAT -->
-    <button class="float-add">
+    <!-- FLOAT BUTTON -->
+
+    <button
+      class="float-add"
+      onclick="window.location.href='employer-profile.html'"
+    >
       ＋
     </button>
 
   </div>
 
+  <!-- SCRIPT -->
+
   <script>
+
+    const employerNavName =
+      document.getElementById("employerNavName");
 
     const employerSearchType =
       document.getElementById("employerSearchType");
@@ -290,30 +427,123 @@
     const employerSearchInput =
       document.getElementById("employerSearchInput");
 
+    const talentContainer =
+      document.getElementById("talentContainer");
+
+    const memberLimitText =
+      document.getElementById("memberLimitText");
+
+    /* USER */
+
+    employerNavName.textContent =
+      localStorage.getItem("loginEmail")
+      || "Guest";
+
+    /* MEMBERSHIP */
+
+    const membership =
+      localStorage.getItem("membership");
+
+    if (membership === "1") {
+
+      memberLimitText.textContent =
+        "VIP: Unlimited candidate recommendations";
+
+    }
+
+    else {
+
+      memberLimitText.textContent =
+        "Non-VIP: Top 10 candidates only";
+
+    }
+
+    /* PLACEHOLDER */
+
     employerSearchType.addEventListener("change", function () {
+
+      if (this.value === "keyword") {
+
+        employerSearchInput.placeholder =
+          "Search candidate skills or experience";
+
+      }
 
       if (this.value === "location") {
 
         employerSearchInput.placeholder =
-          "Enter your preferred work address";
-
-      }
-
-      if (this.value === "salary") {
-
-        employerSearchInput.placeholder =
-          "Enter your expected salary";
+          "Enter candidate preferred location";
 
       }
 
       if (this.value === "workmode") {
 
         employerSearchInput.placeholder =
-          "Online work or office work";
+          "Remote, Hybrid, or On-site";
+
+      }
+
+      if (this.value === "salary") {
+
+        employerSearchInput.placeholder =
+          "Enter expected salary";
 
       }
 
     });
+
+    /* SEARCH */
+
+    function goEmployerSearch() {
+
+      const type =
+        employerSearchType.value;
+
+      const keyword =
+        employerSearchInput.value.trim();
+
+      if (!keyword) {
+
+        alert(
+          "Please enter a keyword."
+        );
+
+        return;
+
+      }
+
+      window.location.href =
+        "search-results.html?type="
+        + encodeURIComponent(type)
+        + "&keyword="
+        + encodeURIComponent(keyword);
+
+    }
+
+    /* VIP LIMIT */
+
+    function applyMembershipLimit() {
+
+      const cards =
+        talentContainer.querySelectorAll(".talent-card");
+
+      if (membership !== "1") {
+
+        cards.forEach((card, index) => {
+
+          if (index >= 10) {
+
+            card.style.display = "none";
+
+          }
+
+        });
+
+      }
+
+    }
+
+    applyMembershipLimit();
 
   </script>
 

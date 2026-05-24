@@ -3344,3 +3344,21 @@ body {
 
   color: #241414;
 }
+.talent-list-scroll {
+  max-height: 720px;
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+.talent-list-scroll::-webkit-scrollbar {
+  width: 8px;
+}
+
+.talent-list-scroll::-webkit-scrollbar-thumb {
+  background: #e5caca;
+  border-radius: 999px;
+}
+
+.talent-list-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}

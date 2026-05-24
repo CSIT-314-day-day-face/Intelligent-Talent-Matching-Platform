@@ -13,8 +13,14 @@ from backend.db_utils import get_db_connection
 app = Flask(__name__)
 # Secret key for session management
 app.secret_key = 'csit314_secret_key_2026'
+app.config['SESSION_COOKIE_SAMESITE'] = 'None'
+app.config['SESSION_COOKIE_SECURE'] = False
 # Enable CORS for frontend integration
-CORS(app, supports_credentials=True)
+CORS(
+    app,
+    supports_credentials=True,
+    origins=["http://127.0.0.1:5500"]
+)
 
 # Authentication Routes
 @app.route('/api/register', methods=['POST'])
@@ -34,6 +40,7 @@ def login():
         session['user_id'] = user['id']
         session['role'] = data['role']
         session['membership'] = user['membership_status']
+        session['email'] = user['email']
         return jsonify({
             "status": "success", 
             "role": data['role'], 
@@ -45,6 +52,19 @@ def login():
 def logout():
     session.clear()
     return jsonify({"status": "success", "message": "Logged out"})
+@app.route('/api/me', methods=['GET'])
+def get_current_user():
+    if not session.get('user_id'):
+        return jsonify({
+            "loggedIn": False
+        })
+    return jsonify({
+        "loggedIn": True,
+        "user_id": session.get('user_id'),
+        "role": session.get('role'),
+        "membership": session.get('membership'),
+        "email": session.get('email')
+    })
 
 # Search Routes (Supports Keywords + Filters)
 @app.route('/api/search', methods=['GET'])

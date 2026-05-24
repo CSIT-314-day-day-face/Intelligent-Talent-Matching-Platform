@@ -30,12 +30,11 @@
         </div>
       </a>
 
-      <div class="results-user">
-        <div>
-          <strong>Alex Thompson</strong>
-          <span>Product Designer</span>
-        </div>
-        <span>⌄</span>
+      <div
+        class="results-user"
+        id="resultsUserName"
+      >
+        Guest
       </div>
 
     </header>
@@ -48,13 +47,14 @@
           <option value="keyword">Keyword</option>
           <option value="location">Address</option>
           <option value="workmode">Work Mode</option>
+          <option value="salary">Salary</option>
         </select>
 
         <input
           class="search-input"
           id="searchInput"
           type="text"
-          placeholder="Search job title or description"
+          placeholder="Search jobs by title or skill"
         >
 
         <button
@@ -127,6 +127,12 @@
   </div>
 
   <script>
+    const resultsUserName =
+      document.getElementById("resultsUserName");
+
+    resultsUserName.textContent =
+      localStorage.getItem("loginEmail") || "Guest";
+
     const searchType = document.getElementById("searchType");
     const searchInput = document.getElementById("searchInput");
 
@@ -136,7 +142,7 @@
 
     searchType.addEventListener("change", function () {
       if (this.value === "keyword") {
-        searchInput.placeholder = "Search job title or description";
+        searchInput.placeholder = "Search jobs by title or skill";
       }
 
       if (this.value === "location") {
@@ -144,7 +150,11 @@
       }
 
       if (this.value === "workmode") {
-        searchInput.placeholder = "Remote, On-site, or Hybrid";
+        searchInput.placeholder = "Remote, Hybrid, or On-site";
+      }
+
+      if (this.value === "salary") {
+        searchInput.placeholder = "Enter your expected salary";
       }
     });
 
@@ -155,12 +165,14 @@
     searchInput.value = keyword;
     searchType.value = type;
 
-    let apiUrl = "http://localhost:5001/api/search?";
+    let apiUrl = "http://127.0.0.1:5001/api/search?";
 
     if (type === "location") {
       apiUrl += "location=" + encodeURIComponent(keyword);
     } else if (type === "workmode") {
       apiUrl += "job_type=" + encodeURIComponent(keyword);
+    } else if (type === "salary") {
+      apiUrl += "q=" + encodeURIComponent(keyword);
     } else {
       apiUrl += "q=" + encodeURIComponent(keyword);
     }
