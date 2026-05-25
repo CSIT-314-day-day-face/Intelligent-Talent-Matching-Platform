@@ -55,3 +55,8 @@ CREATE TABLE IF NOT EXISTS Applications (
     FOREIGN KEY (job_id) REFERENCES Jobs(id) ON DELETE CASCADE,
     UNIQUE(candidate_id, job_id)
 );
+
+CREATE TABLE IF NOT EXISTS AuthTokenRevocations (
+    token TEXT PRIMARY KEY,
+    revoked_at TEXT DEFAULT CURRENT_TIMESTAMP
+);

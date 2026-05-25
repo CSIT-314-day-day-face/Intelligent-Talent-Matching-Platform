@@ -85,6 +85,39 @@
               </select>
             </div>
 
+            <div class="post-field">
+              <label>Job Type <span>*</span></label>
+              <select id="jobTypeInput">
+                <option value="">Select Job Type</option>
+                <option value="Full-time">Full-time</option>
+                <option value="Part-time">Part-time</option>
+                <option value="Contract">Contract</option>
+                <option value="Internship">Internship</option>
+              </select>
+            </div>
+
+            <div class="post-field">
+              <label>Required Education <span>*</span></label>
+              <select id="jobEducationInput">
+                <option value="">Select Education</option>
+                <option value="High School">High School</option>
+                <option value="Certificate">Certificate</option>
+                <option value="Diploma">Diploma</option>
+                <option value="Bachelor">Bachelor</option>
+                <option value="Master">Master</option>
+                <option value="PhD">PhD</option>
+                <option value="Equivalent experience">Equivalent experience</option>
+              </select>
+            </div>
+
+          </div>
+
+          <div class="post-field post-field-full">
+            <label>Job Description <span>*</span></label>
+            <textarea
+              id="jobDescriptionInput"
+              placeholder="Describe the role, responsibilities, team, and hiring expectations"
+            ></textarea>
           </div>
 
           <div class="post-tag-section">
@@ -205,8 +238,11 @@
       const location = document.getElementById("jobLocationInput").value.trim();
       const mode = document.getElementById("jobModeInput").value;
       const salary = document.getElementById("jobSalaryInput").value.trim();
+      const jobType = document.getElementById("jobTypeInput").value.trim();
+      const requiredEducation = document.getElementById("jobEducationInput").value.trim();
+      const description = document.getElementById("jobDescriptionInput").value.trim();
 
-      if (!title || !location || !mode || !salary) {
+      if (!title || !location || !mode || !salary || !jobType || !requiredEducation || !description) {
         alert("Please fill in all job information.");
         return;
       }
@@ -223,18 +259,6 @@
 
       const employerProfile =
         JSON.parse(localStorage.getItem("employerProfile")) || {};
-
-      const description =
-        prompt("Job description", `${title} role requiring ${selectedSkills.join(", ")}.`) ||
-        `${title} role requiring ${selectedSkills.join(", ")}.`;
-
-      const requiredEducation =
-        prompt("Required education level", "Bachelor degree or equivalent experience") ||
-        "Bachelor degree or equivalent experience";
-
-      const jobType =
-        prompt("Job type (e.g. Full-time, Part-time, Contract)", "Full-time") ||
-        "Full-time";
 
       const newJob = {
         title: title,
@@ -265,7 +289,7 @@
             required_skills: newJob.required_skills,
             years_experience: newJob.years_experience,
             job_type: newJob.job_type,
-            company_info: employerProfile.companyName || ""
+            company_info: employerProfile.companyInfo || employerProfile.companyName || ""
           }
         });
 

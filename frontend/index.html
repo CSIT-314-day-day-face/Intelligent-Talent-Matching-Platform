@@ -116,6 +116,18 @@
               Salary
             </option>
 
+            <option value="skill">
+              Skill
+            </option>
+
+            <option value="education">
+              Education
+            </option>
+
+            <option value="job_type">
+              Job Type
+            </option>
+
           </select>
 
           <input
@@ -149,10 +161,10 @@
         </h2>
 
         <a
-          href="#"
+          href="search-results.html?target=jobs"
           class="view-all"
         >
-          View All →
+          View All
         </a>
 
       </div>
@@ -301,16 +313,16 @@
     const navActions =
       document.querySelector(".nav-actions");
 
-    const auth =
+    let auth =
       getLoginState();
 
-    const loginEmail =
+    let loginEmail =
       auth.authToken ? auth.email : "";
 
-    const loginName =
+    let loginName =
       auth.authToken ? (auth.name || auth.email) : "";
 
-    const loginRole =
+    let loginRole =
       auth.authToken ? auth.role : "";
 
     function getDashboardPage() {
@@ -325,7 +337,24 @@
         : "candidate-profile.html";
     }
 
-    if (loginEmail && loginRole) {
+    function renderIndexAuth(currentAuth) {
+      auth = currentAuth;
+      loginEmail = auth.authToken ? auth.email : "";
+      loginName = auth.authToken ? (auth.name || auth.email) : "";
+      loginRole = auth.authToken ? auth.role : "";
+
+      if (!loginEmail || !loginRole) {
+        navActions.innerHTML = `
+          <a
+            href="SignIn.html"
+            class="signup-btn"
+          >
+            Sign in
+          </a>
+        `;
+        return;
+      }
+
       navActions.innerHTML = `
         <a
           href="${getProfilePage()}"
@@ -350,6 +379,9 @@
         </button>
       `;
     }
+
+    renderIndexAuth(auth);
+    syncLoginState().then(renderIndexAuth);
 
     /* PLACEHOLDER CHANGE */
 
@@ -380,6 +412,27 @@
 
         searchInput.placeholder =
           "Enter your expected salary";
+
+      }
+
+      if (this.value === "skill") {
+
+        searchInput.placeholder =
+          "Enter a required skill";
+
+      }
+
+      if (this.value === "education") {
+
+        searchInput.placeholder =
+          "Bachelor, Master, Diploma, or PhD";
+
+      }
+
+      if (this.value === "job_type") {
+
+        searchInput.placeholder =
+          "Full-time, Part-time, Contract, or Internship";
 
       }
 

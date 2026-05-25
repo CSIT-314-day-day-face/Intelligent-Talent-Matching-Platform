@@ -78,6 +78,26 @@ function requireLogin(expectedRole) {
   return auth;
 }
 
+async function syncLoginState() {
+  const auth = getLoginState();
+  if (!auth.authToken) {
+    return auth;
+  }
+
+  try {
+    const data = await apiRequest("/me");
+    if (data.loggedIn) {
+      setLoginState(data, auth.email, auth.role);
+      return getLoginState();
+    }
+  } catch (error) {
+    console.warn("Unable to verify login state:", error.message);
+  }
+
+  clearLoginState();
+  return getLoginState();
+}
+
 function clearLoginState() {
   localStorage.removeItem("loginEmail");
   localStorage.removeItem("loginName");
@@ -103,18 +123,7 @@ async function logoutUser() {
   }
 }
 
-function renderUserMenu(target, profileHref) {
-  const element =
-    typeof target === "string"
-      ? document.getElementById(target)
-      : target;
-
-  if (!element) {
-    return;
-  }
-
-  const auth = getLoginState();
-
+function drawUserMenu(element, auth, profileHref) {
   if (!auth.email || !auth.authToken) {
     element.textContent = "Guest";
     return;
@@ -145,6 +154,33 @@ function renderUserMenu(target, profileHref) {
 
   element.appendChild(userBox);
   element.appendChild(logoutButton);
+}
+
+function renderUserMenu(target, profileHref) {
+  const element =
+    typeof target === "string"
+      ? document.getElementById(target)
+      : target;
+
+  if (!element) {
+    return;
+  }
+
+  const auth = getLoginState();
+  drawUserMenu(element, auth, profileHref);
+
+  if (!auth.authToken) {
+    return;
+  }
+
+  syncLoginState().then(freshAuth => {
+    const freshProfileHref = freshAuth.role === "employer"
+      ? "employer-profile.html"
+      : freshAuth.role === "candidate"
+        ? "candidate-profile.html"
+        : profileHref;
+    drawUserMenu(element, freshAuth, freshProfileHref);
+  });
 }
 
 function skillsToArray(skills) {

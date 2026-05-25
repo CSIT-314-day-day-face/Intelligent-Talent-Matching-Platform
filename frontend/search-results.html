@@ -43,11 +43,9 @@
 
       <div class="results-search-box">
 
-        <select class="search-select" id="searchType">
-          <option value="keyword">Keyword</option>
-          <option value="location">Address</option>
-          <option value="workmode">Work Mode</option>
-          <option value="salary">Salary</option>
+        <select class="search-select" id="searchTarget">
+          <option value="jobs">Jobs</option>
+          <option value="candidates">Candidates</option>
         </select>
 
         <input
@@ -64,6 +62,15 @@
           Search
         </button>
 
+      </div>
+
+      <div class="results-filter-panel" id="resultsFilterPanel">
+        <div class="results-filter-heading">
+          <strong>Filters</strong>
+          <span id="filterHint">Combine keyword and filters for better matching.</span>
+        </div>
+
+        <div class="results-filter-grid" id="resultsFilterGrid"></div>
       </div>
 
     </section>
@@ -137,60 +144,151 @@
       auth.role === "employer" ? "employer-profile.html" : "candidate-profile.html"
     );
 
-    const searchType = document.getElementById("searchType");
+    const searchTarget = document.getElementById("searchTarget");
     const searchInput = document.getElementById("searchInput");
+    const resultsFilterGrid = document.getElementById("resultsFilterGrid");
+    const filterHint = document.getElementById("filterHint");
 
     let currentPage = 1;
-    const jobsPerPage = 4;
+    const resultsPerPage = 4;
     let allResults = [];
 
-    searchType.addEventListener("change", function () {
-      if (this.value === "keyword") {
-        searchInput.placeholder = "Search jobs by title or skill";
-      }
-
-      if (this.value === "location") {
-        searchInput.placeholder = "Enter your preferred work address";
-      }
-
-      if (this.value === "workmode") {
-        searchInput.placeholder = "Remote, Hybrid, or On-site";
-      }
-
-      if (this.value === "salary") {
-        searchInput.placeholder = "Enter your expected salary";
-      }
-    });
-
     const params = new URLSearchParams(window.location.search);
-    const keyword = params.get("keyword") || "";
-    const type = params.get("type") || "keyword";
-    const target = params.get("target") || "jobs";
+    let target = params.get("target") || "jobs";
+    if (target === "candidates" && auth.role !== "employer") {
+      target = "jobs";
+    }
+    const legacyKeyword = params.get("keyword") || "";
+    const legacyType = params.get("type") || "keyword";
 
-    searchInput.value = keyword;
-    searchType.value = type;
+    const filterConfigs = {
+      jobs: [
+        { id: "location", label: "Location", type: "text", placeholder: "Sydney" },
+        { id: "work_mode", label: "Work Mode", type: "select", options: ["", "Remote", "On-site", "Hybrid"] },
+        { id: "job_type", label: "Job Type", type: "select", options: ["", "Full-time", "Part-time", "Contract", "Internship"] },
+        { id: "salary", label: "Salary", type: "select", options: ["", "$10k - $20k", "$20k - $30k", "$30k - $40k", "$40k - $50k", "$50k - $60k", "$60k - $70k", "$70k - $80k", "$80k - $90k", "$90k - $100k", "$100k - $110k", "$65k - $80k", "$70k - $85k", "$75k - $90k", "$90k - $110k", "$100k - $125k", "$110k - $135k", "$125k - $150k", "$135k - $160k", "$145k - $170k"] },
+        { id: "education", label: "Education", type: "select", options: ["", "High School", "Certificate", "Diploma", "Bachelor", "Master", "PhD", "Equivalent experience"] },
+        { id: "skill", label: "Skill", type: "text", placeholder: "Python" }
+      ],
+      candidates: [
+        { id: "location", label: "Preferred Location", type: "text", placeholder: "Sydney" },
+        { id: "work_mode", label: "Preferred Work Mode", type: "select", options: ["", "Remote", "On-site", "Hybrid"] },
+        { id: "education", label: "Education", type: "select", options: ["", "High School", "Certificate", "Diploma", "Bachelor", "Master", "PhD"] },
+        { id: "skill", label: "Skill", type: "text", placeholder: "Python" },
+        { id: "experience", label: "Experience", type: "select", options: ["", "0-3 Years", "3-5 Years", "5-7 Years", "7-9 Years", "9-11 Years", "11+ Years"] }
+      ]
+    };
 
-    let apiUrl = target === "candidates"
-      ? `${API_BASE}/candidates/search?`
-      : `${API_BASE}/search?`;
+    function normalizeLegacyParams() {
+      const query = new URLSearchParams();
+      if (params.get("q")) {
+        query.set("q", params.get("q"));
+      } else if (legacyType === "keyword" && legacyKeyword) {
+        query.set("q", legacyKeyword);
+      }
 
-    if (type === "location") {
-      apiUrl += "location=" + encodeURIComponent(keyword);
-    } else if (type === "workmode") {
-      apiUrl += "work_mode=" + encodeURIComponent(keyword);
-    } else if (type === "salary") {
-      apiUrl += target === "candidates"
-        ? "q=" + encodeURIComponent(keyword)
-        : "salary=" + encodeURIComponent(keyword);
-    } else {
-      apiUrl += "q=" + encodeURIComponent(keyword);
+      const legacyMap = {
+        location: "location",
+        workmode: "work_mode",
+        salary: target === "jobs" ? "salary" : "q",
+        skill: "skill",
+        education: "education",
+        experience: "experience",
+        job_type: "job_type"
+      };
+
+      const mappedKey = legacyMap[legacyType];
+      if (mappedKey && legacyKeyword) {
+        query.set(mappedKey, legacyKeyword);
+      }
+
+      filterConfigs[target].forEach(config => {
+        const value = params.get(config.id);
+        if (value) {
+          query.set(config.id, value);
+        }
+      });
+
+      return query;
     }
 
-    fetch(apiUrl, {
-      method: "GET",
-      credentials: "include"
-    })
-      .then(response => response.json())
+    let searchValues = normalizeLegacyParams();
+
+    function renderFilterControl(config) {
+      const value = searchValues.get(config.id) || "";
+      if (config.type === "select") {
+        const options = config.options.map(option => `
+          <option value="${option}" ${option === value ? "selected" : ""}>
+            ${option || "Any"}
+          </option>
+        `).join("");
+
+        return `
+          <label class="results-filter-field">
+            <span>${config.label}</span>
+            <select data-filter="${config.id}">
+              ${options}
+            </select>
+          </label>
+        `;
+      }
+
+      return `
+        <label class="results-filter-field">
+          <span>${config.label}</span>
+          <input
+            type="text"
+            data-filter="${config.id}"
+            value="${value}"
+            placeholder="${config.placeholder || ""}"
+          >
+        </label>
+      `;
+    }
+
+    function renderFilters() {
+      searchTarget.value = target;
+      searchInput.value = searchValues.get("q") || "";
+      searchInput.placeholder = target === "candidates"
+        ? "Search candidate skills, education, or experience"
+        : "Search jobs by title, company, description, or skill";
+
+      filterHint.textContent = target === "candidates"
+        ? "Search candidate profiles by keyword and filters."
+        : "Search job and company profiles by keyword and filters.";
+
+      resultsFilterGrid.innerHTML =
+        filterConfigs[target].map(renderFilterControl).join("");
+    }
+
+    function collectSearchValues() {
+      const values = new URLSearchParams();
+      const keyword = searchInput.value.trim();
+      if (keyword) {
+        values.set("q", keyword);
+      }
+
+      resultsFilterGrid.querySelectorAll("[data-filter]").forEach(field => {
+        const value = field.value.trim();
+        if (value) {
+          values.set(field.dataset.filter, value);
+        }
+      });
+
+      return values;
+    }
+
+    function buildApiPath() {
+      const endpoint = target === "candidates"
+        ? "/candidates/search"
+        : "/search";
+      const query = collectSearchValues();
+      const queryString = query.toString();
+      return queryString ? `${endpoint}?${queryString}` : endpoint;
+    }
+
+    function runSearch() {
+      apiRequest(buildApiPath())
       .then(data => {
         allResults = data.results || [];
 
@@ -220,6 +318,16 @@
           </div>
         `;
       });
+    }
+
+    renderFilters();
+    runSearch();
+
+    searchTarget.addEventListener("change", function () {
+      target = this.value;
+      searchValues = new URLSearchParams();
+      renderFilters();
+    });
 
     function renderPage(page) {
       currentPage = page;
@@ -229,8 +337,8 @@
 
       resultsContainer.innerHTML = "";
 
-      const start = (page - 1) * jobsPerPage;
-      const end = start + jobsPerPage;
+      const start = (page - 1) * resultsPerPage;
+      const end = start + resultsPerPage;
 
       const jobsToShow =
         allResults.slice(start, end);
@@ -267,6 +375,9 @@
         }
 
         const job = item;
+        const scoreText = Number(job.score || 0) > 0
+          ? `${Math.round(job.score)}% Match`
+          : "Job Listing";
         resultsContainer.innerHTML += `
           <article class="result-card">
 
@@ -287,7 +398,7 @@
               <div class="tags">
                 <span>${job.work_mode || job.job_type || ""}</span>
                 <span>${job.salary}</span>
-                <span>${job.score}% Match</span>
+                <span>${scoreText}</span>
               </div>
 
               <div class="card-bottom">
@@ -312,7 +423,7 @@
 
     function renderPagination() {
       const totalPages =
-        Math.ceil(allResults.length / jobsPerPage);
+        Math.ceil(allResults.length / resultsPerPage);
 
       const pageNumbers =
         document.getElementById("pageNumbers");
@@ -333,7 +444,7 @@
 
     function changePage(direction) {
       const totalPages =
-        Math.ceil(allResults.length / jobsPerPage);
+        Math.ceil(allResults.length / resultsPerPage);
 
       const nextPage =
         currentPage + direction;
@@ -346,16 +457,12 @@
     }
 
     function searchAgain() {
-      const type = searchType.value;
-      const keyword = searchInput.value.trim();
+      const values = collectSearchValues();
 
       window.location.href =
         "search-results.html?target="
         + encodeURIComponent(target)
-        + "&type="
-        + encodeURIComponent(type)
-        + "&keyword="
-        + encodeURIComponent(keyword);
+        + (values.toString() ? "&" + values.toString() : "");
     }
   </script>
 

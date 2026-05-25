@@ -2686,14 +2686,12 @@ body {
 }
 
 .post-field input,
-.post-field select {
+.post-field select,
+.post-field textarea {
   width: 100%;
-  height: 44px;
 
   border: 1px solid #efbebe;
   border-radius: 8px;
-
-  padding: 0 14px;
 
   outline: none;
 
@@ -3729,6 +3727,23 @@ body {
   font-family: inherit;
 }
 
+.post-field input,
+.post-field select {
+  height: 44px;
+  padding: 0 14px;
+}
+
+.post-field textarea {
+  min-height: 126px;
+  padding: 14px;
+  resize: vertical;
+  line-height: 1.5;
+}
+
+.post-field-full {
+  margin-top: 22px;
+}
+
 .employer-search-box select,
 .employer-hero-search .search-select,
 .results-search-box .search-select {
@@ -3766,6 +3781,68 @@ body {
   max-width: 1500px;
   margin: 0 auto;
   padding: 24px 0 34px;
+  flex-direction: column;
+  gap: 14px;
+  align-items: stretch;
+}
+
+.results-filter-panel {
+  width: 100%;
+  background: white;
+  border: 1px solid var(--app-border);
+  border-radius: 18px;
+  padding: 18px;
+  box-shadow: 0 16px 34px rgba(60, 20, 20, 0.06);
+}
+
+.results-filter-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: center;
+  color: #241414;
+  margin-bottom: 14px;
+}
+
+.results-filter-heading span {
+  color: #8c7777;
+  font-size: 13px;
+}
+
+.results-filter-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.results-filter-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 800;
+  color: #6d5a5a;
+}
+
+.results-filter-field input,
+.results-filter-field select {
+  width: 100%;
+  min-width: 0;
+  height: 44px;
+  border: 1px solid #ead4d4;
+  border-radius: 12px;
+  padding: 0 12px;
+  font-family: inherit;
+  font-size: 13px;
+  background: #fffafa;
+  color: #241414;
+  outline: none;
+}
+
+.results-filter-field input:focus,
+.results-filter-field select:focus {
+  border-color: var(--app-red);
+  box-shadow: 0 0 0 3px rgba(227, 31, 45, 0.1);
 }
 
 .results-title-row {
@@ -3872,6 +3949,15 @@ body {
     flex-wrap: wrap;
   }
 
+  .results-filter-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .results-filter-grid {
+    grid-template-columns: 1fr;
+  }
+
   .employer-search-box select,
   .employer-hero-search .search-select,
   .results-search-box .search-select,
@@ -3974,4 +4060,112 @@ body {
   background: #d6001c;
   color: white;
   border-color: #d6001c;
+}
+
+/* Employer edit job modal */
+.edit-job-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(36, 20, 20, 0.34);
+  backdrop-filter: blur(8px);
+}
+
+.edit-job-modal {
+  width: min(820px, 100%);
+  max-height: calc(100vh - 48px);
+  overflow-y: auto;
+  padding: 28px;
+  border: 1px solid #f0caca;
+  border-radius: 18px;
+  background: #fffafa;
+  box-shadow: 0 28px 70px rgba(80, 30, 30, 0.22);
+}
+
+.edit-job-modal-header,
+.edit-job-modal-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.edit-job-modal-header {
+  margin-bottom: 20px;
+}
+
+.edit-job-modal-header h2 {
+  margin: 0;
+  color: #241414;
+  font-size: 28px;
+}
+
+.edit-job-modal-header button {
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 999px;
+  background: #ffe4df;
+  color: #c80013;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.edit-job-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.edit-job-modal label {
+  display: block;
+  color: #5f3737;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.edit-job-modal input,
+.edit-job-modal select,
+.edit-job-modal textarea {
+  width: 100%;
+  margin-top: 8px;
+  border: 1px solid #efbebe;
+  border-radius: 10px;
+  background: white;
+  color: #241414;
+  font-family: inherit;
+  font-size: 14px;
+  outline: none;
+}
+
+.edit-job-modal input,
+.edit-job-modal select {
+  height: 44px;
+  padding: 0 12px;
+}
+
+.edit-job-description {
+  margin-top: 16px;
+}
+
+.edit-job-modal textarea {
+  min-height: 130px;
+  padding: 12px;
+  resize: vertical;
+  line-height: 1.5;
+}
+
+.edit-job-modal-actions {
+  justify-content: flex-end;
+  margin-top: 22px;
+}
+
+@media (max-width: 720px) {
+  .edit-job-grid {
+    grid-template-columns: 1fr;
+  }
 }

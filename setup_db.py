@@ -110,6 +110,7 @@ def build_employers(password_hash):
             company_info,
             email,
             location,
+            1 if index == 1 else 0,
         )
         for index, (email, company_name, company_info, location)
         in enumerate(EMPLOYERS, start=1)
@@ -172,8 +173,11 @@ def setup_database():
 
     cursor.executemany(
         """
-        INSERT INTO Employers (id, email, password, company_name, company_info, contact_info, location)
-        VALUES (?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO Employers (
+            id, email, password, company_name, company_info,
+            contact_info, location, membership_status
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
         """,
         build_employers(password_hash),
     )
@@ -219,6 +223,7 @@ def setup_database():
     conn.close()
     print("Database reset successfully.")
     print("Seeded: 20 Employers, 200 Jobs, 10 Candidates.")
+    print("Demo account: careers@harbourviewbank.com.au is a VIP employer with posted jobs.")
 
 
 if __name__ == "__main__":

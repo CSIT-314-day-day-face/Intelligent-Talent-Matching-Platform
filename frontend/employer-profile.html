@@ -254,6 +254,114 @@
 
   </div>
 
+  <div
+    class="edit-job-modal-overlay"
+    id="editJobModal"
+  >
+    <div class="edit-job-modal">
+      <div class="edit-job-modal-header">
+        <h2>Edit Job</h2>
+        <button type="button" onclick="closeEditJobModal()">x</button>
+      </div>
+
+      <div class="edit-job-grid">
+        <label>
+          Job Title
+          <input id="editJobTitleInput" type="text">
+        </label>
+
+        <label>
+          Location
+          <input id="editJobLocationInput" type="text">
+        </label>
+
+        <label>
+          Work Mode
+          <select id="editJobModeInput">
+            <option value="">Select Work Mode</option>
+            <option value="Remote">Remote</option>
+            <option value="On-site">On-site</option>
+            <option value="Hybrid">Hybrid</option>
+          </select>
+        </label>
+
+        <label>
+          Job Type
+          <select id="editJobTypeInput">
+            <option value="">Select Job Type</option>
+            <option value="Full-time">Full-time</option>
+            <option value="Part-time">Part-time</option>
+            <option value="Contract">Contract</option>
+            <option value="Internship">Internship</option>
+          </select>
+        </label>
+
+        <label>
+          Required Education
+          <select id="editJobEducationInput">
+            <option value="">Select Education</option>
+            <option value="High School">High School</option>
+            <option value="Certificate">Certificate</option>
+            <option value="Diploma">Diploma</option>
+            <option value="Bachelor">Bachelor</option>
+            <option value="Master">Master</option>
+            <option value="PhD">PhD</option>
+            <option value="Equivalent experience">Equivalent experience</option>
+          </select>
+        </label>
+
+        <label>
+          Experience
+          <select id="editJobExperienceInput">
+            <option value="">Select Experience</option>
+            <option value="0-3 Years">0-3 Years</option>
+            <option value="3-5 Years">3-5 Years</option>
+            <option value="5-7 Years">5-7 Years</option>
+            <option value="7-9 Years">7-9 Years</option>
+            <option value="9-11 Years">9-11 Years</option>
+            <option value="11+ Years">11+ Years</option>
+          </select>
+        </label>
+
+        <label>
+          Salary Range
+          <select id="editJobSalaryInput">
+            <option value="">Select Salary Range</option>
+            <option value="$10k - $20k">$10k - $20k</option>
+            <option value="$20k - $30k">$20k - $30k</option>
+            <option value="$30k - $40k">$30k - $40k</option>
+            <option value="$40k - $50k">$40k - $50k</option>
+            <option value="$50k - $60k">$50k - $60k</option>
+            <option value="$60k - $70k">$60k - $70k</option>
+            <option value="$70k - $80k">$70k - $80k</option>
+            <option value="$80k - $90k">$80k - $90k</option>
+            <option value="$90k - $100k">$90k - $100k</option>
+            <option value="$100k - $110k">$100k - $110k</option>
+          </select>
+        </label>
+
+        <label>
+          Required Skills
+          <input id="editJobSkillsInput" type="text" placeholder="Python, SQL, React">
+        </label>
+      </div>
+
+      <label class="edit-job-description">
+        Description
+        <textarea id="editJobDescriptionInput"></textarea>
+      </label>
+
+      <div class="edit-job-modal-actions">
+        <button type="button" class="vip-cancel-btn" onclick="closeEditJobModal()">
+          Cancel
+        </button>
+        <button type="button" class="vip-confirm-btn" onclick="saveEditedJob()">
+          Save Changes
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- SCRIPT -->
 
   <script>
@@ -514,6 +622,17 @@
       const companyEmailInput = document.getElementById("companyEmailInput");
       const jobsList = document.getElementById("publishedJobsList");
       const applicantsList = document.getElementById("recentApplicantsList");
+      const editJobModal = document.getElementById("editJobModal");
+      const editJobTitleInput = document.getElementById("editJobTitleInput");
+      const editJobLocationInput = document.getElementById("editJobLocationInput");
+      const editJobModeInput = document.getElementById("editJobModeInput");
+      const editJobTypeInput = document.getElementById("editJobTypeInput");
+      const editJobEducationInput = document.getElementById("editJobEducationInput");
+      const editJobExperienceInput = document.getElementById("editJobExperienceInput");
+      const editJobSalaryInput = document.getElementById("editJobSalaryInput");
+      const editJobSkillsInput = document.getElementById("editJobSkillsInput");
+      const editJobDescriptionInput = document.getElementById("editJobDescriptionInput");
+      let editingJobId = null;
 
       function setSelectValue(selectElement, value) {
         const normalizedValue = value || "";
@@ -774,32 +893,71 @@
       window.editJob = async function (jobId) {
         try {
           const job = await apiRequest(`/jobs/${jobId}`);
-          const title = prompt("Job title", job.title || "") || job.title;
-          const location = prompt("Job location", job.location || "") || job.location;
-          const description = prompt("Job description", job.description || "") || job.description;
-          const requiredEducation = prompt("Required education", job.required_education || "") || job.required_education;
-          const requiredSkills = prompt("Required skills", job.required_skills || "") || job.required_skills;
-          const yearsExperience = prompt("Years of experience", job.years_experience || "") || job.years_experience;
-          const workMode = prompt("Work mode", job.work_mode || "") || job.work_mode;
-          const salary = prompt("Salary range", job.salary_range || "") || job.salary_range;
-          const jobType = prompt("Job type", job.job_type || "") || job.job_type;
+          editingJobId = jobId;
+          editJobTitleInput.value = job.title || "";
+          editJobLocationInput.value = job.location || "";
+          editJobDescriptionInput.value = job.description || "";
+          editJobSkillsInput.value = skillsToArray(job.required_skills).join(", ");
+          setSelectValue(editJobEducationInput, job.required_education || "");
+          setSelectValue(editJobExperienceInput, job.years_experience || "");
+          setSelectValue(editJobModeInput, job.work_mode || "");
+          setSelectValue(editJobSalaryInput, job.salary_range || job.salary || "");
+          setSelectValue(editJobTypeInput, job.job_type || "");
+          editJobModal.style.display = "flex";
+        } catch (error) {
+          alert(error.message || "Unable to load this job.");
+        }
+      };
 
-          await apiRequest(`/jobs/${jobId}`, {
+      window.closeEditJobModal = function () {
+        editingJobId = null;
+        editJobModal.style.display = "none";
+      };
+
+      window.saveEditedJob = async function () {
+        if (!editingJobId) {
+          return;
+        }
+
+        const requiredSkills = editJobSkillsInput.value
+          .split(",")
+          .map(skill => skill.trim())
+          .filter(Boolean);
+
+        const body = {
+          title: editJobTitleInput.value.trim(),
+          location: editJobLocationInput.value.trim(),
+          description: editJobDescriptionInput.value.trim(),
+          required_education: editJobEducationInput.value.trim(),
+          required_skills: requiredSkills,
+          years_experience: editJobExperienceInput.value.trim(),
+          work_mode: editJobModeInput.value.trim(),
+          salary: editJobSalaryInput.value.trim(),
+          job_type: editJobTypeInput.value.trim(),
+          company_info: profile.companyInfo || profile.companyName
+        };
+
+        if (
+          !body.title ||
+          !body.location ||
+          !body.description ||
+          !body.required_education ||
+          requiredSkills.length === 0 ||
+          !body.years_experience ||
+          !body.work_mode ||
+          !body.salary ||
+          !body.job_type
+        ) {
+          alert("Please complete all job fields before saving.");
+          return;
+        }
+
+        try {
+          await apiRequest(`/jobs/${editingJobId}`, {
             method: "PUT",
-            body: {
-              title,
-              location,
-              description,
-              required_education: requiredEducation,
-              required_skills: requiredSkills,
-              years_experience: yearsExperience,
-              work_mode: workMode,
-              salary,
-              job_type: jobType,
-              company_info: profile.companyInfo || profile.companyName
-            }
+            body
           });
-
+          closeEditJobModal();
           loadPublishedJobs();
         } catch (error) {
           alert(error.message || "Unable to edit this job.");

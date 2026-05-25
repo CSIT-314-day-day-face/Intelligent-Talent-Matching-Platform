@@ -53,6 +53,9 @@
             <option value="location">Address</option>
             <option value="workmode">Work Mode</option>
             <option value="salary">Salary</option>
+            <option value="skill">Skill</option>
+            <option value="education">Education</option>
+            <option value="job_type">Job Type</option>
           </select>
 
           <input
@@ -78,6 +81,13 @@
             <h2>Recommended Jobs for You</h2>
             <p id="membershipText">Non-VIP: Top 10 recommended jobs only</p>
           </div>
+
+          <a
+            href="search-results.html?target=jobs"
+            class="view-all"
+          >
+            Browse All Jobs
+          </a>
 
         </div>
 
@@ -204,26 +214,33 @@
     const searchType = document.getElementById("searchType");
     const searchInput = document.getElementById("searchInput");
 
-    const auth = getLoginState();
-    const loginEmail = auth.email;
-    const loginName = auth.name || auth.email;
-    const membership = auth.membership;
+    let auth = getLoginState();
+    let membership = auth.membership;
 
-    homeUserName.textContent = loginName || "Guest";
+    function renderHomeAuth(currentAuth) {
+      auth = currentAuth;
+      const loginEmail = auth.email;
+      const loginName = auth.name || auth.email;
+      membership = auth.membership;
 
-    if (loginEmail) {
-      heroText.textContent =
-        "Radar is active. Currently scanning matching roles for " + (loginName || loginEmail) + ".";
-    } else {
-      heroText.textContent =
-        "Radar is active. Please sign in to receive personalized recommendations.";
+      homeUserName.textContent = loginName || "Guest";
+
+      if (loginEmail) {
+        heroText.textContent =
+          "Radar is active. Currently scanning matching roles for " + (loginName || loginEmail) + ".";
+      } else {
+        heroText.textContent =
+          "Radar is active. Please sign in to receive personalized recommendations.";
+      }
+
+      if (membership === "1") {
+        membershipText.textContent = "VIP: Unlimited recommended jobs";
+      } else {
+        membershipText.textContent = "Non-VIP: Top 10 recommended jobs only";
+      }
     }
 
-    if (membership === "1") {
-      membershipText.textContent = "VIP: Unlimited recommended jobs";
-    } else {
-      membershipText.textContent = "Non-VIP: Top 10 recommended jobs only";
-    }
+    renderHomeAuth(auth);
 
     searchType.addEventListener("change", function () {
       if (this.value === "keyword") {
@@ -240,6 +257,18 @@
 
       if (this.value === "salary") {
         searchInput.placeholder = "Enter your expected salary";
+      }
+
+      if (this.value === "skill") {
+        searchInput.placeholder = "Enter a required skill";
+      }
+
+      if (this.value === "education") {
+        searchInput.placeholder = "Bachelor, Master, Diploma, or PhD";
+      }
+
+      if (this.value === "job_type") {
+        searchInput.placeholder = "Full-time, Part-time, Contract, or Internship";
       }
     });
 
@@ -316,7 +345,12 @@
       }
     }
 
-    loadRecommendedJobs().then(applyMembershipLimit);
+    syncLoginState()
+      .then(freshAuth => {
+        renderHomeAuth(freshAuth);
+        return loadRecommendedJobs();
+      })
+      .then(applyMembershipLimit);
   </script>
 
 </body>

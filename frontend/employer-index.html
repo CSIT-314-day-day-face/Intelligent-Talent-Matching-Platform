@@ -102,8 +102,16 @@
               Work Mode
             </option>
 
-            <option value="salary">
-              Salary
+            <option value="skill">
+              Skill
+            </option>
+
+            <option value="education">
+              Education
+            </option>
+
+            <option value="experience">
+              Experience
             </option>
 
           </select>
@@ -445,30 +453,35 @@
 
     /* USER */
 
-    const auth =
+    let auth =
       getLoginState();
 
-    employerNavName.textContent =
-      auth.name || auth.email || "Guest";
-
-    /* MEMBERSHIP */
-
-    const membership =
+    let membership =
       auth.membership;
 
-    if (membership === "1") {
+    function renderEmployerAuth(currentAuth) {
+      auth = currentAuth;
+      membership = auth.membership;
 
-      memberLimitText.textContent =
-        "VIP: Unlimited candidate recommendations";
+      employerNavName.textContent =
+        auth.name || auth.email || "Guest";
 
+      if (membership === "1") {
+
+        memberLimitText.textContent =
+          "VIP: Unlimited candidate recommendations";
+
+      }
+
+      else {
+
+        memberLimitText.textContent =
+          "Non-VIP: Top 10 candidates only";
+
+      }
     }
 
-    else {
-
-      memberLimitText.textContent =
-        "Non-VIP: Top 10 candidates only";
-
-    }
+    renderEmployerAuth(auth);
 
     /* PLACEHOLDER */
 
@@ -495,10 +508,24 @@
 
       }
 
-      if (this.value === "salary") {
+      if (this.value === "skill") {
 
         employerSearchInput.placeholder =
-          "Enter expected salary";
+          "Enter candidate skill";
+
+      }
+
+      if (this.value === "education") {
+
+        employerSearchInput.placeholder =
+          "Bachelor, Master, or Diploma";
+
+      }
+
+      if (this.value === "experience") {
+
+        employerSearchInput.placeholder =
+          "0-3 Years, 3-5 Years, or 5-7 Years";
 
       }
 
@@ -610,7 +637,12 @@
 
     }
 
-    loadCandidateRecommendations().then(applyMembershipLimit);
+    syncLoginState()
+      .then(freshAuth => {
+        renderEmployerAuth(freshAuth);
+        return loadCandidateRecommendations();
+      })
+      .then(applyMembershipLimit);
 
   </script>
 

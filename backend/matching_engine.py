@@ -12,6 +12,15 @@ def _has_value(value):
 def _limited(results, membership_status):
     return results if int(membership_status or 0) == 1 else results[:10]
 
+def _field_match_score(source, target):
+    source = str(source or "").lower().strip()
+    target = str(target or "").lower().strip()
+    if not source or not target:
+        return 0
+    if source in target or target in source:
+        return 100
+    return fuzz.token_set_ratio(source, target)
+
 def recommend_jobs(candidate_id, membership_status=0):
     try:
         conn = get_db_connection()
@@ -56,6 +65,8 @@ def recommend_jobs(candidate_id, membership_status=0):
         candidate_skills = _skills_to_set(candidate["skills"])
         candidate_location = (candidate["preferred_location"] or candidate["location"] or "").lower()
         candidate_mode = (candidate["preferred_mode"] or "").lower()
+        candidate_education = candidate["education"] or ""
+        candidate_experience = candidate["years_experience"] or ""
 
         scored_jobs = []
         for job in jobs:
@@ -73,10 +84,40 @@ def recommend_jobs(candidate_id, membership_status=0):
             ]).lower()
             text_score = fuzz.token_set_ratio(candidate_text, job_text)
             required_skills = _skills_to_set(job["required_skills"])
-            skill_score = 100 if required_skills and candidate_skills.intersection(required_skills) else 0
+            if required_skills:
+                skill_score = round(
+                    len(required_skills.intersection(candidate_skills)) / len(required_skills) * 100,
+                    2,
+                )
+            else:
+                skill_score = 0
+            education_score = _field_match_score(candidate_education, job["required_education"])
+            experience_score = _field_match_score(candidate_experience, job["years_experience"])
             location_score = 100 if candidate_location and candidate_location in (job["location"] or "").lower() else 0
             mode_score = 100 if candidate_mode and candidate_mode == (job["work_mode"] or "").lower() else 0
-            final_score = round((text_score * 0.55) + (skill_score * 0.25) + (location_score * 0.1) + (mode_score * 0.1), 2)
+            criteria_fields = [
+                job["description"],
+                job["required_education"],
+                job["required_skills"],
+                job["years_experience"],
+                job["work_mode"],
+                job["location"],
+            ]
+            filled_criteria_count = sum(1 for field in criteria_fields if _has_value(field))
+            criteria_quality = filled_criteria_count / len(criteria_fields)
+            final_score = (
+                text_score * 0.25
+                + skill_score * 0.3
+                + education_score * 0.15
+                + experience_score * 0.15
+                + location_score * 0.075
+                + mode_score * 0.075
+            )
+            if not required_skills:
+                final_score = min(final_score, 62)
+            if filled_criteria_count <= 2:
+                final_score = min(final_score, 45)
+            final_score = round(final_score * (0.75 + criteria_quality * 0.25), 2)
 
             scored_jobs.append({
                 "id": job["id"],
@@ -91,6 +132,7 @@ def recommend_jobs(candidate_id, membership_status=0):
                 "job_type": job["job_type"],
                 "salary": job["salary_range"],
                 "score": final_score,
+                "match_quality": "Low confidence" if filled_criteria_count <= 2 else "Profile match",
             })
 
         scored_jobs.sort(key=lambda x: x["score"], reverse=True)
@@ -171,8 +213,8 @@ def recommend_candidates(job_id, membership_status=0):
             candidate_location = (candidate["preferred_location"] or candidate["location"] or "").lower()
             location_score = 100 if candidate_location and candidate_location in (job["location"] or "").lower() else 0
             mode_score = 100 if _has_value(job["work_mode"]) and (candidate["preferred_mode"] or "").lower() == (job["work_mode"] or "").lower() else 0
-            education_score = 100 if _has_value(job["required_education"]) and (candidate["education"] or "").lower() in (job["required_education"] or "").lower() else 0
-            experience_score = 100 if _has_value(job["years_experience"]) and (candidate["years_experience"] or "").lower() == (job["years_experience"] or "").lower() else 0
+            education_score = _field_match_score(candidate["education"], job["required_education"])
+            experience_score = _field_match_score(candidate["years_experience"], job["years_experience"])
 
             final_score = (
                 text_score * 0.25

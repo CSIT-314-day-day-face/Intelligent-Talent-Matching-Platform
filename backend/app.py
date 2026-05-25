@@ -46,6 +46,21 @@ auth_serializer = URLSafeTimedSerializer(app.secret_key)
 AUTH_TOKEN_SALT = "job-radar-auth"
 AUTH_TOKEN_MAX_AGE = 60 * 60 * 24 * 7
 
+def _ensure_auth_tables():
+    conn = get_db_connection()
+    conn.execute(
+        """
+        CREATE TABLE IF NOT EXISTS AuthTokenRevocations (
+            token TEXT PRIMARY KEY,
+            revoked_at TEXT DEFAULT CURRENT_TIMESTAMP
+        )
+        """
+    )
+    conn.commit()
+    conn.close()
+
+_ensure_auth_tables()
+
 def _table_for_role(role):
     if role == "candidate":
         return "Candidates"
@@ -58,6 +73,34 @@ def _make_auth_token(user_id, role, email):
         {"user_id": user_id, "role": role, "email": email},
         salt=AUTH_TOKEN_SALT,
     )
+
+def _extract_bearer_token():
+    auth_header = request.headers.get("Authorization", "")
+    if not auth_header.startswith("Bearer "):
+        return ""
+    return auth_header.replace("Bearer ", "", 1).strip()
+
+def _is_token_revoked(token):
+    if not token:
+        return False
+    conn = get_db_connection()
+    row = conn.execute(
+        "SELECT token FROM AuthTokenRevocations WHERE token = ?",
+        (token,),
+    ).fetchone()
+    conn.close()
+    return row is not None
+
+def _revoke_token(token):
+    if not token:
+        return
+    conn = get_db_connection()
+    conn.execute(
+        "INSERT OR IGNORE INTO AuthTokenRevocations (token) VALUES (?)",
+        (token,),
+    )
+    conn.commit()
+    conn.close()
 
 def _display_name_for_user(user, role):
     if role == "candidate":
@@ -73,11 +116,10 @@ def _restore_session_from_token():
     if session.get('user_id'):
         return True
 
-    auth_header = request.headers.get("Authorization", "")
-    if not auth_header.startswith("Bearer "):
+    token = _extract_bearer_token()
+    if not token or _is_token_revoked(token):
         return False
 
-    token = auth_header.replace("Bearer ", "", 1).strip()
     try:
         token_data = auth_serializer.loads(
             token,
@@ -116,10 +158,54 @@ def _require_login(role=None):
         return jsonify({"status": "error", "message": "Unauthorized"}), 403
     return None
 
+def _missing_required(data, fields):
+    missing = []
+    for field in fields:
+        value = data.get(field)
+        if isinstance(value, list):
+            has_value = any(str(item).strip() for item in value)
+        else:
+            has_value = bool(str(value or "").strip())
+        if not has_value:
+            missing.append(field)
+    return missing
+
+def _normalize_job_payload(data):
+    payload = dict(data or {})
+    payload["salary"] = payload.get("salary") or payload.get("salary_range", "")
+    payload["work_mode"] = payload.get("work_mode") or payload.get("mode", "")
+    payload["job_type"] = payload.get("job_type") or ""
+    payload["years_experience"] = payload.get("years_experience") or payload.get("experience", "")
+    return payload
+
+def _validate_job_payload(data):
+    payload = _normalize_job_payload(data)
+    missing = _missing_required(
+        payload,
+        [
+            "title",
+            "location",
+            "description",
+            "salary",
+            "job_type",
+            "required_education",
+            "required_skills",
+            "years_experience",
+            "work_mode",
+        ],
+    )
+    if missing:
+        return payload, jsonify({
+            "status": "error",
+            "message": "Missing required job fields",
+            "missing": missing
+        }), 400
+    return payload, None, None
+
 # Authentication Routes
 @app.route('/api/register', methods=['POST'])
 def register():
-    data = request.json or {}
+    data = request.get_json(silent=True) or {}
     if data.get('role') not in ('candidate', 'employer'):
         return jsonify({"status": "error", "message": "Invalid role"}), 400
     if not data.get('email') or not data.get('password'):
@@ -140,7 +226,17 @@ def register():
 
 @app.route('/api/login', methods=['POST'])
 def login():
-    data = request.json or {}
+    data = request.get_json(silent=True) or {}
+    missing = _missing_required(data, ["email", "password", "role"])
+    if missing:
+        return jsonify({
+            "status": "error",
+            "message": "Email, password, and role are required",
+            "missing": missing
+        }), 400
+    if data.get('role') not in ('candidate', 'employer'):
+        return jsonify({"status": "error", "message": "Invalid role"}), 400
+
     user = verify_login(data['email'], data['password'], data['role'])
     if user:
         # Session storage for authentication persistence
@@ -161,6 +257,7 @@ def login():
 
 @app.route('/api/logout', methods=['POST'])
 def logout():
+    _revoke_token(_extract_bearer_token())
     session.clear()
     return jsonify({"status": "success", "message": "Logged out"})
 @app.route('/api/me', methods=['GET'])
@@ -343,7 +440,11 @@ def post_job():
     auth_error = _require_login('employer')
     if auth_error:
         return auth_error
-    data = request.json or {}
+
+    data, validation_error, status_code = _validate_job_payload(request.json or {})
+    if validation_error:
+        return validation_error, status_code
+
     success = create_job(
         session['user_id'], 
         data.get('title'), 
@@ -374,7 +475,12 @@ def edit_job(job_id):
     auth_error = _require_login('employer')
     if auth_error:
         return auth_error
-    success = update_job(job_id, session['user_id'], **(request.json or {}))
+
+    data, validation_error, status_code = _validate_job_payload(request.json or {})
+    if validation_error:
+        return validation_error, status_code
+
+    success = update_job(job_id, session['user_id'], **data)
     if success:
         return jsonify({"status": "success", "message": "Job updated"})
     return jsonify({"status": "error", "message": "Job not found or unauthorized"}), 404
