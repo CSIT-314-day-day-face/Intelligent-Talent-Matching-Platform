@@ -25,6 +25,7 @@ EMPLOYERS = [
     ("jobs@citylinetransport.com.au", "Cityline Transport", "Urban transport operations and scheduling provider.", "Melbourne"),
     ("careers@opaldata.com.au", "Opal Data Services", "Data engineering, reporting, and analytics services company.", "Sydney"),
     ("people@newcastlemanufacturing.com.au", "Newcastle Manufacturing", "Industrial manufacturing and operations technology company.", "Newcastle"),
+    ("test.company@example.com", "Test Company", "Test company account for employer-side feature checking.", "Sydney"),
 ]
 
 
@@ -169,7 +170,7 @@ def setup_database():
         conn.executescript(f.read())
 
     cursor = conn.cursor()
-    password_hash = generate_password_hash('password123')
+    password_hash = generate_password_hash('00000000')
 
     cursor.executemany(
         """
@@ -204,7 +205,8 @@ def setup_database():
         ('grace@uow.edu.au', password_hash, 'Grace Lee', 'grace@uow.edu.au', 'Bachelor', 'Cloud Computing', '7-9 Years', 'Cloud and DevOps specialist.', 'Senior cloud automation', 'AWS, Cloud, DevOps', 'Remote', 'Sydney', 'Sydney', 1),
         ('hank@uow.edu.au', password_hash, 'Hank Moore', 'hank@uow.edu.au', 'Bachelor', 'Software Engineering', '0-3 Years', 'QA engineer.', '2 years QA automation', 'Testing, QA, Selenium', 'Hybrid', 'Melbourne', 'Melbourne', 0),
         ('ivy@uow.edu.au', password_hash, 'Ivy Taylor', 'ivy@uow.edu.au', 'Bachelor', 'Design', '3-5 Years', 'UI/UX designer.', '3 years product design', 'UI/UX, Figma, Design', 'On-site', 'Sydney', 'Sydney', 0),
-        ('jack@uow.edu.au', password_hash, 'Jack Anderson', 'jack@uow.edu.au', 'Master', 'Software Architecture', '5-7 Years', 'Software architect.', '6 years architecture', 'Software Architecture', 'Remote', 'Wollongong', 'Wollongong', 1)
+        ('jack@uow.edu.au', password_hash, 'Jack Anderson', 'jack@uow.edu.au', 'Master', 'Software Architecture', '5-7 Years', 'Software architect.', '6 years architecture', 'Software Architecture', 'Remote', 'Wollongong', 'Wollongong', 1),
+        ('test.candidate@example.com', password_hash, 'Test Candidate', 'test.candidate@example.com', 'Bachelor', 'Computer Science', '3-5 Years', 'Test candidate account for candidate-side feature checking.', 'Three years of software project experience.', 'Python, SQL, JavaScript', 'Remote', 'Sydney', 'Sydney', 0)
     ]
 
     cursor.executemany(
@@ -222,8 +224,10 @@ def setup_database():
     conn.commit()
     conn.close()
     print("Database reset successfully.")
-    print("Seeded: 20 Employers, 200 Jobs, 10 Candidates.")
+    print(f"Seeded: {len(EMPLOYERS)} Employers, 200 Jobs, {len(candidates)} Candidates.")
     print("Demo account: careers@harbourviewbank.com.au is a VIP employer with posted jobs.")
+    print("Test candidate: test.candidate@example.com / 00000000")
+    print("Test company: test.company@example.com / 00000000")
 
 
 if __name__ == "__main__":

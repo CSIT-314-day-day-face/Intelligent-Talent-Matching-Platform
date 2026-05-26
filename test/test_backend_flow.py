@@ -11,7 +11,7 @@ from backend.api_server import app
 from backend.database_connection import get_db_connection
 
 
-PASSWORD = "password123"
+PASSWORD = "00000000"
 RUN_ID = int(time.time())
 CANDIDATE_EMAIL = f"full_candidate_{RUN_ID}@uow.edu.au"
 SECOND_CANDIDATE_EMAIL = f"full_candidate_two_{RUN_ID}@uow.edu.au"
@@ -368,10 +368,10 @@ def run_test():
             salary_filtered_jobs,
         )
         education_filtered_jobs = request_json(public_client, "get", "/api/search?education=Master", 200)[1]
-        expect(education_filtered_jobs.get("count", 0) > 0, "max education job filter returned no jobs", education_filtered_jobs)
+        expect(education_filtered_jobs.get("count", 0) > 0, "minimum education job filter returned no jobs", education_filtered_jobs)
         expect(
-            all(education_rank(item.get("required_education")) <= 4 for item in education_filtered_jobs.get("results", []) if education_rank(item.get("required_education")) is not None),
-            "max education job filter included a higher education requirement",
+            all(education_rank(item.get("required_education")) >= 4 for item in education_filtered_jobs.get("results", []) if education_rank(item.get("required_education")) is not None),
+            "minimum education job filter included a lower education requirement",
             education_filtered_jobs,
         )
         candidates_search = request_json(
@@ -390,8 +390,12 @@ def run_test():
             token=employer_token,
         )[1]
         expect(
-            any(item.get("education") == "Bachelor" for item in candidate_education_search.get("results", [])),
-            "max education candidate filter should include Bachelor candidates when Master is selected",
+            candidate_education_search.get("count", 0) > 0 and all(
+                education_rank(item.get("education")) >= 4
+                for item in candidate_education_search.get("results", [])
+                if education_rank(item.get("education")) is not None
+            ),
+            "minimum education candidate filter should only include Master or higher candidates when Master is selected",
             candidate_education_search,
         )
         request_json(candidate_client, "get", "/api/candidates/search?q=Python", 403, token=candidate_token)
@@ -401,10 +405,17 @@ def run_test():
         expect(candidate_recs_before.get("count") == 10, "non-member candidate recommendations should be top 10", candidate_recs_before.get("count"))
         passed.append("Candidate non-member Top 10 recommendations")
 
-        request_json(candidate_client, "post", "/api/membership/upgrade", 200, token=candidate_token)
+        candidate_toggle_on = request_json(candidate_client, "post", "/api/membership/toggle", 200, token=candidate_token)[1]
+        expect(candidate_toggle_on.get("membership") == 1, "candidate membership should toggle on", candidate_toggle_on)
         candidate_recs_after = request_json(candidate_client, "get", "/api/recommendations/jobs", 200, token=candidate_token)[1]
         expect(candidate_recs_after.get("count", 0) > 10, "member candidate recommendations should be unlimited", candidate_recs_after.get("count"))
-        passed.append("Candidate membership unlimited recommendations")
+        candidate_toggle_off = request_json(candidate_client, "post", "/api/membership/toggle", 200, token=candidate_token)[1]
+        expect(candidate_toggle_off.get("membership") == 0, "candidate membership should toggle off", candidate_toggle_off)
+        candidate_recs_off = request_json(candidate_client, "get", "/api/recommendations/jobs", 200, token=candidate_token)[1]
+        expect(candidate_recs_off.get("count") == 10, "candidate recommendations should return to top 10 after membership is toggled off", candidate_recs_off.get("count"))
+        candidate_toggle_back_on = request_json(candidate_client, "post", "/api/membership/toggle", 200, token=candidate_token)[1]
+        expect(candidate_toggle_back_on.get("membership") == 1, "candidate membership should toggle back on", candidate_toggle_back_on)
+        passed.append("Candidate membership toggle and unlimited recommendations")
 
         request_json(employer_client, "post", "/api/jobs", 400, token=employer_token, json={"title": "Incomplete"})
         job = create_valid_job(employer_client, employer_token)
@@ -429,10 +440,17 @@ def run_test():
         expect(employer_recs_before.get("count") == 10, "non-member employer recommendations should be top 10", employer_recs_before.get("count"))
         job_candidate_recs = request_json(employer_client, "get", f"/api/jobs/{job_id}/recommendations", 200, token=employer_token)[1]
         expect(job_candidate_recs.get("count") == 10, "job-specific non-member candidate recommendations should be top 10", job_candidate_recs.get("count"))
-        request_json(employer_client, "post", "/api/membership/upgrade", 200, token=employer_token)
+        employer_toggle_on = request_json(employer_client, "post", "/api/membership/toggle", 200, token=employer_token)[1]
+        expect(employer_toggle_on.get("membership") == 1, "employer membership should toggle on", employer_toggle_on)
         employer_recs_after = request_json(employer_client, "get", "/api/recommendations/candidates", 200, token=employer_token)[1]
         expect(employer_recs_after.get("count", 0) > 10, "member employer recommendations should be unlimited", employer_recs_after.get("count"))
-        passed.append("Employer Top 10 and VIP unlimited recommendations")
+        employer_toggle_off = request_json(employer_client, "post", "/api/membership/toggle", 200, token=employer_token)[1]
+        expect(employer_toggle_off.get("membership") == 0, "employer membership should toggle off", employer_toggle_off)
+        employer_recs_off = request_json(employer_client, "get", "/api/recommendations/candidates", 200, token=employer_token)[1]
+        expect(employer_recs_off.get("count") == 10, "employer recommendations should return to top 10 after membership is toggled off", employer_recs_off.get("count"))
+        employer_toggle_back_on = request_json(employer_client, "post", "/api/membership/toggle", 200, token=employer_token)[1]
+        expect(employer_toggle_back_on.get("membership") == 1, "employer membership should toggle back on", employer_toggle_back_on)
+        passed.append("Employer membership toggle, Top 10, and VIP unlimited recommendations")
 
         request_json(employer_client, "post", f"/api/jobs/{job_id}/apply", 403, token=employer_token)
         apply_data = request_json(candidate_client, "post", f"/api/jobs/{job_id}/apply", 201, token=candidate_token)[1]

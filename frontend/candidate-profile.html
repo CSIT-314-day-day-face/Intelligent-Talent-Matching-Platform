@@ -164,9 +164,9 @@
             <button
               class="vip-btn"
               id="vipButton"
-              onclick="openVipModal()"
+              onclick="toggleVipStatus()"
             >
-              VIP
+              VIP Off
             </button>
 
           </div>
@@ -395,10 +395,7 @@
       selectedPreferredMode = savedProfile.preferredMode || "";
       setSelectValue(document.getElementById("ageInput"), selectedExperience);
 
-      if (savedProfile.isVip === true) {
-        document.getElementById("vipButton").classList.add("vip-active");
-        document.getElementById("vipButton").innerText = "VIP";
-      }
+      updateVipButton();
 
       renderTags();
       updatePreferredModeButtons();
@@ -628,24 +625,32 @@
       document.getElementById("vipModal").style.display = "none";
     }
 
-    async function becomeVip() {
+    function updateVipButton() {
+      const vipButton = document.getElementById("vipButton");
+      const isVip = candidateProfile.isVip === true;
+      vipButton.classList.toggle("vip-active", isVip);
+      vipButton.textContent = isVip ? "VIP On" : "VIP Off";
+      vipButton.setAttribute("aria-pressed", String(isVip));
+    }
+
+    async function toggleVipStatus() {
       const auth = requireLogin("candidate");
       if (!auth) {
         return;
       }
 
       try {
-        const data = await apiRequest("/membership/upgrade", {
+        const data = await apiRequest("/membership/toggle", {
           method: "POST"
         });
 
-        candidateProfile.isVip = true;
+        candidateProfile.isVip = Number(data.membership) === 1;
         setLoginState(
           {
             email: auth.email,
             display_name: candidateProfile.name || auth.name || auth.email,
             role: "candidate",
-            membership: data.membership ?? 1,
+            membership: data.membership ?? 0,
             auth_token: data.auth_token || auth.authToken
           },
           auth.email,
@@ -656,11 +661,15 @@
           JSON.stringify(candidateProfile)
         );
 
-        document.getElementById("vipButton").classList.add("vip-active");
+        updateVipButton();
         closeVipModal();
       } catch (error) {
-        alert(error.message || "VIP upgrade failed. Please log in first.");
+        alert(error.message || "VIP status update failed. Please log in first.");
       }
+    }
+
+    async function becomeVip() {
+      await toggleVipStatus();
     }
 
     loadCandidateProfile();

@@ -60,14 +60,14 @@ def _education_rank(value):
             return EDUCATION_LEVELS[key]
     return None
 
-def _matches_max_education(actual_education, selected_education):
+def _matches_min_education(actual_education, selected_education):
     if not selected_education:
         return True
     selected_rank = _education_rank(selected_education)
     actual_rank = _education_rank(actual_education)
     if selected_rank is None or actual_rank is None:
         return _contains(actual_education, selected_education)
-    return actual_rank <= selected_rank
+    return actual_rank >= selected_rank
 
 def fuzzy_search_jobs(
     user_query,
@@ -103,7 +103,7 @@ def fuzzy_search_jobs(
                 continue
             if not _matches_min_salary(job["salary_range"], salary):
                 continue
-            if not _matches_max_education(job["required_education"], education):
+            if not _matches_min_education(job["required_education"], education):
                 continue
             if skill and not _contains(job["required_skills"], skill):
                 continue
@@ -173,7 +173,7 @@ def fuzzy_search_candidates(
                 continue
             if work_mode and not _contains(candidate["preferred_mode"], work_mode):
                 continue
-            if not _matches_max_education(candidate["education"], education):
+            if not _matches_min_education(candidate["education"], education):
                 continue
             if skill and not _contains(candidate["skills"], skill):
                 continue

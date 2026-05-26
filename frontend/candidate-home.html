@@ -50,7 +50,7 @@
 
           <select class="search-select" id="searchType">
             <option value="keyword">Keyword</option>
-            <option value="location">Address</option>
+            <option value="location">Location</option>
             <option value="workmode">Work Mode</option>
             <option value="salary">Minimum Salary</option>
             <option value="skill">Skill</option>
@@ -124,7 +124,7 @@
             </label>
 
             <label class="results-filter-field">
-              <span>Max Education Requirement</span>
+              <span>Minimum Education Requirement</span>
               <select id="jobEducationFilter">
                 <option value="">Any</option>
                 <option value="High School">High School</option>
@@ -321,7 +321,7 @@
       }
 
       if (this.value === "location") {
-        searchInput.placeholder = "Enter your preferred work address";
+        searchInput.placeholder = "Enter your preferred work location";
       }
 
       if (this.value === "workmode") {

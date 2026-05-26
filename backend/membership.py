@@ -20,5 +20,28 @@ def upgrade_membership(user_id, role):
     finally:
         if 'conn' in locals(): conn.close()
 
+def toggle_membership(user_id, role):
+    try:
+        conn = get_db_connection()
+        table = "Candidates" if role == "candidate" else "Employers"
+        current = conn.execute(
+            f"SELECT membership_status FROM {table} WHERE id = ?",
+            (user_id,),
+        ).fetchone()
+        if not current:
+            return None
+        new_status = 0 if int(current["membership_status"] or 0) == 1 else 1
+        conn.execute(
+            f"UPDATE {table} SET membership_status = ? WHERE id = ?",
+            (new_status, user_id),
+        )
+        conn.commit()
+        return new_status
+    except Exception as e:
+        print(f"Membership toggle failed: {e}")
+        return None
+    finally:
+        if 'conn' in locals(): conn.close()
+
 def get_search_limit(membership_status):
     return 10 if membership_status == 0 else None

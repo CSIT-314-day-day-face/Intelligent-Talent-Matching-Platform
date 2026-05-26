@@ -20,7 +20,7 @@ from backend.jobs import (
     update_job,
 )
 from backend.recommendations import recommend_jobs, recommend_candidates
-from backend.membership import upgrade_membership
+from backend.membership import upgrade_membership, toggle_membership
 from backend.applications import (
     apply_for_job,
     get_application_for_candidate,
@@ -562,6 +562,29 @@ def upgrade():
             "auth_token": auth_token
         })
     return jsonify({"status": "error"}), 500
+
+@app.route('/api/membership/toggle', methods=['POST'])
+def toggle_membership_status():
+    _restore_session_from_token()
+    if not session.get('user_id'):
+        return jsonify({"status": "error", "message": "Not logged in"}), 401
+
+    new_status = toggle_membership(session['user_id'], session['role'])
+    if new_status is None:
+        return jsonify({"status": "error", "message": "Membership update failed"}), 500
+
+    session['membership'] = new_status
+    auth_token = _make_auth_token(
+        session['user_id'],
+        session['role'],
+        session.get('email', '')
+    )
+    return jsonify({
+        "status": "success",
+        "message": "Membership updated",
+        "membership": new_status,
+        "auth_token": auth_token
+    })
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5001, debug=True)

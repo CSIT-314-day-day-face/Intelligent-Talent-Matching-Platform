@@ -142,9 +142,9 @@
             <button
               class="vip-btn"
               id="vipButton"
-              onclick="openVipModal()"
+              onclick="toggleVipStatus()"
             >
-              VIP
+              VIP Off
             </button>
 
           </div>
@@ -705,12 +705,15 @@
         companyEmailInput.value = profile.email;
         profileName.textContent = profile.name || profile.companyName || "Guest";
 
-        if (profile.isVip === true) {
-          vipButton.classList.add("vip-active");
-        } else {
-          vipButton.classList.remove("vip-active");
-        }
+        updateVipButton();
       };
+
+      function updateVipButton() {
+        const isVip = profile.isVip === true;
+        vipButton.classList.toggle("vip-active", isVip);
+        vipButton.textContent = isVip ? "VIP On" : "VIP Off";
+        vipButton.setAttribute("aria-pressed", String(isVip));
+      }
 
       window.saveEmployerProfile = async function () {
         profile.name = ownerNameInput.value.trim();
@@ -752,35 +755,40 @@
         window.location.href = "post-job.html";
       };
 
-      window.confirmVip = async function () {
+      window.toggleVipStatus = async function () {
         const auth = requireLogin("employer");
         if (!auth) {
           return;
         }
 
         try {
-          const data = await apiRequest("/membership/upgrade", {
+          const data = await apiRequest("/membership/toggle", {
             method: "POST"
           });
 
-          profile.isVip = true;
+          profile.isVip = Number(data.membership) === 1;
           setLoginState(
             {
               email: auth.email,
               display_name: profile.name || profile.companyName || auth.name || auth.email,
               role: "employer",
-              membership: data.membership ?? 1,
+              membership: data.membership ?? 0,
               auth_token: data.auth_token || auth.authToken
             },
             auth.email,
             "employer"
           );
           localStorage.setItem("employerProfile", JSON.stringify(profile));
-          await window.loadEmployerProfile();
+          localStorage.setItem("membership", data.membership ?? 0);
+          updateVipButton();
           closeVipModal();
         } catch (error) {
-          alert(error.message || "VIP upgrade failed. Please log in first.");
+          alert(error.message || "VIP status update failed. Please log in first.");
         }
+      };
+
+      window.confirmVip = async function () {
+        await window.toggleVipStatus();
       };
 
       async function loadPublishedJobs() {
