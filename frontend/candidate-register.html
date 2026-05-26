@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Employer Sign Up</title>
+  <title>Candidate Sign Up</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,13 +16,18 @@
   >
 
   <link rel="stylesheet" href="style.css">
+
 </head>
 
 <body>
 
   <div class="signup-page">
 
-    <a href="index.html" class="signup-logo" onclick="goHome(event)">
+    <a
+      href="index.html"
+      class="signup-logo"
+      onclick="goHome(event)"
+    >
       Job Radar
     </a>
 
@@ -30,25 +35,38 @@
 
       <section class="signup-card">
 
-        <h1>Employer Sign Up</h1>
+        <h1>
+          Candidate Sign Up
+        </h1>
 
         <form>
 
-          <label>Company Name</label>
+
+
+          <label>
+            Name
+          </label>
 
           <div class="signup-input">
-            <span>⌂</span>
+
+            <span>♙</span>
 
             <input
-              id="companyNameInput"
+              id="nameInput"
               type="text"
-              placeholder="e.g. Acme Corp"
+              placeholder="Firstname + Lastname"
             >
+
           </div>
 
-          <label>Work Email</label>
+
+
+          <label>
+            Work Email
+          </label>
 
           <div class="signup-input">
+
             <span>✉</span>
 
             <input
@@ -56,12 +74,18 @@
               type="email"
               placeholder="name@company.com"
             >
+
           </div>
 
-          <label>Password</label>
+
+
+          <label>
+            Password
+          </label>
 
           <div class="signup-input">
-            <span>◧</span>
+
+            <span>▣</span>
 
             <input
               id="passwordInput"
@@ -69,28 +93,37 @@
               maxlength="8"
               placeholder="Min. 8 characters"
             >
+
           </div>
+
+
 
           <button
             type="button"
-            onclick="registerEmployer()"
+            onclick="registerCandidate()"
           >
             Sign Up
           </button>
 
+
+
           <p class="login-link">
+
             Already have an account?
 
-            <a href="SignIn.html">
+            <a href="login.html">
               Log In
             </a>
+
           </p>
 
+
+
           <a
-            href="candidate-signup.html"
+            href="employer-register.html"
             class="switch-link"
           >
-            Register as Candidate →
+            Register as Employer →
           </a>
 
         </form>
@@ -102,17 +135,31 @@
     <footer class="signup-footer">
 
       <div>
-        <strong>Job Radar</strong>
+
+        <strong>
+          Job Radar
+        </strong>
 
         <p>
           © 2024 Job Radar. All rights reserved.
         </p>
+
       </div>
 
       <div class="signup-footer-links">
-        <a href="#">Privacy Policy</a>
-        <a href="#">Terms of Service</a>
-        <a href="#">About Us</a>
+
+        <a href="#">
+          Privacy Policy
+        </a>
+
+        <a href="#">
+          Terms of Service
+        </a>
+
+        <a href="#">
+          About Us
+        </a>
+
       </div>
 
     </footer>
@@ -121,24 +168,43 @@
 
   <script src="api.js"></script>
   <script>
-    function registerEmployer() {
-      const companyName =
-        document.getElementById("companyNameInput").value.trim();
+
+    function registerCandidate() {
+
+      const name =
+        document.getElementById("nameInput")
+        .value.trim();
 
       const email =
-        document.getElementById("emailInput").value.trim();
+        document.getElementById("emailInput")
+        .value.trim();
 
       const password =
-        document.getElementById("passwordInput").value.trim();
+        document.getElementById("passwordInput")
+        .value.trim();
 
-      if (!companyName || !email || !password) {
-        alert("Please complete all fields.");
+      if (
+        !name ||
+        !email ||
+        !password
+      ) {
+
+        alert(
+          "Please complete all fields."
+        );
+
         return;
+
       }
 
       if (password.length < 8) {
-        alert("Password must be 8 characters.");
+
+        alert(
+          "Password must be 8 characters."
+        );
+
         return;
+
       }
 
       apiRequest("/register", {
@@ -146,40 +212,53 @@
         body: {
           email: email,
           password: password,
-          role: "employer",
-          company_name: companyName,
+          role: "candidate",
+          full_name: name,
           contact_info: email
         }
       })
 
       .then(data => {
-        if (data.status === "success") {
-          const employerProfile = {
-            name: "",
-            companyName: companyName,
-            location: "",
-            email: email,
-            isVip: false
-          };
+
+        if (
+          data.status === "success"
+        ) {
 
           localStorage.setItem(
-            "employerProfile",
-            JSON.stringify(employerProfile)
+            "userName",
+            name
+          );
+          clearLoginState();
+          window.location.href = "login.html";
+
+        }
+
+        else {
+
+          alert(
+            data.message ||
+            "Registration failed."
           );
 
-          alert("Registration successful. Please log in.");
-
-          window.location.replace("SignIn.html");
-        } else {
-          alert(data.message || "Registration failed.");
         }
+
       })
 
       .catch(error => {
-        console.error("Register error:", error);
-        alert("Cannot connect to backend. Please make sure Flask is running.");
+
+        console.error(
+          "Register error:",
+          error
+        );
+
+        alert(
+          "Cannot connect to backend."
+        );
+
       });
+
     }
+
   </script>
 
 </body>

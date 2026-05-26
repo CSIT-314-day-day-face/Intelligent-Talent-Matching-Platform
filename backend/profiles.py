@@ -1,4 +1,4 @@
-from backend.db_utils import get_db_connection, row_to_dict
+from backend.database_connection import get_db_connection, row_to_dict
 
 def _skills_to_text(skills):
     if isinstance(skills, list):

@@ -1,4 +1,4 @@
-from backend.db_utils import get_db_connection, row_to_dict, rows_to_dicts
+from backend.database_connection import get_db_connection, row_to_dict, rows_to_dicts
 
 JOB_SELECT = """
     SELECT

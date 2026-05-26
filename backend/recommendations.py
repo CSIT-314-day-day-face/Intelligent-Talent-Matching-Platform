@@ -1,5 +1,5 @@
 from thefuzz import fuzz
-from backend.db_utils import get_db_connection
+from backend.database_connection import get_db_connection
 
 def _skills_to_set(skills):
     if not skills:

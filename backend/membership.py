@@ -1,4 +1,4 @@
-from backend.db_utils import get_db_connection
+from backend.database_connection import get_db_connection
 
 def check_membership_status(user_id, role):
     conn = get_db_connection()

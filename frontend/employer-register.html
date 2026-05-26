@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Candidate Sign Up</title>
+  <title>Employer Sign Up</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,18 +16,13 @@
   >
 
   <link rel="stylesheet" href="style.css">
-
 </head>
 
 <body>
 
   <div class="signup-page">
 
-    <a
-      href="index.html"
-      class="signup-logo"
-      onclick="goHome(event)"
-    >
+    <a href="index.html" class="signup-logo" onclick="goHome(event)">
       Job Radar
     </a>
 
@@ -35,38 +30,25 @@
 
       <section class="signup-card">
 
-        <h1>
-          Candidate Sign Up
-        </h1>
+        <h1>Employer Sign Up</h1>
 
         <form>
 
-          <!-- NAME -->
-
-          <label>
-            Name
-          </label>
+          <label>Company Name</label>
 
           <div class="signup-input">
-
-            <span>♙</span>
+            <span>⌂</span>
 
             <input
-              id="nameInput"
+              id="companyNameInput"
               type="text"
-              placeholder="Firstname + Lastname"
+              placeholder="e.g. Acme Corp"
             >
-
           </div>
 
-          <!-- EMAIL -->
-
-          <label>
-            Work Email
-          </label>
+          <label>Work Email</label>
 
           <div class="signup-input">
-
             <span>✉</span>
 
             <input
@@ -74,18 +56,12 @@
               type="email"
               placeholder="name@company.com"
             >
-
           </div>
 
-          <!-- PASSWORD -->
-
-          <label>
-            Password
-          </label>
+          <label>Password</label>
 
           <div class="signup-input">
-
-            <span>▣</span>
+            <span>◧</span>
 
             <input
               id="passwordInput"
@@ -93,37 +69,28 @@
               maxlength="8"
               placeholder="Min. 8 characters"
             >
-
           </div>
-
-          <!-- BUTTON -->
 
           <button
             type="button"
-            onclick="registerCandidate()"
+            onclick="registerEmployer()"
           >
             Sign Up
           </button>
 
-          <!-- LOGIN -->
-
           <p class="login-link">
-
             Already have an account?
 
-            <a href="SignIn.html">
+            <a href="login.html">
               Log In
             </a>
-
           </p>
 
-          <!-- SWITCH -->
-
           <a
-            href="employer-signup.html"
+            href="candidate-register.html"
             class="switch-link"
           >
-            Register as Employer →
+            Register as Candidate →
           </a>
 
         </form>
@@ -135,31 +102,17 @@
     <footer class="signup-footer">
 
       <div>
-
-        <strong>
-          Job Radar
-        </strong>
+        <strong>Job Radar</strong>
 
         <p>
           © 2024 Job Radar. All rights reserved.
         </p>
-
       </div>
 
       <div class="signup-footer-links">
-
-        <a href="#">
-          Privacy Policy
-        </a>
-
-        <a href="#">
-          Terms of Service
-        </a>
-
-        <a href="#">
-          About Us
-        </a>
-
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">About Us</a>
       </div>
 
     </footer>
@@ -168,43 +121,24 @@
 
   <script src="api.js"></script>
   <script>
-
-    function registerCandidate() {
-
-      const name =
-        document.getElementById("nameInput")
-        .value.trim();
+    function registerEmployer() {
+      const companyName =
+        document.getElementById("companyNameInput").value.trim();
 
       const email =
-        document.getElementById("emailInput")
-        .value.trim();
+        document.getElementById("emailInput").value.trim();
 
       const password =
-        document.getElementById("passwordInput")
-        .value.trim();
+        document.getElementById("passwordInput").value.trim();
 
-      if (
-        !name ||
-        !email ||
-        !password
-      ) {
-
-        alert(
-          "Please complete all fields."
-        );
-
+      if (!companyName || !email || !password) {
+        alert("Please complete all fields.");
         return;
-
       }
 
       if (password.length < 8) {
-
-        alert(
-          "Password must be 8 characters."
-        );
-
+        alert("Password must be 8 characters.");
         return;
-
       }
 
       apiRequest("/register", {
@@ -212,57 +146,39 @@
         body: {
           email: email,
           password: password,
-          role: "candidate",
-          full_name: name,
+          role: "employer",
+          company_name: companyName,
           contact_info: email
         }
       })
 
       .then(data => {
-
-        if (
-          data.status === "success"
-        ) {
+        if (data.status === "success") {
+          const employerProfile = {
+            name: "",
+            companyName: companyName,
+            location: "",
+            email: email,
+            isVip: false
+          };
 
           localStorage.setItem(
-            "userName",
-            name
+            "employerProfile",
+            JSON.stringify(employerProfile)
           );
 
-          alert(
-            "Registration successful."
-          );
-
-          window.location.replace("SignIn.html");
-
+          clearLoginState();
+          window.location.href = "login.html";
+        } else {
+          alert(data.message || "Registration failed.");
         }
-
-        else {
-
-          alert(
-            data.message ||
-            "Registration failed."
-          );
-
-        }
-
       })
 
       .catch(error => {
-
-        console.error(
-          "Register error:",
-          error
-        );
-
-        alert(
-          "Cannot connect to backend."
-        );
-
+        console.error("Register error:", error);
+        alert("Cannot connect to backend. Please make sure Flask is running.");
       });
-
     }
-
   </script>
 
 </body>

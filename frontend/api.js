@@ -65,13 +65,13 @@ function requireLogin(expectedRole) {
 
   if (!auth.email || !auth.role || !auth.authToken) {
     alert("Please log in first.");
-    window.location.replace("SignIn.html");
+    window.location.replace("login.html");
     return null;
   }
 
   if (expectedRole && auth.role !== expectedRole) {
     alert("Please log in with the correct role.");
-    window.location.replace("SignIn.html");
+    window.location.replace("login.html");
     return null;
   }
 
@@ -204,8 +204,8 @@ function getLoggedInHomePage() {
   }
 
   return auth.role === "employer"
-    ? "employer-index.html"
-    : "jobseeker-index.html";
+    ? "employer-home.html"
+    : "candidate-home.html";
 }
 
 function goHome(event) {

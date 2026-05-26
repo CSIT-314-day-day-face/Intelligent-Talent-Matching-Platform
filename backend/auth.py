@@ -1,5 +1,5 @@
 from werkzeug.security import generate_password_hash, check_password_hash
-from backend.db_utils import get_db_connection
+from backend.database_connection import get_db_connection
 
 VALID_ROLES = {"candidate", "employer"}
 
@@ -69,8 +69,8 @@ def verify_login(email, password, role):
         table = _table_for_role(role)
         user = conn.execute(f"SELECT * FROM {table} WHERE email = ?", (email,)).fetchone()
         if user and check_password_hash(user['password'], password):
-            return dict(user) # Convert to standard dictionary
-        return None 
+            return dict(user)
+        return None
     except Exception as e:
         print(f"Login verification error: {e}")
         return None

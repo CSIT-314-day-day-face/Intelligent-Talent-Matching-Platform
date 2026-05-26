@@ -3,16 +3,15 @@ from flask_cors import CORS
 from itsdangerous import BadSignature, SignatureExpired, URLSafeTimedSerializer
 import os
 
-# Import business logic modules
 from backend.auth import verify_login, register_user
-from backend.search_logic import fuzzy_search_jobs, fuzzy_search_candidates
-from backend.profile import (
+from backend.search import fuzzy_search_jobs, fuzzy_search_candidates
+from backend.profiles import (
     get_candidate_profile,
     get_employer_profile,
     update_candidate_profile,
     update_employer_profile,
 )
-from backend.job_management import (
+from backend.jobs import (
     create_job,
     delete_job_for_employer,
     get_all_jobs,
@@ -20,7 +19,7 @@ from backend.job_management import (
     get_job,
     update_job,
 )
-from backend.matching_engine import recommend_jobs, recommend_candidates
+from backend.recommendations import recommend_jobs, recommend_candidates
 from backend.membership import upgrade_membership
 from backend.applications import (
     apply_for_job,
@@ -28,14 +27,12 @@ from backend.applications import (
     get_recent_applications_for_candidate,
     get_recent_applicants_for_employer,
 )
-from backend.db_utils import get_db_connection
+from backend.database_connection import get_db_connection
 
 app = Flask(__name__)
-# Secret key for session management
 app.secret_key = os.environ.get('FLASK_SECRET_KEY', 'csit314_secret_key_2026')
 app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
 app.config['SESSION_COOKIE_SECURE'] = False
-# Enable CORS for frontend integration
 CORS(
     app,
     supports_credentials=True,
@@ -202,7 +199,6 @@ def _validate_job_payload(data):
         }), 400
     return payload, None, None
 
-# Authentication Routes
 @app.route('/api/register', methods=['POST'])
 def register():
     data = request.get_json(silent=True) or {}
@@ -239,15 +235,14 @@ def login():
 
     user = verify_login(data['email'], data['password'], data['role'])
     if user:
-        # Session storage for authentication persistence
         session['user_id'] = user['id']
         session['role'] = data['role']
         session['membership'] = user['membership_status']
         session['email'] = user['email']
         auth_token = _make_auth_token(user['id'], data['role'], user['email'])
         return jsonify({
-            "status": "success", 
-            "role": data['role'], 
+            "status": "success",
+            "role": data['role'],
             "membership": user['membership_status'],
             "email": user['email'],
             "display_name": _display_name_for_user(user, data['role']),
@@ -275,7 +270,6 @@ def get_current_user():
         "email": session.get('email')
     })
 
-# Profile Routes
 @app.route('/api/profile', methods=['GET'])
 def get_profile():
     auth_error = _require_login()
@@ -305,7 +299,6 @@ def save_profile():
         return jsonify({"status": "success", "message": "Profile updated"})
     return jsonify({"status": "error", "message": "Profile update failed"}), 500
 
-# Search Routes (Supports keywords + filters + fuzzy matching)
 @app.route('/api/search', methods=['GET'])
 def search():
     query = request.args.get('q', '')
@@ -315,8 +308,7 @@ def search():
     salary = request.args.get('salary', None)
     education = request.args.get('education', None)
     skill = request.args.get('skill', None)
-    
-    # Older frontend used job_type for Remote/Hybrid/On-site, so keep it compatible.
+
     if job_type in ("Remote", "Hybrid", "On-site") and not work_mode:
         work_mode = job_type
         job_type = None
@@ -370,7 +362,6 @@ def get_candidate_detail(candidate_id):
         return jsonify(profile)
     return jsonify({"status": "error", "message": "Candidate not found"}), 404
 
-# Recommendation Routes
 @app.route('/api/recommendations/jobs', methods=['GET'])
 def recommended_jobs():
     auth_error = _require_login('candidate')
@@ -405,7 +396,6 @@ def recommended_candidates_for_employer():
     results = recommend_candidates(job_id, session.get('membership', 0))
     return jsonify({"results": results, "count": len(results), "job_id": job_id})
 
-# Job Details Route (Requirement Traceability)
 @app.route('/api/jobs', methods=['GET'])
 def list_jobs():
     limit = request.args.get('limit', type=int)
@@ -434,7 +424,6 @@ def apply_to_job(job_id):
         return jsonify({"status": "success", "message": message}), status_code
     return jsonify({"status": "error", "message": message}), 404 if message == "Job not found" else 500
 
-# Job Management Routes
 @app.route('/api/jobs', methods=['POST'])
 def post_job():
     auth_error = _require_login('employer')
@@ -446,11 +435,11 @@ def post_job():
         return validation_error, status_code
 
     success = create_job(
-        session['user_id'], 
-        data.get('title'), 
-        data.get('location'), 
-        data.get('description'), 
-        data.get('salary'), 
+        session['user_id'],
+        data.get('title'),
+        data.get('location'),
+        data.get('description'),
+        data.get('salary'),
         data.get('job_type', data.get('work_mode')),
         company_info=data.get('company_info', ''),
         required_education=data.get('required_education', ''),
@@ -523,29 +512,26 @@ def recent_employer_applicants():
     results = get_recent_applicants_for_employer(session['user_id'], limit)
     return jsonify({"results": results, "count": len(results)})
 
-# Profile Routes
 @app.route('/api/profile/update', methods=['POST'])
 def update_profile():
     auth_error = _require_login('candidate')
     if auth_error:
         return auth_error
-    
+
     data = request.json or {}
     success = update_candidate_profile(session['user_id'], **data)
-    
-    # Explicit status return to avoid tuple packaging error
+
     if success:
         return jsonify({"status": "success"})
     else:
         return jsonify({"status": "error", "message": "Database update failed"}), 500
 
-# Membership Routes
 @app.route('/api/membership/upgrade', methods=['POST'])
 def upgrade():
     _restore_session_from_token()
     if not session.get('user_id'):
         return jsonify({"status": "error", "message": "Not logged in"}), 401
-    
+
     if upgrade_membership(session['user_id'], session['role']):
         session['membership'] = 1
         auth_token = _make_auth_token(
@@ -562,5 +548,4 @@ def upgrade():
     return jsonify({"status": "error"}), 500
 
 if __name__ == '__main__':
-    # Run on port 5001 with debug mode enabled for development
     app.run(host='0.0.0.0', port=5001, debug=True)

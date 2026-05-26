@@ -41,7 +41,7 @@
 
   <div class="page">
 
-    <!-- NAVBAR -->
+
 
     <header class="navbar">
 
@@ -60,7 +60,7 @@
       <div class="nav-actions">
 
         <a
-          href="SignIn.html"
+          href="login.html"
           class="signup-btn"
         >
           Sign in
@@ -70,7 +70,7 @@
 
     </header>
 
-    <!-- HERO -->
+
 
     <section class="hero">
 
@@ -91,7 +91,7 @@
           and bring the most relevant roles directly to your dashboard.
         </p>
 
-        <!-- SEARCH -->
+
 
         <div class="search-box">
 
@@ -150,7 +150,7 @@
 
     </section>
 
-    <!-- RECOMMENDED -->
+
 
     <section class="recommended-section">
 
@@ -181,7 +181,7 @@
 
       </div>
 
-      <!-- LOCK -->
+
 
       <div class="lock-popup">
 
@@ -200,7 +200,7 @@
         </p>
 
         <button
-          onclick="window.location.href='SignIn.html'"
+          onclick="window.location.href='login.html'"
         >
           Sign In to Radar
         </button>
@@ -209,11 +209,11 @@
 
     </section>
 
-    <!-- FEATURES -->
+
 
     <section class="feature-section">
 
-      <!-- LEFT -->
+
 
       <div class="feature-card">
 
@@ -254,7 +254,7 @@
 
       </div>
 
-      <!-- RIGHT -->
+
 
       <div class="feature-card">
 
@@ -299,7 +299,7 @@
 
   </div>
 
-  <!-- SCRIPT -->
+
 
   <script src="api.js"></script>
   <script>
@@ -327,8 +327,8 @@
 
     function getDashboardPage() {
       return loginRole === "employer"
-        ? "employer-index.html"
-        : "jobseeker-index.html";
+        ? "employer-home.html"
+        : "candidate-home.html";
     }
 
     function getProfilePage() {
@@ -346,7 +346,7 @@
       if (!loginEmail || !loginRole) {
         navActions.innerHTML = `
           <a
-            href="SignIn.html"
+            href="login.html"
             class="signup-btn"
           >
             Sign in
@@ -383,7 +383,7 @@
     renderIndexAuth(auth);
     syncLoginState().then(renderIndexAuth);
 
-    /* PLACEHOLDER CHANGE */
+
 
     searchType.addEventListener("change", function () {
 
@@ -438,7 +438,7 @@
 
     });
 
-    /* SEARCH */
+
 
     function goSearch() {
 

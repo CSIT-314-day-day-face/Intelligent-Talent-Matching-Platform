@@ -10,7 +10,7 @@ pip install -r requirements.txt
 python setup_db.py
 
 4. Running the Backend:
-python -m backend.app
+python -m backend.api_server
 
 5. System Verification:
 python test/test_backend_flow.py
