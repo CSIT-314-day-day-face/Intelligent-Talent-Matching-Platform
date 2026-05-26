@@ -1,5 +1,6 @@
 from werkzeug.security import generate_password_hash, check_password_hash
 from backend.database_connection import get_db_connection
+import sqlite3
 
 VALID_ROLES = {"candidate", "employer"}
 
@@ -57,6 +58,8 @@ def register_user(email, password, role, **profile_data):
             )
         conn.commit()
         return True
+    except sqlite3.IntegrityError:
+        return False
     except Exception as e:
         print(f"Registration error: {e}")
         return False

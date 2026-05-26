@@ -148,10 +148,26 @@
 
         console.error("Login error:", error);
 
-        alert("Cannot connect to backend. Please make sure Flask is running.");
+        const errorMessage = error && error.message ? error.message : "";
+        const isConnectionError =
+          errorMessage.includes("Failed to fetch") ||
+          errorMessage.includes("NetworkError") ||
+          errorMessage.includes("Load failed");
+
+        alert(
+          isConnectionError
+            ? "Cannot connect to backend. Please make sure Flask is running."
+            : errorMessage || "Login failed."
+        );
 
       });
     }
+
+    bindEnterKey([
+      "#emailInput",
+      "#passwordInput",
+      "#roleInput"
+    ], loginUser);
   </script>
 
 </body>

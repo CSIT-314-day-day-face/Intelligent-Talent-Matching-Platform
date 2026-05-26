@@ -3795,6 +3795,16 @@ body {
   box-shadow: 0 16px 34px rgba(60, 20, 20, 0.06);
 }
 
+.home-filter-panel {
+  width: 100%;
+  margin-top: 14px;
+  background: white;
+  border: 1px solid var(--app-border);
+  border-radius: 18px;
+  padding: 18px;
+  box-shadow: 0 16px 34px rgba(60, 20, 20, 0.06);
+}
+
 .results-filter-heading {
   display: flex;
   justify-content: space-between;
@@ -3956,6 +3966,10 @@ body {
 
   .results-filter-grid {
     grid-template-columns: 1fr;
+  }
+
+  .home-filter-panel {
+    padding: 14px;
   }
 
   .employer-search-box select,

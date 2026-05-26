@@ -166,14 +166,14 @@
         { id: "location", label: "Location", type: "text", placeholder: "Sydney" },
         { id: "work_mode", label: "Work Mode", type: "select", options: ["", "Remote", "On-site", "Hybrid"] },
         { id: "job_type", label: "Job Type", type: "select", options: ["", "Full-time", "Part-time", "Contract", "Internship"] },
-        { id: "salary", label: "Salary", type: "select", options: ["", "$10k - $20k", "$20k - $30k", "$30k - $40k", "$40k - $50k", "$50k - $60k", "$60k - $70k", "$70k - $80k", "$80k - $90k", "$90k - $100k", "$100k - $110k", "$65k - $80k", "$70k - $85k", "$75k - $90k", "$90k - $110k", "$100k - $125k", "$110k - $135k", "$125k - $150k", "$135k - $160k", "$145k - $170k"] },
-        { id: "education", label: "Education", type: "select", options: ["", "High School", "Certificate", "Diploma", "Bachelor", "Master", "PhD", "Equivalent experience"] },
+        { id: "salary", label: "Minimum Salary", type: "select", options: ["", "$10k+", "$20k+", "$30k+", "$40k+", "$50k+", "$60k+", "$70k+", "$80k+", "$90k+", "$100k+", "$125k+", "$150k+"] },
+        { id: "education", label: "Max Education Requirement", type: "select", options: ["", "High School", "Certificate", "Diploma", "Bachelor", "Master", "PhD", "Equivalent experience"] },
         { id: "skill", label: "Skill", type: "text", placeholder: "Python" }
       ],
       candidates: [
         { id: "location", label: "Preferred Location", type: "text", placeholder: "Sydney" },
         { id: "work_mode", label: "Preferred Work Mode", type: "select", options: ["", "Remote", "On-site", "Hybrid"] },
-        { id: "education", label: "Education", type: "select", options: ["", "High School", "Certificate", "Diploma", "Bachelor", "Master", "PhD"] },
+        { id: "education", label: "Max Education", type: "select", options: ["", "High School", "Certificate", "Diploma", "Bachelor", "Master", "PhD"] },
         { id: "skill", label: "Skill", type: "text", placeholder: "Python" },
         { id: "experience", label: "Experience", type: "select", options: ["", "0-3 Years", "3-5 Years", "5-7 Years", "7-9 Years", "9-11 Years", "11+ Years"] }
       ]
@@ -321,12 +321,22 @@
     }
 
     renderFilters();
+    bindEnterKey([
+      "#searchTarget",
+      "#searchInput",
+      "#resultsFilterGrid input",
+      "#resultsFilterGrid select"
+    ], searchAgain);
     runSearch();
 
     searchTarget.addEventListener("change", function () {
       target = this.value;
       searchValues = new URLSearchParams();
       renderFilters();
+      bindEnterKey([
+        "#resultsFilterGrid input",
+        "#resultsFilterGrid select"
+      ], searchAgain);
     });
 
     function renderPage(page) {

@@ -179,6 +179,12 @@
         alert("Cannot connect to backend. Please make sure Flask is running.");
       });
     }
+
+    bindEnterKey([
+      "#companyNameInput",
+      "#emailInput",
+      "#passwordInput"
+    ], registerEmployer);
   </script>
 
 </body>

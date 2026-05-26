@@ -128,6 +128,61 @@
 
         </div>
 
+        <div class="home-filter-panel">
+          <div class="results-filter-heading">
+            <strong>Candidate Filters</strong>
+            <span>Combine keyword and filters before searching.</span>
+          </div>
+
+          <div class="results-filter-grid">
+            <label class="results-filter-field">
+              <span>Preferred Location</span>
+              <input id="candidateLocationFilter" type="text" placeholder="Sydney">
+            </label>
+
+            <label class="results-filter-field">
+              <span>Preferred Work Mode</span>
+              <select id="candidateModeFilter">
+                <option value="">Any</option>
+                <option value="Remote">Remote</option>
+                <option value="On-site">On-site</option>
+                <option value="Hybrid">Hybrid</option>
+              </select>
+            </label>
+
+            <label class="results-filter-field">
+              <span>Max Education</span>
+              <select id="candidateEducationFilter">
+                <option value="">Any</option>
+                <option value="High School">High School</option>
+                <option value="Certificate">Certificate</option>
+                <option value="Diploma">Diploma</option>
+                <option value="Bachelor">Bachelor</option>
+                <option value="Master">Master</option>
+                <option value="PhD">PhD</option>
+              </select>
+            </label>
+
+            <label class="results-filter-field">
+              <span>Skill</span>
+              <input id="candidateSkillFilter" type="text" placeholder="Python">
+            </label>
+
+            <label class="results-filter-field">
+              <span>Experience</span>
+              <select id="candidateExperienceFilter">
+                <option value="">Any</option>
+                <option value="0-3 Years">0-3 Years</option>
+                <option value="3-5 Years">3-5 Years</option>
+                <option value="5-7 Years">5-7 Years</option>
+                <option value="7-9 Years">7-9 Years</option>
+                <option value="9-11 Years">9-11 Years</option>
+                <option value="11+ Years">11+ Years</option>
+              </select>
+            </label>
+          </div>
+        </div>
+
       </section>
 
 
@@ -534,18 +589,27 @@
 
 
     function goEmployerSearch() {
+      const params = new URLSearchParams({ target: "candidates" });
+      const quickSearchMap = {
+        keyword: "q",
+        location: "location",
+        workmode: "work_mode",
+        skill: "skill",
+        education: "education",
+        experience: "experience"
+      };
+      const keyword = employerSearchInput.value.trim();
+      if (keyword) {
+        params.set(quickSearchMap[employerSearchType.value] || "q", keyword);
+      }
 
-      const type =
-        employerSearchType.value;
+      appendFieldParam(params, "candidateLocationFilter", "location");
+      appendFieldParam(params, "candidateModeFilter", "work_mode");
+      appendFieldParam(params, "candidateEducationFilter", "education");
+      appendFieldParam(params, "candidateSkillFilter", "skill");
+      appendFieldParam(params, "candidateExperienceFilter", "experience");
 
-      const keyword =
-        employerSearchInput.value.trim();
-
-      window.location.href =
-        "search-results.html?target=candidates&type="
-        + encodeURIComponent(type)
-        + "&keyword="
-        + encodeURIComponent(keyword);
+      window.location.href = "search-results.html?" + params.toString();
 
     }
 
@@ -643,6 +707,16 @@
         return loadCandidateRecommendations();
       })
       .then(applyMembershipLimit);
+
+    bindEnterKey([
+      "#employerSearchType",
+      "#employerSearchInput",
+      "#candidateLocationFilter",
+      "#candidateModeFilter",
+      "#candidateEducationFilter",
+      "#candidateSkillFilter",
+      "#candidateExperienceFilter"
+    ], goEmployerSearch);
 
   </script>
 

@@ -298,6 +298,15 @@
         alert(error.message || "Job posting failed. Please log in as an employer.");
       }
     }
+
+    bindEnterKey([
+      "#jobTitleInput",
+      "#jobLocationInput",
+      "#jobModeInput",
+      "#jobSalaryInput",
+      "#jobTypeInput",
+      "#jobEducationInput"
+    ], saveJob);
   </script>
 
 </body>

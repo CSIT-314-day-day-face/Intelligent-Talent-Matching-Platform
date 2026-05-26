@@ -52,7 +52,7 @@
             <option value="keyword">Keyword</option>
             <option value="location">Address</option>
             <option value="workmode">Work Mode</option>
-            <option value="salary">Salary</option>
+            <option value="salary">Minimum Salary</option>
             <option value="skill">Skill</option>
             <option value="education">Education</option>
             <option value="job_type">Job Type</option>
@@ -69,6 +69,79 @@
             Search
           </button>
 
+        </div>
+
+        <div class="home-filter-panel">
+          <div class="results-filter-heading">
+            <strong>Job Filters</strong>
+            <span>Combine keyword and filters before searching.</span>
+          </div>
+
+          <div class="results-filter-grid">
+            <label class="results-filter-field">
+              <span>Location</span>
+              <input id="jobLocationFilter" type="text" placeholder="Sydney">
+            </label>
+
+            <label class="results-filter-field">
+              <span>Work Mode</span>
+              <select id="jobModeFilter">
+                <option value="">Any</option>
+                <option value="Remote">Remote</option>
+                <option value="On-site">On-site</option>
+                <option value="Hybrid">Hybrid</option>
+              </select>
+            </label>
+
+            <label class="results-filter-field">
+              <span>Job Type</span>
+              <select id="jobTypeFilter">
+                <option value="">Any</option>
+                <option value="Full-time">Full-time</option>
+                <option value="Part-time">Part-time</option>
+                <option value="Contract">Contract</option>
+                <option value="Internship">Internship</option>
+              </select>
+            </label>
+
+            <label class="results-filter-field">
+              <span>Minimum Salary</span>
+              <select id="jobSalaryFilter">
+                <option value="">Any</option>
+                <option value="$10k+">$10k+</option>
+                <option value="$20k+">$20k+</option>
+                <option value="$30k+">$30k+</option>
+                <option value="$40k+">$40k+</option>
+                <option value="$50k+">$50k+</option>
+                <option value="$60k+">$60k+</option>
+                <option value="$70k+">$70k+</option>
+                <option value="$80k+">$80k+</option>
+                <option value="$90k+">$90k+</option>
+                <option value="$100k+">$100k+</option>
+                <option value="$125k+">$125k+</option>
+                <option value="$150k+">$150k+</option>
+              </select>
+            </label>
+
+            <label class="results-filter-field">
+              <span>Max Education Requirement</span>
+              <select id="jobEducationFilter">
+                <option value="">Any</option>
+                <option value="High School">High School</option>
+                <option value="Certificate">Certificate</option>
+                <option value="Diploma">Diploma</option>
+                <option value="Bachelor">Bachelor</option>
+                <option value="Master">Master</option>
+                <option value="PhD">PhD</option>
+                <option value="Equivalent experience">Equivalent experience</option>
+              </select>
+            </label>
+
+            <label class="results-filter-field">
+              <span>Skill</span>
+              <input id="jobSkillFilter" type="text" placeholder="Python">
+            </label>
+          </div>
         </div>
 
       </section>
@@ -256,7 +329,7 @@
       }
 
       if (this.value === "salary") {
-        searchInput.placeholder = "Enter your expected salary";
+        searchInput.placeholder = "Enter minimum salary, e.g. 90k";
       }
 
       if (this.value === "skill") {
@@ -273,14 +346,29 @@
     });
 
     function goSearch() {
-      const type = searchType.value;
+      const params = new URLSearchParams({ target: "jobs" });
+      const quickSearchMap = {
+        keyword: "q",
+        location: "location",
+        workmode: "work_mode",
+        salary: "salary",
+        skill: "skill",
+        education: "education",
+        job_type: "job_type"
+      };
       const keyword = searchInput.value.trim();
+      if (keyword) {
+        params.set(quickSearchMap[searchType.value] || "q", keyword);
+      }
 
-      window.location.href =
-        "search-results.html?type=" +
-        encodeURIComponent(type) +
-        "&keyword=" +
-        encodeURIComponent(keyword);
+      appendFieldParam(params, "jobLocationFilter", "location");
+      appendFieldParam(params, "jobModeFilter", "work_mode");
+      appendFieldParam(params, "jobTypeFilter", "job_type");
+      appendFieldParam(params, "jobSalaryFilter", "salary");
+      appendFieldParam(params, "jobEducationFilter", "education");
+      appendFieldParam(params, "jobSkillFilter", "skill");
+
+      window.location.href = "search-results.html?" + params.toString();
     }
 
     function renderRecommendedJobs(jobs) {
@@ -351,6 +439,17 @@
         return loadRecommendedJobs();
       })
       .then(applyMembershipLimit);
+
+    bindEnterKey([
+      "#searchType",
+      "#searchInput",
+      "#jobLocationFilter",
+      "#jobModeFilter",
+      "#jobTypeFilter",
+      "#jobSalaryFilter",
+      "#jobEducationFilter",
+      "#jobSkillFilter"
+    ], goSearch);
   </script>
 
 </body>

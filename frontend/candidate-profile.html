@@ -665,6 +665,15 @@
 
     loadCandidateProfile();
     loadRecentApplications();
+
+    bindEnterKey([
+      "#nameInput",
+      "#ageInput",
+      "#locationInput",
+      "#educationInput",
+      "#majorInput",
+      "#emailInput"
+    ], saveCandidateProfile);
   </script>
 
 </body>

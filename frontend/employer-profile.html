@@ -979,6 +979,24 @@
         }
       };
 
+      bindEnterKey([
+        "#ownerNameInput",
+        "#companyNameInput",
+        "#companyLocationInput",
+        "#companyEmailInput"
+      ], () => window.saveEmployerProfile());
+
+      bindEnterKey([
+        "#editJobTitleInput",
+        "#editJobLocationInput",
+        "#editJobModeInput",
+        "#editJobTypeInput",
+        "#editJobEducationInput",
+        "#editJobExperienceInput",
+        "#editJobSalaryInput",
+        "#editJobSkillsInput"
+      ], () => window.saveEditedJob());
+
       window.loadEmployerProfile();
       loadPublishedJobs();
       loadRecentApplicants();

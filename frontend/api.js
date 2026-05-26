@@ -215,3 +215,43 @@ function goHome(event) {
 
   window.location.href = getLoggedInHomePage();
 }
+
+function bindEnterKey(targets, action) {
+  const targetList = Array.isArray(targets) ? targets : [targets];
+
+  targetList.forEach(target => {
+    const elements =
+      typeof target === "string"
+        ? document.querySelectorAll(target)
+        : [target];
+
+    elements.forEach(element => {
+      if (!element || element.dataset.enterBound === "1") {
+        return;
+      }
+
+      element.dataset.enterBound = "1";
+      element.addEventListener("keydown", event => {
+        if (
+          event.key !== "Enter" ||
+          event.shiftKey ||
+          event.isComposing ||
+          event.target.tagName === "TEXTAREA"
+        ) {
+          return;
+        }
+
+        event.preventDefault();
+        action(event);
+      });
+    });
+  });
+}
+
+function appendFieldParam(params, fieldId, paramName) {
+  const field = document.getElementById(fieldId);
+  const value = field ? field.value.trim() : "";
+  if (value) {
+    params.set(paramName, value);
+  }
+}

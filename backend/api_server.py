@@ -248,7 +248,7 @@ def login():
             "display_name": _display_name_for_user(user, data['role']),
             "auth_token": auth_token
         })
-    return jsonify({"status": "error", "message": "Invalid credentials"}), 401
+    return jsonify({"status": "error", "message": "Invalid email or password."}), 401
 
 @app.route('/api/logout', methods=['POST'])
 def logout():
@@ -469,7 +469,23 @@ def edit_job(job_id):
     if validation_error:
         return validation_error, status_code
 
-    success = update_job(job_id, session['user_id'], **data)
+    editable_data = {
+        key: data.get(key)
+        for key in [
+            "title",
+            "company_info",
+            "description",
+            "required_education",
+            "required_skills",
+            "years_experience",
+            "work_mode",
+            "location",
+            "salary",
+            "salary_range",
+            "job_type",
+        ]
+    }
+    success = update_job(job_id, session['user_id'], **editable_data)
     if success:
         return jsonify({"status": "success", "message": "Job updated"})
     return jsonify({"status": "error", "message": "Job not found or unauthorized"}), 404
