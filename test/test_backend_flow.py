@@ -11,7 +11,7 @@ from backend.api_server import app
 from backend.database_connection import get_db_connection
 
 
-PASSWORD = "00000000"
+PASSWORD = "000000000"
 RUN_ID = int(time.time())
 CANDIDATE_EMAIL = f"full_candidate_{RUN_ID}@uow.edu.au"
 SECOND_CANDIDATE_EMAIL = f"full_candidate_two_{RUN_ID}@uow.edu.au"
@@ -271,6 +271,24 @@ def run_test():
         register_employer(public_client, SECOND_EMPLOYER_EMAIL, "Second Employer Test Company")
         passed.append("Candidate and employer registration")
 
+        short_password = request_json(
+            public_client,
+            "post",
+            "/api/register",
+            400,
+            json={
+                "email": f"short_password_{RUN_ID}@example.com",
+                "password": "1234567",
+                "role": "candidate",
+            },
+        )[1]
+        expect(
+            short_password.get("message") == "Password must be at least 8 characters.",
+            "short password should be rejected",
+            short_password,
+        )
+        passed.append("Minimum password length validation")
+
         duplicate = request_json(
             public_client,
             "post",
@@ -483,8 +501,14 @@ def run_test():
 
         frontend_candidate_register = (ROOT / "frontend" / "candidate-register.html").read_text(encoding="utf-8")
         frontend_employer_register = (ROOT / "frontend" / "employer-register.html").read_text(encoding="utf-8")
+        frontend_login = (ROOT / "frontend" / "login.html").read_text(encoding="utf-8")
+        frontend_job_detail = (ROOT / "frontend" / "job-detail.html").read_text(encoding="utf-8")
         expect('window.location.href = "login.html"' in frontend_candidate_register, "candidate register page does not redirect to login")
         expect('window.location.href = "login.html"' in frontend_employer_register, "employer register page does not redirect to login")
+        expect('maxlength="8"' not in frontend_candidate_register + frontend_employer_register + frontend_login, "password fields should not cap input at 8 characters")
+        expect('minlength="8"' in frontend_candidate_register and 'minlength="8"' in frontend_employer_register and 'minlength="8"' in frontend_login, "password fields should require at least 8 characters")
+        expect('requireLogin("candidate")' in frontend_job_detail, "job apply should require candidate login")
+        expect('${alreadyApplied || isEmployer ? "disabled" : ""}' in frontend_job_detail, "guest job apply button should remain clickable")
         passed.append("Frontend sign up redirects to login")
 
         print("Full functionality test passed")

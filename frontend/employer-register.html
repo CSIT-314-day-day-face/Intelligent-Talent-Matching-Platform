@@ -66,7 +66,7 @@
             <input
               id="passwordInput"
               type="password"
-              maxlength="8"
+              minlength="8"
               placeholder="Min. 8 characters"
             >
           </div>
@@ -105,7 +105,7 @@
         <strong>Job Radar</strong>
 
         <p>
-          © 2024 Job Radar. All rights reserved.
+          © 2026 Job Radar. All rights reserved.
         </p>
       </div>
 
@@ -137,7 +137,7 @@
       }
 
       if (password.length < 8) {
-        alert("Password must be 8 characters.");
+        alert("Password must be at least 8 characters.");
         return;
       }
 

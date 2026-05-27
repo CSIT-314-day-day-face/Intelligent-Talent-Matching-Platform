@@ -206,6 +206,8 @@ def register():
         return jsonify({"status": "error", "message": "Invalid role"}), 400
     if not data.get('email') or not data.get('password'):
         return jsonify({"status": "error", "message": "Email and password are required"}), 400
+    if len(str(data.get('password'))) < 8:
+        return jsonify({"status": "error", "message": "Password must be at least 8 characters."}), 400
 
     success = register_user(
         data['email'],

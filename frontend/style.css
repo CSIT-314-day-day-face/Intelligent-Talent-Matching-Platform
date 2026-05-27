@@ -119,10 +119,11 @@ body {
 
 .hero {
   width: 100%;
-  height: 620px;
+  min-height: 760px;
 
   padding-left: 72px;
   padding-top: 70px;
+  padding-bottom: 72px;
 
   background:
     linear-gradient(

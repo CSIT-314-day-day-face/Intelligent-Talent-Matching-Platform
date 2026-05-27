@@ -57,7 +57,7 @@
         document.getElementById("jobTitle").textContent = job.title || "Job Detail";
         document.getElementById("jobCompany").textContent = job.company_name || job.company_info || "";
         const alreadyApplied = Boolean(job.application);
-        const canApply = auth.role === "candidate" && auth.authToken;
+        const isEmployer = auth.role === "employer" && auth.authToken;
 
         container.innerHTML = `
           <article class="result-card">
@@ -94,7 +94,7 @@
                 class="search-btn"
                 id="applyButton"
                 onclick="applyForCurrentJob()"
-                ${!canApply || alreadyApplied ? "disabled" : ""}
+                ${alreadyApplied || isEmployer ? "disabled" : ""}
               >
                 ${alreadyApplied ? "Already Applied" : "Apply"}
               </button>
