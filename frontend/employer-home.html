@@ -88,38 +88,10 @@
 
         <div class="employer-search-box">
 
-          <select id="employerSearchType">
-
-            <option value="keyword">
-              Keyword
-            </option>
-
-            <option value="location">
-              Location
-            </option>
-
-            <option value="workmode">
-              Work Mode
-            </option>
-
-            <option value="skill">
-              Skill
-            </option>
-
-            <option value="education">
-              Education
-            </option>
-
-            <option value="experience">
-              Experience
-            </option>
-
-          </select>
-
           <input
             id="employerSearchInput"
             type="text"
-            placeholder="Search candidate skills or experience"
+            placeholder="Search candidates by any keyword"
           >
 
           <button onclick="goEmployerSearch()">
@@ -494,9 +466,6 @@
     const employerNavName =
       document.getElementById("employerNavName");
 
-    const employerSearchType =
-      document.getElementById("employerSearchType");
-
     const employerSearchInput =
       document.getElementById("employerSearchInput");
 
@@ -540,67 +509,11 @@
 
 
 
-    employerSearchType.addEventListener("change", function () {
-
-      if (this.value === "keyword") {
-
-        employerSearchInput.placeholder =
-          "Search candidate skills or experience";
-
-      }
-
-      if (this.value === "location") {
-
-        employerSearchInput.placeholder =
-          "Enter candidate preferred location";
-
-      }
-
-      if (this.value === "workmode") {
-
-        employerSearchInput.placeholder =
-          "Remote, Hybrid, or On-site";
-
-      }
-
-      if (this.value === "skill") {
-
-        employerSearchInput.placeholder =
-          "Enter candidate skill";
-
-      }
-
-      if (this.value === "education") {
-
-        employerSearchInput.placeholder =
-          "Bachelor, Master, or Diploma";
-
-      }
-
-      if (this.value === "experience") {
-
-        employerSearchInput.placeholder =
-          "0-3 Years, 3-5 Years, or 5-7 Years";
-
-      }
-
-    });
-
-
-
     function goEmployerSearch() {
       const params = new URLSearchParams({ target: "candidates" });
-      const quickSearchMap = {
-        keyword: "q",
-        location: "location",
-        workmode: "work_mode",
-        skill: "skill",
-        education: "education",
-        experience: "experience"
-      };
       const keyword = employerSearchInput.value.trim();
       if (keyword) {
-        params.set(quickSearchMap[employerSearchType.value] || "q", keyword);
+        params.set("q", keyword);
       }
 
       appendFieldParam(params, "candidateLocationFilter", "location");
@@ -709,7 +622,6 @@
       .then(applyMembershipLimit);
 
     bindEnterKey([
-      "#employerSearchType",
       "#employerSearchInput",
       "#candidateLocationFilter",
       "#candidateModeFilter",

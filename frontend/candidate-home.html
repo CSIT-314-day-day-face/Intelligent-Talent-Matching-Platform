@@ -48,21 +48,11 @@
 
         <div class="employer-hero-search">
 
-          <select class="search-select" id="searchType">
-            <option value="keyword">Keyword</option>
-            <option value="location">Location</option>
-            <option value="workmode">Work Mode</option>
-            <option value="salary">Minimum Salary</option>
-            <option value="skill">Skill</option>
-            <option value="education">Education</option>
-            <option value="job_type">Job Type</option>
-          </select>
-
           <input
             type="text"
             class="search-input"
             id="searchInput"
-            placeholder="Search jobs by title or skill"
+            placeholder="Search jobs by any keyword"
           >
 
           <button class="search-btn" onclick="goSearch()">
@@ -284,7 +274,6 @@
     const membershipText = document.getElementById("membershipText");
     const recommendedJobs = document.getElementById("recommendedJobs");
 
-    const searchType = document.getElementById("searchType");
     const searchInput = document.getElementById("searchInput");
 
     let auth = getLoginState();
@@ -315,50 +304,11 @@
 
     renderHomeAuth(auth);
 
-    searchType.addEventListener("change", function () {
-      if (this.value === "keyword") {
-        searchInput.placeholder = "Search jobs by title or skill";
-      }
-
-      if (this.value === "location") {
-        searchInput.placeholder = "Enter your preferred work location";
-      }
-
-      if (this.value === "workmode") {
-        searchInput.placeholder = "Remote, Hybrid, or On-site";
-      }
-
-      if (this.value === "salary") {
-        searchInput.placeholder = "Enter minimum salary, e.g. 90k";
-      }
-
-      if (this.value === "skill") {
-        searchInput.placeholder = "Enter a required skill";
-      }
-
-      if (this.value === "education") {
-        searchInput.placeholder = "Bachelor, Master, Diploma, or PhD";
-      }
-
-      if (this.value === "job_type") {
-        searchInput.placeholder = "Full-time, Part-time, Contract, or Internship";
-      }
-    });
-
     function goSearch() {
       const params = new URLSearchParams({ target: "jobs" });
-      const quickSearchMap = {
-        keyword: "q",
-        location: "location",
-        workmode: "work_mode",
-        salary: "salary",
-        skill: "skill",
-        education: "education",
-        job_type: "job_type"
-      };
       const keyword = searchInput.value.trim();
       if (keyword) {
-        params.set(quickSearchMap[searchType.value] || "q", keyword);
+        params.set("q", keyword);
       }
 
       appendFieldParam(params, "jobLocationFilter", "location");
@@ -441,7 +391,6 @@
       .then(applyMembershipLimit);
 
     bindEnterKey([
-      "#searchType",
       "#searchInput",
       "#jobLocationFilter",
       "#jobModeFilter",
